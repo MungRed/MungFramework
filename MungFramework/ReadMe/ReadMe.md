@@ -23,6 +23,51 @@
 
 ## 模块详细
 
+### Logic
+
+该模块执行游戏运行逻辑
+
+#### GameApplication
+
+游戏的入口，控制游戏开始，循环，结束，暂停等事件
+
+约束：
+
+1. 子管理器或者子执行器能够调用GameApplication中的事件。例如控制游戏暂停。但禁止在子管理器中的OnXXXX中调用GameApplication中的DOXXXX，否则会导致无限递归。例如不能在某个子管理器的OnPause中调用Application中的DOPause。
+
+#### GameManager
+
+GameManager:游戏管理器抽象类
+GameSaveableManager:游戏管理器抽象类，可被存档系统保存和读取
+GameExecutor:游戏执行器抽象类
+
+
+管理器与执行器的树形结构示意图：
+
+![游戏管理器树形结构图](./游戏管理器树形结构图.jpg)
+
+约束：
+
+1. 游戏管理器不应承担详细的逻辑任务，例如：战斗管理器只能控制战斗的开始和结束等事件，不能用于操控角色，而操控角色应分配给战斗管理器下的操控执行器。
+2. 在管理器与执行器的树形结构中，执行器只能当作叶节点。
+3. 树形结构图为有向无环图，且除根节点(Application节点)外，每个节点的入度为1
+
+### Model
+
+该模块代表游戏中的模型
+
+#### Model
+
+模型抽象类
+
+#### SOModelStream
+
+从SO到模型的数据流节点抽象类
+
+#### ModelModelStream
+
+从Model到Model的数据流节点抽象类
+
 ### Extend
 
 该模块提供对Unity的扩展
