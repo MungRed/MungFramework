@@ -2,7 +2,6 @@
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.Composites;
 
 namespace MungFramework.Logic.Save
 {
@@ -10,16 +9,16 @@ namespace MungFramework.Logic.Save
     {
         [SerializeField]
         [ReadOnly]
-        private List<GameSaveableManager> SaveableManagers;
+        protected List<GameSaveableManager> SaveableManagers;
 
 
         [SerializeField]
         //[ReadOnly]
-        private SaveFile SystemSaveFile; //系统存档文件
+        protected SaveFile SystemSaveFile; //系统存档文件
 
         [SerializeField]
         //[ReadOnly]
-        private SaveFile CurrentSaveFile;//当前存档文件
+        protected SaveFile CurrentSaveFile;//当前存档文件
 
 
         public override void OnSceneLoad(GameManager parentManager)
@@ -39,7 +38,7 @@ namespace MungFramework.Logic.Save
         /// 初始化数据库
         /// </summary>
         /// <exception cref="System.Exception"></exception>
-        private void InitDataBase()
+        protected void InitDataBase()
         {
             bool hasDataBase = DataBase.ExistDataBase();
             if (!hasDataBase)
@@ -59,7 +58,7 @@ namespace MungFramework.Logic.Save
         /// 加载存档文件
         /// 加载存档文件后，系统文件和当前存档文件都不为null
         /// </summary>
-        private void LoadSaves()
+        protected void LoadSaves()
         {
             LoadSystemSaveFile();
             LoadPlayerSaveFiles();
@@ -68,7 +67,7 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 加载系统存档文件
         /// </summary>
-        private void LoadSystemSaveFile()
+        protected void LoadSystemSaveFile()
         {
             var loadResult = LoadSaveFile("system");
 
@@ -85,7 +84,7 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 加载玩家存档文件
         /// </summary>
-        private void LoadPlayerSaveFiles()
+        protected void LoadPlayerSaveFiles()
         {
             //获取当前使用的存档
             var nowSaveFileName = SystemSaveFile.GetValue("NowSaveFileName");
@@ -111,7 +110,7 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 在存档之前调用
         /// </summary>
-        private void OnSave()
+        protected void OnSave()
         {
             //保存所有管理器
             SaveableManagers.ForEach(manager => manager.Save());
@@ -143,7 +142,7 @@ namespace MungFramework.Logic.Save
             SetSystemValue("NowSaveFileName", CurrentSaveFile.SaveName);
         }
 
-        private void SaveIn(SaveFile saveFile)
+        protected void SaveIn(SaveFile saveFile)
         {
             DataBase.SetKeyValues(saveFile.SaveName, saveFile.GetKeyValues());
         }

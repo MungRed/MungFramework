@@ -21,8 +21,10 @@
 
 1. Unity InputSystem
 2. Odin
-3. Core RP Library
-4. Unity Ui Toolkit
+3. DOTween Pro
+4. TextMeshPro
+5. Core RP Library
+6. Unity Ui Toolkit
 
 ## 框架示意图
 

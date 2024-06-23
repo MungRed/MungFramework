@@ -10,7 +10,6 @@
         /// </summary>
         /// <param name="inputType"></param>
         public void OnInput(InputTypeValue inputType);
-
     }
 
 }

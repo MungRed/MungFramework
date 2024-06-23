@@ -42,6 +42,7 @@ namespace MungFramework.Logic.Input
         NONE,
         LEFT, UP, DOWN, RIGHT,
         OK, CANCEL,
+        LEFT_PAGE,RIGTH_PAGE,UP_ROLL,DOWN_ROLL,
     }
 
     /// <summary>
@@ -63,20 +64,20 @@ namespace MungFramework.Logic.Input
         /// 每个按键对应输入事件的映射
         /// </summary>
         [SerializeField]
-        private InputMap @InputMap;
+        protected InputMap @InputMap;
 
-        private InputSource @InputSource;
+        protected InputSource @InputSource;
 
         public InputDeviceEnum InputDevice;
 
 
         [ShowInInspector]
         [ReadOnly]
-        private List<IInputAcceptor> InputAcceptorStack = new();
+        protected List<IInputAcceptor> InputAcceptorStack = new();
 
-        private Dictionary<InputTypeValue, UnityEvent> InputActions_Performerd = new();
+        protected Dictionary<InputTypeValue, UnityEvent> InputActions_Performerd = new();
 
-        private Dictionary<InputTypeValue, UnityEvent> InputActions_Canceled = new();
+        protected Dictionary<InputTypeValue, UnityEvent> InputActions_Canceled = new();
 
 
 
@@ -157,7 +158,7 @@ namespace MungFramework.Logic.Input
         /// </summary>
         [SerializeField]
         [ReadOnly]
-        private bool isUp, isDown, isLeft, isRight;
+        protected bool isUp, isDown, isLeft, isRight;
 
         /// <summary>
         /// 返回移动轴
@@ -202,7 +203,7 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 初始化输入事件
         /// </summary>
-        private void InitInput()
+        protected void InitInput()
         {
             var inputactions = InputSource.GetEnumerator();
             while (inputactions.MoveNext())
@@ -227,7 +228,7 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 添加移动轴的绑定
         /// </summary>
-        private void AddMoveAxisBind()
+        protected void AddMoveAxisBind()
         {
             Add_ControllInputAction_Performerd(InputTypeValue.UP, () => isUp = true);
             Add_ControllInputAction_Performerd(InputTypeValue.DOWN, () => isDown = true);
@@ -301,7 +302,7 @@ namespace MungFramework.Logic.Input
         /// 按下事件
         /// </summary>
         /// <param name="inputkey"></param>
-        private void InputAction_Performerd(InputTypeKey inputkey)
+        protected void InputAction_Performerd(InputTypeKey inputkey)
         {
             //根据按键的key获取输入值
             foreach (var iv in InputMap.GetInputValue(inputkey))
@@ -324,7 +325,7 @@ namespace MungFramework.Logic.Input
         /// 取消事件
         /// </summary>
         /// <param name="inputkey"></param>
-        private void InputAction_Canceled(InputTypeKey inputkey)
+        protected void InputAction_Canceled(InputTypeKey inputkey)
         {
             //根据按键的key获取输入值
             foreach (var iv in InputMap.GetInputValue(inputkey))
@@ -346,7 +347,7 @@ namespace MungFramework.Logic.Input
             StartCoroutine(_DefaultMoter(time));
         }
 
-        private IEnumerator _DefaultMoter(float time)
+        protected IEnumerator _DefaultMoter(float time)
         {
             var gamepad = Gamepad.current;
             Moter(gamepad, 1f, 1f);
