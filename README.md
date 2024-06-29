@@ -18,8 +18,6 @@
 
 ## 依赖项
 
->注意：本框架不提供依赖插件的源代码，请自行安装以下插件
-
 1. Unity InputSystem
 2. Odin
 3. DOTween Pro
