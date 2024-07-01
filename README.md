@@ -27,10 +27,10 @@
 
 ## 框架示意图
 
-![框架示意图](./MungFramework/ReadMe/框架示意图.jpg)
+![框架示意图](./MungFramework/Document/框架示意图.jpg)
 
 ## 如何使用
 
-[上手指南](./MungFramework/ReadMe/上手指南.md)
+[上手指南](./MungFramework/Document/上手指南.md)
 
-[文档](./MungFramework/ReadMe/文档.md)
+[文档](./MungFramework/Document/文档.md)
