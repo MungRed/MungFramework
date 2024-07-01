@@ -18,13 +18,14 @@ namespace MungFramework.ActionTreeEditor
         public ActionNode CreateNode(System.Type type)
         {
             ActionNode node = CreateInstance(type) as ActionNode;
-            node.name = type.Name;
 
+            node.name = type.Name;
             node.guid = System.Guid.NewGuid().ToString();
 
             ActionNodeList.Add(node);
 
             //±£´æ
+            UnityEditor.EditorUtility.SetDirty(this);
             UnityEditor.AssetDatabase.AddObjectToAsset(node, this);
             UnityEditor.AssetDatabase.SaveAssets();
 
@@ -34,7 +35,7 @@ namespace MungFramework.ActionTreeEditor
         {
             ActionNodeList.Remove(node);
 
-
+            UnityEditor.EditorUtility.SetDirty(this);
             UnityEditor.AssetDatabase.RemoveObjectFromAsset(node);
             UnityEditor.AssetDatabase.SaveAssets();
 
@@ -44,32 +45,31 @@ namespace MungFramework.ActionTreeEditor
         {
             if (GetNextChild(father) == child)
             {
-                father.Next = null;
+                father.SetNextNode(null);
             }
 
             if (GetAtTimeChild(father) == child)
             {
-                father.AtTime = null;
+                father.SetAtTimeNode(null);
             }
         }
 
         public void SetNextChild(ActionNode father, ActionNode child)
         {
-            father.Next = child;
+            father.SetNextNode(child);
         }
         public void SetAtTimeChild(ActionNode father, ActionNode child)
         {
-
-            father.AtTime = child;
+            father.SetAtTimeNode(child);
         }
 
         public ActionNode GetNextChild(ActionNode node)
         {
-            return node.Next;
+            return node.GetNextNode();
         }
         public ActionNode GetAtTimeChild(ActionNode node)
         {
-            return node.AtTime;
+            return node.GetAtTimeNode();
         }
 #endif
     }

@@ -92,7 +92,7 @@ namespace MungFramework.ActionTreeEditor
         public override void SetPosition(Rect newPos)
         {
             base.SetPosition(newPos);
-            Node.position = newPos.position;
+            Node.SetPosition(newPos.position);
         }
     }
 

@@ -30,6 +30,7 @@ namespace MungFramework.Ui
 
         public virtual void OnInput(InputValueEnum inputType)
         {
+            //Debug.Log(inputType);
             LayerControll(inputType);
         }
 

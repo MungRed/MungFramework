@@ -9,6 +9,12 @@ namespace MungFramework.ActionTreeEditor
         public string guid;
         [HideInInspector]
         public Vector2 position;
+        [HideInInspector]
+        public ActionNode Next;
+        [HideInInspector]
+        public ActionNode AtTime;
+
+
 
         public Color ÑÕÉ« = new Color(0.227f, 0.227f, 0.227f, 1.000f);
         public string ±¸×¢ = "";
@@ -27,10 +33,31 @@ namespace MungFramework.ActionTreeEditor
             get;
         }
 
-        [HideInInspector]
-        public ActionNode Next;
-        [HideInInspector]
-        public ActionNode AtTime;
+        public void SetPosition(Vector3 position)
+        {
+            this.position = position;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+        public void SetNextNode(ActionNode node)
+        {
+            Next = node;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+        public void SetAtTimeNode(ActionNode node)
+        {
+            AtTime = node;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+        public ActionNode GetNextNode()
+        {
+            return Next;
+        }
+        public ActionNode GetAtTimeNode()
+        {
+            return AtTime;
+        }
+
+
     }
 }
 

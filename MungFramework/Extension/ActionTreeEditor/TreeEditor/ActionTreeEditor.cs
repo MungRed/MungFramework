@@ -7,8 +7,8 @@ namespace MungFramework.ActionTreeEditor
 {
     public class ActionTreeEditor : EditorWindow
     {
-        ActionTreeViewer nodeTreeViewer;
-        InspectorView inspectorView;
+        private ActionTreeViewer nodeTreeViewer;
+        private InspectorView inspectorView;
 
         [MenuItem("MungFramework/节点编辑器")]
         public static void OpenWindow()
@@ -56,10 +56,12 @@ namespace MungFramework.ActionTreeEditor
         public void OnNodeSelected(ActionNodeView view)
         {
             inspectorView.UpdateSelection(view);
+            UnityEditor.AssetDatabase.SaveAssets();
         }
         public void OnNodeUnSelected(ActionNodeView view)
         {
             inspectorView.Clear();
+            UnityEditor.AssetDatabase.SaveAssets();
         }
 
 
@@ -77,6 +79,7 @@ namespace MungFramework.ActionTreeEditor
 
             inspectorView.Clear();
             nodeTreeViewer.PopulateView(tree);
+            UnityEditor.AssetDatabase.SaveAssets();
         }
     }
 }
