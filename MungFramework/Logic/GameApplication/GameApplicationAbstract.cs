@@ -12,8 +12,8 @@ namespace MungFramework.Logic
         //µ¥Àı¶ÔÏó
         public static GameApplicationAbstract Instance;
 
-        public Input.InputManagerAbstract InputManager;
         public Save.SaveManagerAbstract SaveManager;
+        public Input.InputManagerAbstract InputManager;
         public Sound.SoundManagerAbstract SoundManager;
 
         

@@ -1,4 +1,5 @@
-﻿using MungFramework.ScriptableObjects;
+﻿using MungFramework.ComponentExtension;
+using MungFramework.ScriptableObjects;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,10 +11,13 @@ namespace MungFramework.Demo
         public List<AudioClip> BackGroundMusicList;
 
 
-        public AudioClip GetNextMusic()
+        public AudioClip GetRandomBgm()
         {
-            var nextIndex = Random.Range(0, BackGroundMusicList.Count);
-            return BackGroundMusicList[nextIndex];
+            if (BackGroundMusicList.Empty())
+            {
+                return null;
+            }
+            return BackGroundMusicList[Random.Range(0, BackGroundMusicList.Count)];
         }
     }
 

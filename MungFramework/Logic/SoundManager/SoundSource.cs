@@ -1,11 +1,10 @@
-﻿using Sirenix.OdinInspector;
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace MungFramework.Logic.Sound
 {
     [Serializable]
-    public class SoundSource
+    public class SoundSource : MungFramework.Model.Model
     {
         public string id;//id
         public Transform Follow;//跟随的对象

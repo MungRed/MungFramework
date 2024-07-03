@@ -10,7 +10,7 @@ namespace MungFramework.Logic.Input
     /// 输入映射
     /// </summary>
     [Serializable]
-    public class InputMap
+    public class InputMap : MungFramework.Model.Model
     {
         [Serializable]
         public class InputMapItem

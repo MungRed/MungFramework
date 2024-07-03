@@ -27,8 +27,11 @@ namespace MungFramework.Demo
         [ContextMenu("PlayNextBgm")]
         public void PlayNextBgm()
         {
-            var nextBgm = BgmList.GetNextMusic();
-
+            var nextBgm = BgmList.GetRandomBgm();
+            if (nextBgm == null)
+            {
+                return;
+            }
             SoundManager.PlayAudio("music", nextBgm, transition: true, loop: true);
         }
 

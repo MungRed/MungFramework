@@ -128,8 +128,7 @@ namespace MungFramework.Logic.Sound
             {
                 return this;
             }
-
-            soundSource.Source.transform.position = soundSource.Follow.position + localPosition;
+            soundSource.LocalPosition = localPosition;
             return this;
         }
 

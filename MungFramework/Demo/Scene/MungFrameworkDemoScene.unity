@@ -469,6 +469,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 351011113}
   m_CullTransparentMesh: 1
+--- !u!1 &364079800
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 364079801}
+  - component: {fileID: 364079802}
+  m_Layer: 0
+  m_Name: Input
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &364079801
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364079800}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1488344717}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &364079802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364079800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e1e17a757d224446b5672782c9ca220, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameManagerEvents:
+    GameManagerEventMap:
+      m_Keys: 
+      m_Values: []
+  SubGameManagerList: []
+  SubGameExecutorList: []
+  InputMap:
+    InputMapItemList: []
+  InputDevice: 0
+  IsUp: 0
+  IsDown: 0
+  IsLeft: 0
+  IsRight: 0
 --- !u!1 &376982846
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,14 +568,75 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 376982846}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1270437503}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &402762374
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 402762375}
+  - component: {fileID: 402762376}
+  m_Layer: 0
+  m_Name: Save
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &402762375
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402762374}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1488344717}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &402762376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402762374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec2b55f6b1daf364aa84225e5ba992f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameManagerEvents:
+    GameManagerEventMap:
+      m_Keys: 
+      m_Values: []
+  SubGameManagerList: []
+  SubGameExecutorList: []
+  SavableManagerList: []
+  SystemSaveFile:
+    SaveName: 
+    DataDictionary:
+      m_Keys: []
+      m_Values: []
+  CurrentSaveFile:
+    SaveName: 
+    DataDictionary:
+      m_Keys: []
+      m_Values: []
 --- !u!1 &513997272
 GameObject:
   m_ObjectHideFlags: 0
@@ -1187,9 +1305,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 376982848}
   m_Father: {fileID: 1488344717}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1270437504
 MonoBehaviour:
@@ -1340,8 +1459,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1488344717}
   - component: {fileID: 1488344719}
-  - component: {fileID: 1488344721}
-  - component: {fileID: 1488344718}
   m_Layer: 0
   m_Name: GameApp
   m_TagString: Untagged
@@ -1361,36 +1478,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 402762375}
+  - {fileID: 364079801}
   - {fileID: 1270437503}
-  - {fileID: 376982848}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1488344718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1488344715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e1e17a757d224446b5672782c9ca220, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GameManagerEvents:
-    GameManagerEventMap:
-      m_Keys: 
-      m_Values: []
-  SubGameManagerList: []
-  SubGameExecutorList: []
-  InputMap:
-    InputMapItemList: []
-  InputDevice: 0
-  IsUp: 0
-  IsDown: 0
-  IsLeft: 0
-  IsRight: 0
 --- !u!114 &1488344719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1434,43 +1527,14 @@ MonoBehaviour:
               m_BoolArgument: 0
             m_CallState: 2
   SubGameManagerList:
-  - {fileID: 1488344721}
-  - {fileID: 1488344718}
+  - {fileID: 402762376}
+  - {fileID: 364079802}
   - {fileID: 1270437504}
   SubGameExecutorList: []
-  InputManager: {fileID: 1488344718}
-  SaveManager: {fileID: 1488344721}
+  InputManager: {fileID: 364079802}
+  SaveManager: {fileID: 402762376}
   SoundManager: {fileID: 1270437504}
   GameState: 0
---- !u!114 &1488344721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1488344715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec2b55f6b1daf364aa84225e5ba992f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GameManagerEvents:
-    GameManagerEventMap:
-      m_Keys: 
-      m_Values: []
-  SubGameManagerList: []
-  SubGameExecutorList: []
-  SavableManagerList: []
-  SystemSaveFile:
-    SaveName: 
-    DataDictionary:
-      m_Keys: []
-      m_Values: []
-  CurrentSaveFile:
-    SaveName: 
-    DataDictionary:
-      m_Keys: []
-      m_Values: []
 --- !u!1 &1663727948
 GameObject:
   m_ObjectHideFlags: 0

@@ -41,11 +41,11 @@ namespace MungFramework.Logic.Save
         /// <exception cref="System.Exception"></exception>
         protected IEnumerator InitDatabase()
         {
-            bool hasDataBase = MungDatabase.ExistDatabase();
+            bool hasDataBase = Database.ExistDatabase();
             if (!hasDataBase)
             {
                 Debug.Log("数据库不存在，新建");
-                bool createSuccess = MungDatabase.CreateDatabase();
+                bool createSuccess = Database.CreateDatabase();
                 if (!createSuccess)
                 {
                     //如果创建失败
@@ -154,7 +154,7 @@ namespace MungFramework.Logic.Save
 
         protected IEnumerator SaveIn(SaveFile saveFile)
         {
-            MungDatabase.SetKeyValues(saveFile.SaveName, saveFile.GetKeyValues());
+            Database.SetKeyValues(saveFile.SaveName, saveFile.GetKeyValues());
             yield return null;
         }
 
@@ -168,7 +168,7 @@ namespace MungFramework.Logic.Save
 
         public (SaveFile, bool) LoadSaveFile(string saveName)
         {
-            var saveFile = MungDatabase.GetKeyValues(saveName);
+            var saveFile = Database.GetKeyValues(saveName);
             if (saveFile.Item2 == false)
             {
                 return (new SaveFile(saveName, new()), false);
