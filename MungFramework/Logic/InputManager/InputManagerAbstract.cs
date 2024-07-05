@@ -15,10 +15,11 @@ namespace MungFramework.Logic.Input
     /// </summary>
     public enum InputKeyEnum
     {
+        ANYKEY,
         NUM1, NUM2, NUM3, NUM4, NUM5, NUM6, NUM7, NUM8, NUM9, NUM0,
         ESC, TAB, CAPS,
         LEFT_SHIFT, LEFT_CONTROLL, LEFT_ALT,
-        RIGTH_SHIFT, RIGHT_CONTROLL, RIGHT_ALT,
+        RIGHT_SHIFT, RIGHT_CONTROLL, RIGHT_ALT,
         SPACE, ENTER, BACK,
         HOME, END, PAGE_UP, PAGE_DOWN,
         ARROW_LEFT, ARROW_RIGHT, ARROW_UP, ARROW_DOWN,
@@ -40,9 +41,11 @@ namespace MungFramework.Logic.Input
     public enum InputValueEnum
     {
         NONE,
+        ANYKEY,
         LEFT, UP, DOWN, RIGHT,
         OK, CANCEL,
-        LEFT_PAGE, RIGTH_PAGE, UP_ROLL, DOWN_ROLL,
+        LEFT_PAGE, RIGTH_PAGE, 
+        UP_ROLL, DOWN_ROLL,
     }
 
     /// <summary>
@@ -136,14 +139,14 @@ namespace MungFramework.Logic.Input
             var saveLoad = SaveManager.GetSystemValue("KEYMAP");
 
             //如果没有输入的存档文件，那么初始化，否则读取输入的存档文件
-            if (saveLoad.Item2 == false)
+            if (saveLoad.hasValue == false)
             {
                 InputMap.DefaultInputMap();
                 SaveManager.SetSystemValue("KEYMAP", JsonUtility.ToJson(InputMap));
             }
             else
             {
-                InputMap = JsonUtility.FromJson<InputMap>(saveLoad.Item1);
+                InputMap = JsonUtility.FromJson<InputMap>(saveLoad.value);
             }
 
             yield return null;
@@ -305,11 +308,13 @@ namespace MungFramework.Logic.Input
         /// <param name="inputkey"></param>
         protected void InputAction_Performerd(InputKeyEnum inputkey)
         {
+
             //根据按键的key获取输入值
             foreach (var iv in InputMap.GetInputValue(inputkey))
             {
+                //Debug.Log(iv);
                 if (InputActionMap_Performerd.ContainsKey(iv))
-                {
+                {      
                     InputActionMap_Performerd[iv].Invoke();
                 }
 

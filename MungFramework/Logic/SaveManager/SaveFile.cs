@@ -43,7 +43,7 @@ namespace MungFramework.Logic.Save
             DataDictionary[key] = value;
             return true;
         }
-        public (string val, bool hasVal) GetValue(string key)
+        public (string value, bool hasValue) GetValue(string key)
         {
             if (HasKey(key))
             {

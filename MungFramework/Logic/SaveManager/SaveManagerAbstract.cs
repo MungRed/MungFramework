@@ -93,16 +93,16 @@ namespace MungFramework.Logic.Save
             var nowSaveFileName = SystemSaveFile.GetValue("NowSaveFileName");
 
             //如果没有当前使用的存档，说明是第一次进入游戏，默认使用自动存档
-            if (nowSaveFileName.hasVal == false)
+            if (nowSaveFileName.hasValue == false)
             {
-                nowSaveFileName.val = "save0";
+                nowSaveFileName.value = "save0";
                 SetSystemValue("NowSaveFileName", "save0");
             }
 
-            var loadResult = LoadSaveFile(nowSaveFileName.val);
+            var loadResult = LoadSaveFile(nowSaveFileName.value);
             if (loadResult.Item2 == false)
             {
-                CurrentSaveFile = new SaveFile(nowSaveFileName.val, new());
+                CurrentSaveFile = new SaveFile(nowSaveFileName.value, new());
             }
             else
             {
@@ -160,13 +160,13 @@ namespace MungFramework.Logic.Save
 
 
 
-        public (SaveFile, bool) LoadSaveFile(int saveindex)
+        public (SaveFile saveFile, bool hasSaveFile) LoadSaveFile(int saveindex)
         {
             string saveName = "save" + saveindex;
             return LoadSaveFile(saveName);
         }
 
-        public (SaveFile, bool) LoadSaveFile(string saveName)
+        public (SaveFile saveFile, bool hasSaveFile) LoadSaveFile(string saveName)
         {
             var saveFile = Database.GetKeyValues(saveName);
             if (saveFile.Item2 == false)
@@ -196,7 +196,7 @@ namespace MungFramework.Logic.Save
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public (string, bool) GetSystemValue(string key)
+        public (string value , bool hasValue) GetSystemValue(string key)
         {
             return SystemSaveFile.GetValue(key);
         }
@@ -216,7 +216,7 @@ namespace MungFramework.Logic.Save
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public (string, bool) GetSaveValue(string key)
+        public (string value, bool hasValue) GetSaveValue(string key)
         {
             return CurrentSaveFile.GetValue(key);
         }
