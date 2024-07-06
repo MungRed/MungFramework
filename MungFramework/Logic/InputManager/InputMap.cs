@@ -42,6 +42,10 @@ namespace MungFramework.Logic.Input
             //Debug.Log(InputMapItemList.Where(x => x.InputKey == key).Count());
             return InputMapItemList.Where(x => x.InputKey == key).Select(x => x.InputValue);
         }
+        public IEnumerable<InputKeyEnum> GetInputKey(InputValueEnum value)
+        {
+            return InputMapItemList.Where(x=>x.InputValue==value).Select(x => x.InputKey);
+        }
 
         /// <summary>
         /// 默认输入映射
@@ -110,6 +114,17 @@ namespace MungFramework.Logic.Input
             }
             oldBind.InputKey = newkey;
             return true;
+        }
+
+        /// <summary>
+        /// 是否有某个按键的绑定
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool HasBind(InputKeyEnum key, InputValueEnum value)
+        {
+            return InputMapItemList.Find(x => x.InputKey == key && x.InputValue == value) != null;
         }
     }
 }

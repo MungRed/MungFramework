@@ -44,7 +44,7 @@ namespace MungFramework.Logic.Input
         ANYKEY,
         LEFT, UP, DOWN, RIGHT,
         OK, CANCEL,
-        LEFT_PAGE, RIGTH_PAGE, 
+        LEFT_PAGE, RIGTH_PAGE,
         UP_ROLL, DOWN_ROLL,
     }
 
@@ -78,10 +78,11 @@ namespace MungFramework.Logic.Input
         [ReadOnly]
         protected List<IInputAcceptor> InputAcceptorStack = new();
 
-        protected Dictionary<InputValueEnum, UnityEvent> InputActionMap_Performerd = new();
+        protected Dictionary<InputValueEnum, UnityEvent> InputActionListener_Performerd = new();
 
-        protected Dictionary<InputValueEnum, UnityEvent> InputActionMap_Canceled = new();
+        protected Dictionary<InputValueEnum, UnityEvent> InputActionListener_Canceled = new();
 
+        protected UnityEvent<InputKeyEnum> InputActionListener_AnyKeyDown = new();
 
 
         /// <summary>
@@ -159,7 +160,87 @@ namespace MungFramework.Logic.Input
         }
 
 
+        /// <summary>
+        /// 初始化输入事件
+        /// </summary>
+        protected void InitInput()
+        {
+            var inputactions = InputSource.GetEnumerator();
+            while (inputactions.MoveNext())
+            {
+                var action = inputactions.Current;
+                var mapname = action.actionMap.name;
+                var actionname = action.name;
 
+                if (mapname == "Controll")
+                {
+                    if (Enum.IsDefined(typeof(InputKeyEnum), actionname))
+                    {
+                        action.performed += (CNT cnt) => { InputAction_Performerd((InputKeyEnum)Enum.Parse(typeof(InputKeyEnum), actionname)); };
+                        action.canceled += (CNT cnt) => { InputAction_Canceled((InputKeyEnum)Enum.Parse(typeof(InputKeyEnum), actionname)); };
+                    }
+                }
+            }
+
+            AddMoveAxisBind();
+        }
+
+        /// <summary>
+        /// 改变按键绑定
+        /// </summary>
+        /// <param name="oldkey"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public IEnumerator ChangeKeyBind(InputKeyEnum oldkey, InputValueEnum value)
+        {
+            //如果旧键位是任意键，说明是添加键位而不是改变键位
+            if (oldkey == InputKeyEnum.ANYKEY)
+            {
+                bool added = false;
+                UnityAction<InputKeyEnum> addBind = (InputKeyEnum newkey) =>
+                {
+                    InputMap.AddBind(newkey, value);
+                    added = true;
+
+                };
+
+                Add_InputAction_AnyKeyDown(addBind);
+
+                yield return new WaitUntil(() => added);
+
+                Remove_InputAction_AnyKeyDown(addBind);
+            }
+            else
+            {
+                if (!InputMap.HasBind(oldkey, value))
+                {
+                    Debug.LogError("按键绑定切换错误，不存在旧的绑定");
+                    yield break;
+                }
+
+                bool changed = false;
+
+                UnityAction<InputKeyEnum> changeBind = (InputKeyEnum newkey) =>
+                {
+                    InputMap.ChangeBind(oldkey, newkey, value);
+                    changed = true;
+                };
+
+                Add_InputAction_AnyKeyDown(changeBind);
+
+                yield return new WaitUntil(() => changed);
+
+                Remove_InputAction_AnyKeyDown(changeBind);
+            }
+        }
+
+        public IEnumerable<InputKeyEnum> GetCurrentBind(InputValueEnum value)
+        {
+            return InputMap.GetInputKey(value);
+        }
+
+
+        #region 轴
         /// <summary>
         /// 是否按下上下左右
         /// </summary>
@@ -197,37 +278,10 @@ namespace MungFramework.Logic.Input
                 return res.normalized;
             }
         }
-
         /// <summary>
         /// 返回视角轴
         /// </summary>
         public Vector2 ViewAxis => InputSource == null ? Vector2.zero : InputSource.Controll.ViewAxis.ReadValue<Vector2>();
-
-
-        /// <summary>
-        /// 初始化输入事件
-        /// </summary>
-        protected void InitInput()
-        {
-            var inputactions = InputSource.GetEnumerator();
-            while (inputactions.MoveNext())
-            {
-                var action = inputactions.Current;
-                var mapname = action.actionMap.name;
-                var actionname = action.name;
-
-                if (mapname == "Controll")
-                {
-                    if (Enum.IsDefined(typeof(InputKeyEnum), actionname))
-                    {
-                        action.performed += (CNT cnt) => { InputAction_Performerd((InputKeyEnum)Enum.Parse(typeof(InputKeyEnum), actionname)); };
-                        action.canceled += (CNT cnt) => { InputAction_Canceled((InputKeyEnum)Enum.Parse(typeof(InputKeyEnum), actionname)); };
-                    }
-                }
-            }
-
-            AddMoveAxisBind();
-        }
 
         /// <summary>
         /// 添加移动轴的绑定
@@ -244,6 +298,9 @@ namespace MungFramework.Logic.Input
             Add_InputAction_Canceled(InputValueEnum.LEFT, () => IsLeft = false);
             Add_InputAction_Canceled(InputValueEnum.RIGHT, () => IsRight = false);
         }
+        #endregion
+
+        #region 添加/移除 事件监听
 
         /// <summary>
         /// 为某个输入添加按下事件
@@ -252,13 +309,12 @@ namespace MungFramework.Logic.Input
         /// <param name="action"></param>
         public void Add_InputAction_Performerd(InputValueEnum type, UnityAction action)
         {
-            if (!InputActionMap_Performerd.ContainsKey(type))
+            if (!InputActionListener_Performerd.ContainsKey(type))
             {
-                InputActionMap_Performerd.Add(type, new());
+                InputActionListener_Performerd.Add(type, new());
             }
-            InputActionMap_Performerd[type].AddListener(action);
+            InputActionListener_Performerd[type].AddListener(action);
         }
-
         /// <summary>
         /// 移除某个输入的按下事件
         /// </summary>
@@ -266,13 +322,12 @@ namespace MungFramework.Logic.Input
         /// <param name="action"></param>
         public void Remove_InputAction_Performerd(InputValueEnum type, UnityAction action)
         {
-            if (InputActionMap_Performerd.ContainsKey(type))
+            if (InputActionListener_Performerd.ContainsKey(type))
             {
-                InputActionMap_Performerd[type].RemoveListener(action);
+                InputActionListener_Performerd[type].RemoveListener(action);
                 Debug.Log("RemovePerformed" + action);
             }
         }
-
         /// <summary>
         /// 为某个输入添加取消事件
         /// </summary>
@@ -280,13 +335,12 @@ namespace MungFramework.Logic.Input
         /// <param name="action"></param>
         public void Add_InputAction_Canceled(InputValueEnum type, UnityAction action)
         {
-            if (!InputActionMap_Canceled.ContainsKey(type))
+            if (!InputActionListener_Canceled.ContainsKey(type))
             {
-                InputActionMap_Canceled.Add(type, new());
+                InputActionListener_Canceled.Add(type, new());
             }
-            InputActionMap_Canceled[type].AddListener(action);
+            InputActionListener_Canceled[type].AddListener(action);
         }
-
         /// <summary>
         /// 移除某个输入的取消事件
         /// </summary>
@@ -294,28 +348,52 @@ namespace MungFramework.Logic.Input
         /// <param name="action"></param>
         public void Remove_InputAction_Canceled(InputValueEnum type, UnityAction action)
         {
-            if (InputActionMap_Canceled.ContainsKey(type))
+            if (InputActionListener_Canceled.ContainsKey(type))
             {
-                InputActionMap_Canceled[type].RemoveListener(action);
+                InputActionListener_Canceled[type].RemoveListener(action);
             }
         }
+        /// <summary>
+        /// 添加任意键按下的事件
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="action"></param>
+        public void Add_InputAction_AnyKeyDown(UnityAction<InputKeyEnum> action)
+        {
+            InputActionListener_AnyKeyDown.AddListener(action);
+        }
+        /// <summary>
+        /// 移除任意键按下的事件
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="action"></param>
+        public void Remove_InputAction_AnyKeyDown(UnityAction<InputKeyEnum> action)
+        {
+            InputActionListener_AnyKeyDown.RemoveListener(action);
+        }
 
+        #endregion
 
-
+        #region 按下和取消事件
         /// <summary>
         /// 按下事件
         /// </summary>
         /// <param name="inputkey"></param>
         protected void InputAction_Performerd(InputKeyEnum inputkey)
         {
+            //如果不是任意键，就触发一次任意键按下的事件
+            if (inputkey != InputKeyEnum.ANYKEY)
+            {
+                InputAction_AnyKeyDown(inputkey);
+            }
 
             //根据按键的key获取输入值
             foreach (var iv in InputMap.GetInputValue(inputkey))
             {
                 //Debug.Log(iv);
-                if (InputActionMap_Performerd.ContainsKey(iv))
-                {      
-                    InputActionMap_Performerd[iv].Invoke();
+                if (InputActionListener_Performerd.ContainsKey(iv))
+                {
+                    InputActionListener_Performerd[iv].Invoke();
                 }
 
                 if (InputAcceptorStack.Count > 0)
@@ -324,9 +402,6 @@ namespace MungFramework.Logic.Input
                 }
             }
         }
-
-
-
         /// <summary>
         /// 取消事件
         /// </summary>
@@ -336,14 +411,24 @@ namespace MungFramework.Logic.Input
             //根据按键的key获取输入值
             foreach (var iv in InputMap.GetInputValue(inputkey))
             {
-                if (InputActionMap_Canceled.ContainsKey(iv))
+                if (InputActionListener_Canceled.ContainsKey(iv))
                 {
-                    InputActionMap_Canceled[iv].Invoke();
+                    InputActionListener_Canceled[iv].Invoke();
                 }
             }
         }
+        /// <summary>
+        /// 任意键按下，但包括InputkeyEnum中的任意键
+        /// </summary>
+        /// <param name="inputKey"></param>
+        protected void InputAction_AnyKeyDown(InputKeyEnum inputKey)
+        {
+            //Debug.Log("anykeydown " + inputKey);
+            InputActionListener_AnyKeyDown.Invoke(inputKey);
+        }
+        #endregion
 
-
+        #region 手柄震动
         /// <summary>
         /// 默认震动
         /// </summary>
@@ -352,7 +437,6 @@ namespace MungFramework.Logic.Input
         {
             StartCoroutine(_DefaultMoter(time));
         }
-
         protected IEnumerator _DefaultMoter(float time)
         {
             var gamepad = Gamepad.current;
@@ -360,8 +444,6 @@ namespace MungFramework.Logic.Input
             yield return new WaitForSeconds(time);
             CancelMoter(gamepad);
         }
-
-
         /// <summary>
         /// 震动
         /// </summary>
@@ -373,7 +455,6 @@ namespace MungFramework.Logic.Input
             }
             pad.SetMotorSpeeds(_low, _max);
         }
-
         /// <summary>
         /// 取消震动
         /// </summary>
@@ -386,6 +467,7 @@ namespace MungFramework.Logic.Input
             pad.SetMotorSpeeds(0, 0);
         }
 
+        #endregion
     }
 }
 
