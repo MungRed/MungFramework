@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MungFramework.Demo
 {
-    [CreateAssetMenu(fileName = "newso", menuName = "SO/SOTest")]
+    //[CreateAssetMenu(fileName = "newso", menuName = "SO/SOTest")]
     public class SOTest : DataSO
     {
         public string Name;

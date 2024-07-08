@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MungFramework.Demo
 {
-    [CreateAssetMenu(fileName = "newsolist", menuName = "SO/SOList")]
+    //[CreateAssetMenu(fileName = "newsolist", menuName = "SO/SOList")]
     public class SOListTest : DataSOList<SOTest>
     {
         //‘⁄’‚¿©’π
