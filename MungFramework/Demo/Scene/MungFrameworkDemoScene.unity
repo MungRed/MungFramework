@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -561,7 +561,7 @@ MonoBehaviour:
     GameManagerEventMap:
       m_Keys: 
       m_Values: []
-  BgmList: {fileID: 11400000, guid: 158791150d2b7ec4bbcda006166a2fa1, type: 2}
+  BgmList: {fileID: 11400000, guid: 326cd14165fb7c54691e3e236fefd118, type: 2}
   SoundManager: {fileID: 1270437504}
 --- !u!4 &376982848
 Transform:
@@ -727,7 +727,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 513997272}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14b512712db1a884fa885e2271dd1714, type: 3}
+  m_Script: {fileID: 11500000, guid: c757882432807ea40b256287228387cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   UiButtonActionMap:
@@ -1318,12 +1318,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1042816151}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 098c03c5d1c34244a9e770ca37702361, type: 3}
+  m_Script: {fileID: 11500000, guid: ceef1cada00466040adfde4c4d2ea1b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ButtonList: []
   NowSelectButton: {fileID: 0}
-  CouldKeyToClose: 0
+  CouldKeyToClose: 1
   OpenEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -1550,7 +1550,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1425168760}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14b512712db1a884fa885e2271dd1714, type: 3}
+  m_Script: {fileID: 11500000, guid: c757882432807ea40b256287228387cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   UiButtonActionMap:
@@ -1674,7 +1674,7 @@ GameObject:
   - component: {fileID: 1564948619}
   - component: {fileID: 1564948622}
   - component: {fileID: 1564948621}
-  - component: {fileID: 1564948620}
+  - component: {fileID: 1564948623}
   m_Layer: 5
   m_Name: "\u6539\u952E\u6D4B\u8BD5"
   m_TagString: Untagged
@@ -1704,42 +1704,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 269.01, y: 100}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &1564948620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564948618}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14b512712db1a884fa885e2271dd1714, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UiButtonActionMap:
-    m_Keys: 04000000
-    m_Values:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1286925551}
-          m_TargetAssemblyTypeName: MungFramework.Demo.ChangeInputMapExecutor, Assembly-CSharp-firstpass
-          m_MethodName: ChanageKeyMapTest
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  CouldUp: 1
-  CouldDown: 1
-  CouldLeft: 0
-  CouldRight: 0
-  IsSelected: 0
-  SelectObject: {fileID: 591879862}
-  CheckAudio: {fileID: 8300000, guid: 9e8c4f407bcb99d4dad4385f6ea4bc4f, type: 3}
 --- !u!114 &1564948621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1778,6 +1742,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1564948618}
   m_CullTransparentMesh: 1
+--- !u!114 &1564948623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1564948618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c757882432807ea40b256287228387cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UiButtonActionMap:
+    m_Keys: 04000000
+    m_Values:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1286925551}
+          m_TargetAssemblyTypeName: MungFramework.Demo.ChangeInputMapExecutor, Assembly-CSharp-firstpass
+          m_MethodName: ChanageKeyMapTest
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  CouldUp: 1
+  CouldDown: 1
+  CouldLeft: 0
+  CouldRight: 0
+  IsSelected: 0
+  SelectObject: {fileID: 591879862}
+  CheckAudio: {fileID: 8300000, guid: 9e8c4f407bcb99d4dad4385f6ea4bc4f, type: 3}
 --- !u!1 &1663727948
 GameObject:
   m_ObjectHideFlags: 0
@@ -1942,7 +1942,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1813912792}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14b512712db1a884fa885e2271dd1714, type: 3}
+  m_Script: {fileID: 11500000, guid: c757882432807ea40b256287228387cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   UiButtonActionMap:

@@ -9,21 +9,17 @@ namespace MungFramework.Ui
     public abstract class UiLayerGroupAbstract : MonoBehaviour
     {
         [SerializeField]
-        [ReadOnly]
         protected List<UiLayerAbstract> UiLayerList;
 
         //当前layer的索引
         [SerializeField]
-        [ReadOnly]
         protected int NowOpenedLayerIndex;
 
         [SerializeField]
-        [ReadOnly]
         protected UiLayerAbstract NowOpenedLayer;
 
 
         [SerializeField]
-        [ReadOnly]
         protected UnityEvent OpenEvent, CloseEvent;
 
 
