@@ -27,11 +27,11 @@ namespace MungFramework.Logic.Sound
 
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
-            yield return StartCoroutine(base.OnSceneLoad(parentManager));
+            yield return base.OnSceneLoad(parentManager);
             //读取保存数据
-            yield return StartCoroutine(Load());
+            yield return Load();
             //加载默认声音源
-            yield return StartCoroutine(InitSoundSource());
+            yield return InitSoundSource();
         }
 
         public override void OnGameUpdate(GameManagerAbstract parentManager)

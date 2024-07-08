@@ -81,7 +81,7 @@ namespace MungFramework.Logic
         {
             Debug.Log("SceneLoad");
             GameState = GameStateEnum.Awake;
-            yield return StartCoroutine(base.OnSceneLoad(parentManager));
+            yield return base.OnSceneLoad(parentManager);
             GameState = GameStateEnum.Start;
         }
         /// <summary>
@@ -97,7 +97,7 @@ namespace MungFramework.Logic
 
 
             Debug.Log("GameStart");
-            yield return StartCoroutine(base.OnGameStart(parentManager));
+            yield return base.OnGameStart(parentManager);
             GameState = GameStateEnum.Update;
         }
 
@@ -132,7 +132,7 @@ namespace MungFramework.Logic
         {
             //ÔÝÍ£ÖÐ
             GameState = GameStateEnum.PauseIn;
-            yield return  StartCoroutine(base.OnGamePause(parentManager));
+            yield return  base.OnGamePause(parentManager);
             Debug.Log("GamePause");
             //ÔÝÍ£
             GameState = GameStateEnum.Pause;
@@ -153,7 +153,7 @@ namespace MungFramework.Logic
         {
             //»Ö¸´ÖÐ
             GameState = GameStateEnum.ResumeIn;
-            yield return StartCoroutine(base.OnGameResume(parentManager));
+            yield return base.OnGameResume(parentManager);
             Debug.Log("GameResume");
             GameState = GameStateEnum.Update;
         }

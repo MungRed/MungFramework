@@ -24,16 +24,17 @@ namespace MungFramework.Logic.Save
 
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
-            yield return StartCoroutine(base.OnSceneLoad(parentManager));
+            yield return base.OnSceneLoad(parentManager);
 
             //初始化数据库
             //如果初始化数据库失败抛出异常提示
-            yield return StartCoroutine(InitDatabase());
+            yield return InitDatabase();
 
             //加载存档文件
             //加载存档文件时默认数据库初始化成功，即存在系统存档文件
-            yield return StartCoroutine(LoadSaves());
+            yield return LoadSaves();
         }
+
 
         /// <summary>
         /// 初始化数据库
@@ -42,9 +43,13 @@ namespace MungFramework.Logic.Save
         protected IEnumerator InitDatabase()
         {
             bool hasDataBase = Database.ExistDatabase();
+
+            //如果数据库不存在
             if (!hasDataBase)
             {
                 Debug.Log("数据库不存在，新建");
+
+                //创建数据库
                 bool createSuccess = Database.CreateDatabase();
                 if (!createSuccess)
                 {
@@ -62,8 +67,9 @@ namespace MungFramework.Logic.Save
         /// </summary>
         protected IEnumerator LoadSaves()
         {
-            yield return StartCoroutine(LoadSystemSaveFile());
-            yield return StartCoroutine(LoadPlayerSaveFiles());
+            yield return LoadSystemSaveFile();
+
+            yield return LoadPlayerSaveFiles();
         }
 
         /// <summary>
@@ -79,6 +85,7 @@ namespace MungFramework.Logic.Save
             }
             else
             {
+                Debug.Log("系统存档文件加载成功");
                 SystemSaveFile = loadResult.Item1;
             }
             yield return null;
@@ -95,17 +102,24 @@ namespace MungFramework.Logic.Save
             //如果没有当前使用的存档，说明是第一次进入游戏，默认使用自动存档
             if (nowSaveFileName.hasValue == false)
             {
+                Debug.Log("没有当前使用的存档，说明是第一次进入游戏，默认使用自动存档");
                 nowSaveFileName.value = "save0";
+
                 SetSystemValue("NowSaveFileName", "save0");
             }
 
             var loadResult = LoadSaveFile(nowSaveFileName.value);
+            //如果没有存档文件
             if (loadResult.Item2 == false)
             {
+                //新建
                 CurrentSaveFile = new SaveFile(nowSaveFileName.value, new());
+                //并保存
+                yield return SaveIn(CurrentSaveFile);
             }
             else
             {
+                //否则当前存档文件为读取的存档文件
                 CurrentSaveFile = loadResult.Item1;
             }
 
@@ -120,7 +134,7 @@ namespace MungFramework.Logic.Save
             //保存所有管理器
             foreach (var savableManager in SavableManagerList)
             {
-                yield return StartCoroutine (savableManager.Save());
+                yield return savableManager.Save();
             }
         }
 
@@ -129,11 +143,11 @@ namespace MungFramework.Logic.Save
         /// </summary>
         public IEnumerator AutoSave()
         {
-            yield return StartCoroutine(OnSave());
+            yield return OnSave();
 
             SaveFile saveFile = new SaveFile("save0", CurrentSaveFile.GetKeyValues());
 
-            yield return StartCoroutine(SaveIn(saveFile));
+            yield return SaveIn(saveFile);
         }
 
         /// <summary>
@@ -142,11 +156,11 @@ namespace MungFramework.Logic.Save
         /// <param name="saveIndex"></param>
         public IEnumerator SaveInByIndex(int saveIndex)
         {
-            yield return StartCoroutine(OnSave());
+            yield return OnSave();
 
             CurrentSaveFile.SaveName = "save" + saveIndex;
 
-            yield return StartCoroutine(SaveIn(CurrentSaveFile));
+            yield return SaveIn(CurrentSaveFile);
 
             //更新当前存档
             SetSystemValue("NowSaveFileName", CurrentSaveFile.SaveName);
@@ -188,7 +202,7 @@ namespace MungFramework.Logic.Save
         public void SetSystemValue(string key, string val)
         {
             SystemSaveFile.SetValue(key, val);
-            SaveIn(SystemSaveFile);
+            StartCoroutine(SaveIn(SystemSaveFile));
         }
 
         /// <summary>

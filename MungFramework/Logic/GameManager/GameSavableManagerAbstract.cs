@@ -12,7 +12,7 @@ namespace MungFramework.Logic
 
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
-            yield return StartCoroutine(base.OnSceneLoad(parentManager));
+            yield return base.OnSceneLoad(parentManager);
             //把自身添加到存档管理器中
             SaveManager = GameApplicationAbstract.Instance.SaveManager;
             SaveManager.AddManager(this);

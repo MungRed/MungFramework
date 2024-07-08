@@ -106,7 +106,7 @@ namespace MungFramework.Logic.Input
 
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
-            yield return StartCoroutine(base.OnSceneLoad(parentManager));
+            yield return base.OnSceneLoad(parentManager);
 
             InputMap = new();
 
@@ -114,7 +114,7 @@ namespace MungFramework.Logic.Input
             InputSource.Enable();
 
             //从存档中读取设置
-            yield return StartCoroutine(Load());
+            yield return Load();
 
             //初始化输入
             InitInput();

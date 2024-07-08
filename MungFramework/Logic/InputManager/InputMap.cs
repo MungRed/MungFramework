@@ -75,6 +75,7 @@ namespace MungFramework.Logic.Input
 
             InputMapItemList.Add(new(InputKeyEnum.GP_A, InputValueEnum.OK));
             InputMapItemList.Add(new(InputKeyEnum.GP_B, InputValueEnum.CANCEL));
+
             InputMapItemList.Add(new(InputKeyEnum.GP_LEFT_SHOULDER, InputValueEnum.LEFT_PAGE));
             InputMapItemList.Add(new(InputKeyEnum.GP_RIGHT_SHOULDER, InputValueEnum.RIGTH_PAGE));
             InputMapItemList.Add(new(InputKeyEnum.GP_LEFT_TRIGGER, InputValueEnum.UP_ROLL));

@@ -32,11 +32,11 @@ namespace MungFramework.Logic
             GameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnSceneLoad)?.Invoke();
             foreach (var subManager in SubGameManagerList)
             {
-                yield return StartCoroutine(subManager.OnSceneLoad(this));
+                yield return subManager.OnSceneLoad(this);
             }
             foreach (var subExecutors in SubGameExecutorList)
             {
-                yield return StartCoroutine(subExecutors.OnSceneLoad(this));
+                yield return subExecutors.OnSceneLoad(this);
             }
             yield return null;
         }
@@ -45,11 +45,11 @@ namespace MungFramework.Logic
             GameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameStart)?.Invoke();
             foreach (var subManager in SubGameManagerList)
             {
-                yield return StartCoroutine(subManager.OnGameStart(this));
+                yield return subManager.OnGameStart(this);
             }
             foreach (var subExecutors in SubGameExecutorList)
             {
-                yield return StartCoroutine(subExecutors.OnGameStart(this));
+                yield return subExecutors.OnGameStart(this);
             }
             yield return null;
         }
@@ -58,11 +58,11 @@ namespace MungFramework.Logic
             GameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGamePause)?.Invoke();
             foreach (var subManager in SubGameManagerList)
             {
-                yield return StartCoroutine(subManager.OnGamePause(this));
+                yield return subManager.OnGamePause(this);
             }
             foreach (var subExecutors in SubGameExecutorList)
             {
-                yield return StartCoroutine(subExecutors.OnGamePause(this));
+                yield return subExecutors.OnGamePause(this);
             }
             yield return null;
         }
@@ -71,11 +71,11 @@ namespace MungFramework.Logic
             GameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameResume)?.Invoke();
             foreach (var subManager in SubGameManagerList)
             {
-                yield return StartCoroutine(subManager.OnGameResume(this));
+                yield return subManager.OnGameResume(this);
             }
             foreach (var subExecutors in SubGameExecutorList)
             {
-                yield return StartCoroutine(subExecutors.OnGameResume(this));
+                yield return subExecutors.OnGameResume(this);
             }
             yield return null;
         }

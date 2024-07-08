@@ -13,15 +13,15 @@ namespace MungFramework.Demo
 
         public override IEnumerator OnGamePause(GameManagerAbstract parentManager)
         {
-            yield return StartCoroutine(base.OnGamePause(parentManager));
+            yield return base.OnGamePause(parentManager);
             
-            yield return StartCoroutine(SoundManager.PauseAudio("music",transition:true));
+            yield return SoundManager.PauseAudio("music", transition: true);
         }
         public override IEnumerator OnGameResume(GameManagerAbstract parentManager)
         {
-            yield return StartCoroutine(base.OnGameResume(parentManager));
+            yield return base.OnGameResume(parentManager);
 
-            yield return StartCoroutine(SoundManager.ResumeAudio("music",transition:true));
+            yield return SoundManager.ResumeAudio("music", transition: true);
         }
 
         [ContextMenu("PlayNextBgm")]

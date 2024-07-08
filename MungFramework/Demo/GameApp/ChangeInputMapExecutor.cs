@@ -15,7 +15,7 @@ namespace MungFramework.Demo
 
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
-            yield return StartCoroutine(base.OnSceneLoad(parentManager));
+            yield return base.OnSceneLoad(parentManager);
             InputManager = parentManager as InputManager;
         }
 
