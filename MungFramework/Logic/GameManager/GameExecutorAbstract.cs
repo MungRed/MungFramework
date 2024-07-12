@@ -1,7 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace MungFramework.Logic
 {
@@ -12,6 +11,8 @@ namespace MungFramework.Logic
     {
 
         [SerializeField]
+        [FoldoutGroup("事件")]
+        [LabelText("事件")]
         protected GameManagerEvents GameExecutorEvents = new();
 
 

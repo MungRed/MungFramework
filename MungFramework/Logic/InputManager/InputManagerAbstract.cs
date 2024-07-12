@@ -61,15 +61,12 @@ namespace MungFramework.Logic.Input
     /// <summary>
     /// 输入管理器
     /// </summary>
-    public abstract class InputManagerAbstract : GameSavableManagerAbstract
+    public abstract class InputManagerAbstract : SingletonGameManagerAbstract<InputManagerAbstract>
     {
-        /// <summary>
-        /// 每个按键对应输入事件的映射
-        /// </summary>
         [SerializeField]
-        protected InputMap InputMap;
+        private InputDataManagerAbstract InputDataManager;
 
-        protected InputSource InputSource;
+
 
         public InputDeviceEnum InputDevice;
 
@@ -107,15 +104,6 @@ namespace MungFramework.Logic.Input
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
             yield return base.OnSceneLoad(parentManager);
-
-            InputMap = new();
-
-            InputSource = new();
-            InputSource.Enable();
-
-            //从存档中读取设置
-            yield return Load();
-
             //初始化输入
             InitInput();
         }
@@ -135,37 +123,13 @@ namespace MungFramework.Logic.Input
         }
 
 
-        public override IEnumerator Load()
-        {
-            var saveLoad = SaveManager.GetSystemValue("KEYMAP");
-
-            //如果没有输入的存档文件，那么初始化，否则读取输入的存档文件
-            if (saveLoad.hasValue == false)
-            {
-                InputMap.DefaultInputMap();
-                SaveManager.SetSystemValue("KEYMAP", JsonUtility.ToJson(InputMap));
-            }
-            else
-            {
-                InputMap = JsonUtility.FromJson<InputMap>(saveLoad.value);
-            }
-
-            yield return null;
-        }
-        public override IEnumerator Save()
-        {
-            SaveManager.SetSystemValue("KEYMAP", JsonUtility.ToJson(InputMap));
-
-            yield return null;
-        }
-
 
         /// <summary>
         /// 初始化输入事件
         /// </summary>
         protected void InitInput()
         {
-            var inputactions = InputSource.GetEnumerator();
+            var inputactions = InputDataManager.InputSource.GetEnumerator();
             while (inputactions.MoveNext())
             {
                 var action = inputactions.Current;
@@ -199,9 +163,8 @@ namespace MungFramework.Logic.Input
                 bool added = false;
                 UnityAction<InputKeyEnum> addBind = (InputKeyEnum newkey) =>
                 {
-                    InputMap.AddBind(newkey, value);
+                    InputDataManager.InputMap.AddBind(newkey, value);
                     added = true;
-
                 };
 
                 Add_InputAction_AnyKeyDown(addBind);
@@ -212,7 +175,7 @@ namespace MungFramework.Logic.Input
             }
             else
             {
-                if (!InputMap.HasBind(oldkey, value))
+                if (!InputDataManager.InputMap.HasBind(oldkey, value))
                 {
                     Debug.LogError("按键绑定切换错误，不存在旧的绑定");
                     yield break;
@@ -222,7 +185,7 @@ namespace MungFramework.Logic.Input
 
                 UnityAction<InputKeyEnum> changeBind = (InputKeyEnum newkey) =>
                 {
-                    InputMap.ChangeBind(oldkey, newkey, value);
+                    InputDataManager.InputMap.ChangeBind(oldkey, newkey, value);
                     changed = true;
                 };
 
@@ -236,7 +199,7 @@ namespace MungFramework.Logic.Input
 
         public IEnumerable<InputKeyEnum> GetCurrentBind(InputValueEnum value)
         {
-            return InputMap.GetInputKey(value);
+            return InputDataManager.InputMap.GetInputKey(value);
         }
 
 
@@ -258,10 +221,7 @@ namespace MungFramework.Logic.Input
                 Vector2 res = Vector2.zero;
                 if (InputDevice == InputDeviceEnum.手柄)
                 {
-                    if (InputSource != null)
-                    {
-                        res = InputSource.Controll.MoveAxis.ReadValue<Vector2>();
-                    }
+                    return InputDataManager.MoveAxis;
                 }
                 else
                 {
@@ -278,10 +238,11 @@ namespace MungFramework.Logic.Input
                 return res.normalized;
             }
         }
+
         /// <summary>
         /// 返回视角轴
         /// </summary>
-        public Vector2 ViewAxis => InputSource == null ? Vector2.zero : InputSource.Controll.ViewAxis.ReadValue<Vector2>();
+        public Vector2 ViewAxis => InputDataManager.ViewAxis;
 
         /// <summary>
         /// 添加移动轴的绑定
@@ -388,7 +349,7 @@ namespace MungFramework.Logic.Input
             }
 
             //根据按键的key获取输入值
-            foreach (var iv in InputMap.GetInputValue(inputkey))
+            foreach (var iv in InputDataManager.InputMap.GetInputValue(inputkey))
             {
                 //Debug.Log(iv);
                 if (InputActionListener_Performerd.ContainsKey(iv))
@@ -409,7 +370,7 @@ namespace MungFramework.Logic.Input
         protected void InputAction_Canceled(InputKeyEnum inputkey)
         {
             //根据按键的key获取输入值
-            foreach (var iv in InputMap.GetInputValue(inputkey))
+            foreach (var iv in InputDataManager.InputMap.GetInputValue(inputkey))
             {
                 if (InputActionListener_Canceled.ContainsKey(iv))
                 {

@@ -5,10 +5,10 @@ using MungFramework.Logic;
 
 namespace MungFramework.Demo
 {
-    public class BGMExecutor : GameExecutorAbstract
+    public class DemoBGMExecutor : GameExecutorAbstract
     {
-        public BackGroundMusicSO BgmList;
-        public SoundManager SoundManager;
+        public DemoBackGroundMusicSO BgmList;
+        public DemoSoundManager SoundManager;
 
 
         public override IEnumerator OnGamePause(GameManagerAbstract parentManager)

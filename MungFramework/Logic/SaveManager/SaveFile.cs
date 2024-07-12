@@ -8,14 +8,12 @@ using UnityEngine.Rendering;
 namespace MungFramework.Logic.Save
 {
     [Serializable]
-    public class SaveFile : MungFramework.Model.Model
+    public class SaveFile : Model.Model
     {
         [SerializeField]
-        //[ReadOnly]
         public string SaveName;
 
         [SerializeField]
-        //[ReadOnly]
         private SerializedDictionary<string, string> DataDictionary;
 
         public SaveFile(string saveName, List<KeyValuePair<string, string>> datas)

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MungFramework.Demo
 {
     //[CreateAssetMenu(fileName = "newBackGroundMusicSO", menuName = "SO/BackGroundMusic")]
-    public class BackGroundMusicSO : DataSO
+    public class DemoBackGroundMusicSO : DataSO
     {
         public List<AudioClip> BackGroundMusicList;
 

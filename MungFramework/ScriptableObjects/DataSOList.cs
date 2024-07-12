@@ -29,6 +29,17 @@ namespace MungFramework.ScriptableObjects
         [SerializeField]
         protected List<DataSOItem> DataSOItemList = new();
 
+        public List<DataSOItem> GetAllItems()
+        {
+            return DataSOItemList;
+        }
+        public DataSOItem GetItemById(string id)
+        {
+            return DataSOItemList.Find(item => item.Id == id);
+        }
+
+
+
         [Button("@\"获取所有\" + TDataSOName + \"文件\"", ButtonSizes.Medium)]
         private void GetAllSO()
         {
@@ -42,6 +53,16 @@ namespace MungFramework.ScriptableObjects
             }
             SortList();
         }
+        [Button("将所有id设置为资源名称",ButtonSizes.Medium)]
+        private void SetAllIdWithName()
+        {
+            foreach (var dataSOItem in DataSOItemList)
+            {
+                dataSOItem.Id = dataSOItem.Item.name;
+            }
+            Debug.Log("已设置");
+        }
+
 
         [Button("对id排序", ButtonSizes.Medium)]
         private void SortList()
@@ -55,19 +76,19 @@ namespace MungFramework.ScriptableObjects
         {
             bool flag = true;
             HashSet<string> idSet = new HashSet<string>();
-            foreach (var t in DataSOItemList)
+            foreach (var dataSOItem in DataSOItemList)
             {
-                if (t.Id.Contains(" "))
+                if (dataSOItem.Id.Contains(" "))
                 {
-                    Debug.LogError($"id包含空格(已经清除)：id:{t.Id} name:{t.Item.name}");
-                    t.Id = t.Id.Replace(" ", "");
+                    Debug.LogError($"id包含空格(已经清除)：id:{dataSOItem.Id} name:{dataSOItem.Item.name}");
+                    dataSOItem.Id = dataSOItem.Id.Replace(" ", "");
                 }
-                if (idSet.Contains(t.Id))
+                if (idSet.Contains(dataSOItem.Id))
                 {
                     flag = false;
-                    Debug.LogError($"id重复：id:{t.Id} name:{t.Item.name}");
+                    Debug.LogError($"id重复：id:{dataSOItem.Id} name:{dataSOItem.Item.name}");
                 }
-                idSet.Add(t.Id);
+                idSet.Add(dataSOItem.Id);
             }
 
             if (flag)
@@ -79,10 +100,10 @@ namespace MungFramework.ScriptableObjects
         [Button("@\"对所有\" + TDataSOName + \"应用id\"", ButtonSizes.Medium)]
         private void ApplyID()
         {
-            foreach (var item in DataSOItemList)
+            foreach (var dataSOItem in DataSOItemList)
             {
-                item.Item.Id = item.Id;
-               UnityEditor.EditorUtility.SetDirty(item.Item);
+                dataSOItem.Item.Id = dataSOItem.Id;
+               UnityEditor.EditorUtility.SetDirty(dataSOItem.Item);
             }
             UnityEditor.AssetDatabase.SaveAssets();
             Debug.Log("已应用id");

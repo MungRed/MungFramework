@@ -6,16 +6,14 @@ namespace MungFramework.Logic
     /// <summary>
     /// 可保存的游戏管理器，能调用子管理器和子执行器
     /// </summary>
-    public abstract class GameSavableManagerAbstract : GameManagerAbstract
+    public abstract class SavableGameManagerAbstract : GameManagerAbstract
     {
-        protected SaveManagerAbstract SaveManager;
 
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
             yield return base.OnSceneLoad(parentManager);
             //把自身添加到存档管理器中
-            SaveManager = GameApplicationAbstract.Instance.SaveManager;
-            SaveManager.AddManager(this);
+            SaveManagerAbstract.Instance.AddManager(this);
         }
 
 

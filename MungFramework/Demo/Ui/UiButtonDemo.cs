@@ -12,7 +12,7 @@ namespace MungFramework.Demo
             base.Select();
             if (CheckAudio != null)
             {
-                GameApplication.Instance.SoundManager.PlayAudio("effect", CheckAudio);
+                DemoSoundManager.Instance.PlayAudio("effect", CheckAudio);
             }
         }
 

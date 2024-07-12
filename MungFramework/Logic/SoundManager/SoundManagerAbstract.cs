@@ -8,8 +8,11 @@ using UnityEngine;
 
 namespace MungFramework.Logic.Sound
 {
-    public abstract class SoundManagerAbstract : GameSavableManagerAbstract
+    public abstract class SoundManagerAbstract : SingletonGameManagerAbstract<SoundManagerAbstract>
     {
+        [SerializeField]
+        private SoundDataManagerAbstract SoundSaveManager;
+
 
         [ReadOnly]
         [SerializeField]
@@ -29,7 +32,7 @@ namespace MungFramework.Logic.Sound
         {
             yield return base.OnSceneLoad(parentManager);
             //读取保存数据
-            yield return Load();
+            yield return SoundSaveManager.Load();
             //加载默认声音源
             yield return InitSoundSource();
         }
@@ -46,17 +49,6 @@ namespace MungFramework.Logic.Sound
         }
 
 
-        public override IEnumerator Load()
-        {
-            //保存一些声音的设置
-            yield return null;
-        }
-
-        public override IEnumerator Save()
-        {
-            //加载声音设置
-            yield return null;
-        }
 
         /// <summary>
         /// 初始化声音源

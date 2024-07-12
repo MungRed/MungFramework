@@ -8,15 +8,15 @@ using UnityEngine;
 
 namespace MungFramework.Demo
 {
-    public class ChangeInputMapExecutor : GameExecutorAbstract
+    public class DemoChangeInputMapExecutor : GameExecutorAbstract
     {
         [SerializeField]
-        private InputManager InputManager;
+        private DemoInputManager InputManager;
 
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
             yield return base.OnSceneLoad(parentManager);
-            InputManager = parentManager as InputManager;
+            InputManager = parentManager as DemoInputManager;
         }
 
 

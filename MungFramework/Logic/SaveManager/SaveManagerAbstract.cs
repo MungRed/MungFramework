@@ -6,19 +6,17 @@ using UnityEngine;
 
 namespace MungFramework.Logic.Save
 {
-    public abstract class SaveManagerAbstract : GameManagerAbstract
+    public abstract class SaveManagerAbstract : SingletonGameManagerAbstract<SaveManagerAbstract>
     {
         [SerializeField]
         [ReadOnly]
-        protected List<GameSavableManagerAbstract> SavableManagerList;
+        protected List<SavableGameManagerAbstract> SavableManagerList;
 
 
         [SerializeField]
-        //[ReadOnly]
         protected SaveFile SystemSaveFile; //系统存档文件
 
         [SerializeField]
-        //[ReadOnly]
         protected SaveFile CurrentSaveFile;//当前存档文件
 
 
@@ -236,7 +234,7 @@ namespace MungFramework.Logic.Save
         }
 
 
-        public void AddManager(GameSavableManagerAbstract savableManager)
+        public void AddManager(SavableGameManagerAbstract savableManager)
         {
             if (SavableManagerList.Contains(savableManager))
             {

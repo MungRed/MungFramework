@@ -26,7 +26,7 @@ namespace MungFramework.Ui
 
         protected UiLayerGroupAbstract UiLayerGroup => GetComponentInParent<UiLayerGroupAbstract>();
 
-        public InputManagerAbstract InputManager => GameApplicationAbstract.Instance.InputManager;
+        public InputManagerAbstract InputManager =>InputManagerAbstract.Instance;
 
         public virtual void OnInput(InputValueEnum inputType)
         {
@@ -232,7 +232,9 @@ namespace MungFramework.Ui
             {
                 return;
             }
+
             NowSelectButton.Right();
+
             if (!NowSelectButton.CouldRight)
             {
                 return;

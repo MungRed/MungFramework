@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MungFramework.Logic
@@ -7,17 +8,8 @@ namespace MungFramework.Logic
     /// <summary>
     /// 游戏应用程序，游戏的入口，每个场景有且只有一个GameApplication
     /// </summary>
-    public abstract class GameApplicationAbstract : GameManagerAbstract
+    public abstract class GameApplicationAbstract : SingletonGameManagerAbstract<GameApplicationAbstract>
     {
-        //单例对象
-        public static GameApplicationAbstract Instance;
-
-        public Save.SaveManagerAbstract SaveManager;
-        public Input.InputManagerAbstract InputManager;
-        public Sound.SoundManagerAbstract SoundManager;
-
-        
-
         /// <summary>
         /// 游戏状态
         /// </summary>
@@ -37,16 +29,10 @@ namespace MungFramework.Logic
 
 
         #region Unity消息
-        public virtual void Awake()
+        public override void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            base.Awake();
+
             DOSceneLoad();
         }
         public virtual void Start()

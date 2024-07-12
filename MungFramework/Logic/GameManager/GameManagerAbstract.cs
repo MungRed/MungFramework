@@ -11,18 +11,24 @@ namespace MungFramework.Logic
     public abstract class GameManagerAbstract : MonoBehaviour
     {
         [SerializeField]
+        [FoldoutGroup("事件")]
+        [LabelText("事件")]
         protected GameManagerEvents GameManagerEvents = new();
 
         /// <summary>
         /// 按一定顺序获取所有的子管理器
         /// </summary>
         /// <returns></returns>
+        [FoldoutGroup("子管理器")]
+        [LabelText("子管理器")]
         public List<GameManagerAbstract> SubGameManagerList;
 
         /// <summary>
         /// 按一定顺序获取所有的子执行器
         /// </summary>
         /// <returns></returns>
+        [FoldoutGroup("子管理器")]
+        [LabelText("子执行器")]
         public List<GameExecutorAbstract> SubGameExecutorList;
 
 

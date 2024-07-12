@@ -1,7 +1,7 @@
 using MungFramework.ActionTreeEditor;
 namespace MungFramework.Demo
 {
-    public class MyNode2 : ActionNode
+    public class DemoMyNode2 : ActionNode
     {
         public override NodeType _NodeType => NodeType.Root;
 
