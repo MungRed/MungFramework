@@ -5,17 +5,16 @@ namespace MungFramework.Logic
 {
     public class SingletonGameManagerAbstract<T> : GameManagerAbstract where T: GameManagerAbstract
     {
-        public static T Instance;
-        public  virtual void Awake()
+        private static T _Instance;
+        public static T Instance
         {
-            if (Instance == null)
+            get
             {
-                Instance = this as T;
-            }
-            else
-            {
-                Debug.LogError("单例已存在");
-                Destroy(gameObject);
+                if (_Instance == null)
+                {
+                    _Instance = FindObjectOfType(typeof(T)) as T;
+                }
+                return _Instance;
             }
         }
     }

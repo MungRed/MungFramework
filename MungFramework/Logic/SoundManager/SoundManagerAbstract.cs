@@ -11,7 +11,7 @@ namespace MungFramework.Logic.Sound
     public abstract class SoundManagerAbstract : SingletonGameManagerAbstract<SoundManagerAbstract>
     {
         [SerializeField]
-        private SoundDataManagerAbstract SoundSaveManager;
+        private SoundDataManagerAbstract SoundDataManager;
 
 
         [ReadOnly]
@@ -21,18 +21,22 @@ namespace MungFramework.Logic.Sound
         [ReadOnly]
         [SerializeField]
         //默认的声音源
-        protected List<string> DefaultSoundSourceList = new List<string>() {
-            "music",
-            "effect",
-            "voice",
+        protected List<(string, SoundDataManagerAbstract.VolumeTypeEnum)> DefaultSoundSourceList = new List<(string, SoundDataManagerAbstract.VolumeTypeEnum)>() {
+            ("music",SoundDataManagerAbstract.VolumeTypeEnum.Music),
+            ("effect",SoundDataManagerAbstract.VolumeTypeEnum.Effect),
+            ("voice",SoundDataManagerAbstract.VolumeTypeEnum.Voice)
         };
+
+        public void SetSoundVolume(SoundDataManagerAbstract.VolumeTypeEnum volumeType, int val)
+        {
+            SoundDataManager.SetVolumeData(volumeType, val);
+        }
+
 
 
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
             yield return base.OnSceneLoad(parentManager);
-            //读取保存数据
-            yield return SoundSaveManager.Load();
             //加载默认声音源
             yield return InitSoundSource();
         }
@@ -45,6 +49,7 @@ namespace MungFramework.Logic.Sound
             foreach (var soundSource in SoundSourceList)
             {
                 soundSource.Source.transform.position = soundSource.Follow.position + soundSource.LocalPosition;
+                soundSource.Volume = SoundDataManager.GetVolumeData(soundSource.VolumeType);
             }
         }
 
@@ -58,7 +63,7 @@ namespace MungFramework.Logic.Sound
         {
             foreach (var defaultSoundSource in DefaultSoundSourceList)
             {
-                AddSoundSource(defaultSoundSource, 1);
+                AddSoundSource(defaultSoundSource.Item1, defaultSoundSource.Item2);
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -69,7 +74,7 @@ namespace MungFramework.Logic.Sound
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public virtual SoundManagerAbstract AddSoundSource(string id, float volume)
+        public virtual SoundManagerAbstract AddSoundSource(string id, SoundDataManagerAbstract.VolumeTypeEnum volumeType)
         {
             //检查id是否存在
             if (GetSoundSource(id) != null)
@@ -78,6 +83,7 @@ namespace MungFramework.Logic.Sound
                 return this;
             }
 
+            float volume = SoundDataManager.GetVolumeData(volumeType) / 100f;
             //添加声音源游戏对象
             GameObject soundSourceObj = AddSoundSourceObj(id, transform, Vector3.zero, volume);
 
@@ -87,7 +93,9 @@ namespace MungFramework.Logic.Sound
                 id = id,
                 Follow = transform,
                 LocalPosition = Vector3.zero,
+
                 Source = soundSourceObj.GetComponent<AudioSource>(),
+                VolumeType = volumeType,
                 Volume = volume
             };
             SoundSourceList.Add(soundSource);
@@ -125,7 +133,7 @@ namespace MungFramework.Logic.Sound
         }
 
 
-        /// <summary>
+/*        /// <summary>
         /// 设置声音源音量
         /// </summary>
         public virtual SoundManagerAbstract SetSoundSourceVolume(string id, float volume, bool transition)
@@ -151,7 +159,7 @@ namespace MungFramework.Logic.Sound
             }
 
             return this;
-        }
+        }*/
 
         /// <summary>
         /// 添加声音源游戏对象

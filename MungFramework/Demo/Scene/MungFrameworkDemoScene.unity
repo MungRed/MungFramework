@@ -511,7 +511,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 364079800}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e1e17a757d224446b5672782c9ca220, type: 3}
+  m_Script: {fileID: 11500000, guid: d5803a6d4dfae5146b8a347740a00ae9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   GameManagerEvents:
@@ -519,10 +519,8 @@ MonoBehaviour:
       m_Keys: 
       m_Values: []
   SubGameManagerList: []
-  SubGameExecutorList:
-  - {fileID: 1286925551}
-  InputMap:
-    InputMapItemList: []
+  SubGameExecutorList: []
+  InputDataManager: {fileID: 0}
   InputDevice: 0
   IsUp: 0
   IsDown: 0
@@ -753,7 +751,7 @@ MonoBehaviour:
   CouldRight: 0
   IsSelected: 0
   SelectObject: {fileID: 1663727948}
-  CheckAudio: {fileID: 8300000, guid: 9e8c4f407bcb99d4dad4385f6ea4bc4f, type: 3}
+  checkAudio: {fileID: 8300000, guid: 9e8c4f407bcb99d4dad4385f6ea4bc4f, type: 3}
 --- !u!1 &563668677
 GameObject:
   m_ObjectHideFlags: 0
@@ -1408,6 +1406,7 @@ MonoBehaviour:
   SubGameManagerList: []
   SubGameExecutorList:
   - {fileID: 376982847}
+  SoundSaveManager: {fileID: 0}
   SoundSourceList: []
   DefaultSoundSourceList:
   - music
@@ -1576,7 +1575,7 @@ MonoBehaviour:
   CouldRight: 0
   IsSelected: 0
   SelectObject: {fileID: 1911970722}
-  CheckAudio: {fileID: 8300000, guid: 9e8c4f407bcb99d4dad4385f6ea4bc4f, type: 3}
+  checkAudio: {fileID: 8300000, guid: 9e8c4f407bcb99d4dad4385f6ea4bc4f, type: 3}
 --- !u!1 &1488344715
 GameObject:
   m_ObjectHideFlags: 0
@@ -1659,9 +1658,6 @@ MonoBehaviour:
   - {fileID: 364079802}
   - {fileID: 1270437504}
   SubGameExecutorList: []
-  SaveManager: {fileID: 402762376}
-  InputManager: {fileID: 364079802}
-  SoundManager: {fileID: 1270437504}
   GameState: 0
 --- !u!1 &1564948618
 GameObject:
@@ -1777,7 +1773,7 @@ MonoBehaviour:
   CouldRight: 0
   IsSelected: 0
   SelectObject: {fileID: 591879862}
-  CheckAudio: {fileID: 8300000, guid: 9e8c4f407bcb99d4dad4385f6ea4bc4f, type: 3}
+  checkAudio: {fileID: 8300000, guid: 9e8c4f407bcb99d4dad4385f6ea4bc4f, type: 3}
 --- !u!1 &1663727948
 GameObject:
   m_ObjectHideFlags: 0
@@ -1968,7 +1964,7 @@ MonoBehaviour:
   CouldRight: 0
   IsSelected: 0
   SelectObject: {fileID: 339552536}
-  CheckAudio: {fileID: 8300000, guid: 9e8c4f407bcb99d4dad4385f6ea4bc4f, type: 3}
+  checkAudio: {fileID: 8300000, guid: 9e8c4f407bcb99d4dad4385f6ea4bc4f, type: 3}
 --- !u!1 &1911970722
 GameObject:
   m_ObjectHideFlags: 0

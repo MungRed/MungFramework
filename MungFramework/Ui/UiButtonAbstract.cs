@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using MungFramework.ComponentExtension;
+using MungFramework.Logic.Sound;
 
 namespace MungFramework.Ui
 {
@@ -27,6 +28,9 @@ namespace MungFramework.Ui
 
         public UiScrollViewAbstract UiScrollView => GetComponentInParent<UiScrollViewAbstract>();
 
+
+        [SerializeField]
+        protected AudioClip checkAudio;
 
         #region ÊÂ¼þ
         public void AddAction(UiButtonActionType type, UnityAction action)
@@ -57,6 +61,10 @@ namespace MungFramework.Ui
             IsSelected = true;
             UpdateScrollView();
             DoAction(UiButtonActionType.Select);
+            if (checkAudio != null)
+            {
+                SoundManagerAbstract.Instance.PlayAudio("effect", checkAudio);
+            }
             if (SelectObject != null)
             {
                 SelectObject.SetActive(true);

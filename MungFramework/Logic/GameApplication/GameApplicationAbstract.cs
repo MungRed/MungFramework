@@ -29,10 +29,8 @@ namespace MungFramework.Logic
 
 
         #region Unityœ˚œ¢
-        public override void Awake()
+        public virtual void Awake()
         {
-            base.Awake();
-
             DOSceneLoad();
         }
         public virtual void Start()
