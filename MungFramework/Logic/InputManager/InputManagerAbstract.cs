@@ -155,15 +155,21 @@ namespace MungFramework.Logic.Input
         /// <param name="oldkey"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public IEnumerator ChangeKeyBind(InputKeyEnum oldkey, InputValueEnum value)
+        public IEnumerator ChangeKeyBind(string inputMapName,InputKeyEnum oldkey, InputValueEnum value)
         {
+            var inputMap = InputDataManager.GetInputMap(inputMapName);
+            if (inputMap == null)
+            {
+                yield break;
+            }
+
             //如果旧键位是任意键，说明是添加键位而不是改变键位
             if (oldkey == InputKeyEnum.ANYKEY)
             {
                 bool added = false;
                 UnityAction<InputKeyEnum> addBind = (InputKeyEnum newkey) =>
                 {
-                    InputDataManager.InputMap.AddBind(newkey, value);
+                    inputMap.AddBind(newkey, value);
                     added = true;
                 };
 
@@ -175,7 +181,7 @@ namespace MungFramework.Logic.Input
             }
             else
             {
-                if (!InputDataManager.InputMap.HasBind(oldkey, value))
+                if (!inputMap.HasBind(oldkey, value))
                 {
                     Debug.LogError("按键绑定切换错误，不存在旧的绑定");
                     yield break;
@@ -185,7 +191,7 @@ namespace MungFramework.Logic.Input
 
                 UnityAction<InputKeyEnum> changeBind = (InputKeyEnum newkey) =>
                 {
-                    InputDataManager.InputMap.ChangeBind(oldkey, newkey, value);
+                    inputMap.ChangeBind(oldkey, newkey, value);
                     changed = true;
                 };
 
@@ -195,11 +201,12 @@ namespace MungFramework.Logic.Input
 
                 Remove_InputAction_AnyKeyDown(changeBind);
             }
+            InputDataManager.Save();
         }
 
         public IEnumerable<InputKeyEnum> GetCurrentBind(InputValueEnum value)
         {
-            return InputDataManager.InputMap.GetInputKey(value);
+            return InputDataManager.GetInputKeys(value);
         }
 
 
@@ -349,17 +356,17 @@ namespace MungFramework.Logic.Input
             }
 
             //根据按键的key获取输入值
-            foreach (var iv in InputDataManager.InputMap.GetInputValue(inputkey))
+            foreach (var inputvalue in InputDataManager.GetInputValues(inputkey))
             {
                 //Debug.Log(iv);
-                if (InputActionListener_Performerd.ContainsKey(iv))
+                if (InputActionListener_Performerd.ContainsKey(inputvalue))
                 {
-                    InputActionListener_Performerd[iv].Invoke();
+                    InputActionListener_Performerd[inputvalue].Invoke();
                 }
 
                 if (InputAcceptorStack.Count > 0)
                 {
-                    InputAcceptorStack[0].OnInput(iv);
+                    InputAcceptorStack[0].OnInput(inputvalue);
                 }
             }
         }
@@ -370,11 +377,11 @@ namespace MungFramework.Logic.Input
         protected void InputAction_Canceled(InputKeyEnum inputkey)
         {
             //根据按键的key获取输入值
-            foreach (var iv in InputDataManager.InputMap.GetInputValue(inputkey))
+            foreach (var inputvalue in InputDataManager.GetInputValues(inputkey))
             {
-                if (InputActionListener_Canceled.ContainsKey(iv))
+                if (InputActionListener_Canceled.ContainsKey(inputvalue))
                 {
-                    InputActionListener_Canceled[iv].Invoke();
+                    InputActionListener_Canceled[inputvalue].Invoke();
                 }
             }
         }

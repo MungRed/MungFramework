@@ -38,12 +38,12 @@ namespace MungFramework.Demo
             if (oldBind.Count == 0)
             {
                 Debug.Log("旧按键不存在，新添键位");
-                yield return StartCoroutine(InputManager.ChangeKeyBind(InputKeyEnum.ANYKEY, value));
+                yield return StartCoroutine(InputManager.ChangeKeyBind("KEYMAP_LAYER_Ui",InputKeyEnum.ANYKEY, value));
             }
             else
             {
                 Debug.Log("请按任意键 旧按键为："+oldBind.First());
-                yield return StartCoroutine(InputManager.ChangeKeyBind(oldBind.First(), value));
+                yield return StartCoroutine(InputManager.ChangeKeyBind("KEYMAP_LAYER_Ui", oldBind.First(), value));
                 var newBind = InputManager.GetCurrentBind(value).ToList();
                 Debug.Log("绑定成功 新按键为：" + newBind.First());
             }

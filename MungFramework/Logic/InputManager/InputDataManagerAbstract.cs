@@ -1,27 +1,51 @@
 ﻿using MungFramework.Demo;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace MungFramework.Logic.Input
 {
-    public abstract class InputDataManagerAbstract : SavableGameManagerAbstract
+    public abstract class InputDataManagerAbstract : GameManagerAbstract
     {
-        /// <summary>
-        /// 每个按键对应输入事件的映射
-        /// </summary>
         [SerializeField]
-        public InputMap InputMap;
+        private List<InputMapLayerDataSO> inputMapLayerDataSOList = new();
+
+        [SerializeField]
+        private List<InputMapLayer> inputMapLayerList = new();
 
         public InputSource InputSource;
 
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
             yield return base.OnSceneLoad(parentManager);
-            InputMap = new();
             InputSource = new();
             InputSource.Enable();
-            yield return Load();
+            Load();
         }
+
+        public IEnumerable<InputValueEnum> GetInputValues(InputKeyEnum inputKey)
+        {
+            foreach (var inputMap in inputMapLayerList)
+            {
+                yield return inputMap.GetInputValue(inputKey);
+            }
+        }
+        public IEnumerable<InputKeyEnum> GetInputKeys(InputValueEnum inputValue)
+        {
+            foreach (var inputMap in inputMapLayerList)
+            {
+                foreach (var inputKey in inputMap.GetInputKey(inputValue))
+                {
+                    yield return inputKey;
+                }
+            }
+        }
+        public InputMapLayer GetInputMap(string inputMapName)
+        {
+            return inputMapLayerList.Find(x => x.InputMapLayerName == inputMapName);
+        }
+
 
         /// <summary>
         /// 返回移动轴
@@ -37,36 +61,45 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 返回视角轴
         /// </summary>
-        public Vector2 ViewAxis => InputSource == null ? Vector2.zero : InputSource.Controll.ViewAxis.ReadValue<Vector2>();
-
-
-
-
-
-
-        public override IEnumerator Load()
+        public Vector2 ViewAxis
         {
-            var saveLoad = DemoSaveManager.Instance.GetSystemValue("KEYMAP");
-
-            //如果没有输入的存档文件，那么初始化，否则读取输入的存档文件
-            if (saveLoad.hasValue == false)
+            get
             {
-                InputMap.DefaultInputMap();
-                DemoSaveManager.Instance.SetSystemValue("KEYMAP", JsonUtility.ToJson(InputMap));
+                return InputSource == null ? Vector2.zero : InputSource.Controll.ViewAxis.ReadValue<Vector2>();
             }
-            else
-            {
-                InputMap = JsonUtility.FromJson<InputMap>(saveLoad.value);
-            }
-
-            yield return null;
         }
 
-        public override IEnumerator Save()
-        {
-            DemoSaveManager.Instance.SetSystemValue("KEYMAP", JsonUtility.ToJson(InputMap));
 
-            yield return null;
+
+
+        public void Load()
+        {
+            inputMapLayerList.Clear();
+            foreach (var inputMapDataSO in inputMapLayerDataSOList)
+            {
+                var savename = "INPUTMAP_LAYER_" + inputMapDataSO.InputMapLayerName;
+                var loadSuccess = DemoSaveManager.Instance.GetSystemValue(savename);
+                if (loadSuccess.hasValue == false)
+                {
+                    Debug.Log("读取按键层" + savename + "不存在，新建");
+                    inputMapLayerList.Add(new InputMapLayerSOModelStream().Stream(inputMapDataSO));
+                }
+                else
+                {
+                    Debug.Log("读取按键层" + savename + "成功");
+                    inputMapLayerList.Add(JsonUtility.FromJson<InputMapLayer>(loadSuccess.value));  
+                }
+            }
+            Save();
+        }
+
+        public void Save()
+        {
+            foreach (var inputMap in inputMapLayerList)
+            {
+                var savename = "INPUTMAP_LAYER_" + inputMap.InputMapLayerName;
+                DemoSaveManager.Instance.SetSystemValue(savename, JsonUtility.ToJson(inputMap));
+            }
         }
     }
 }

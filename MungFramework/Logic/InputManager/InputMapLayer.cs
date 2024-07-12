@@ -8,49 +8,35 @@ using UnityEditor;
 namespace MungFramework.Logic.Input
 {
     /// <summary>
-    /// 输入映射
+    /// 输入映射,Key不重复
     /// </summary>
     [Serializable]
-    public class InputMap : MungFramework.Model.Model
+    public class InputMapLayer : MungFramework.Model.Model
     {
-        [Serializable]
-        public class InputMapItem
-        {        
-            //代表某个按键会触发某个值
-            public InputKeyEnum InputKey;
-            public InputValueEnum InputValue;
-
-            public InputMapItem(InputKeyEnum inputKey, InputValueEnum inputValue)
-            {
-                InputKey = inputKey;
-                InputValue = inputValue;
-            }
-        }
+        public string InputMapLayerName;
 
         [SerializeField]
-        [ReadOnly]
-        private List<InputMapItem> InputMapItemList = new();
+        public  List<InputMapKeyValuePair> InputMapList = new();
 
         /// <summary>
         /// 获取某个键对应的输入值
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public IEnumerable<InputValueEnum> GetInputValue(InputKeyEnum key)
+        public InputValueEnum GetInputValue(InputKeyEnum key)
         {
-            //Debug.Log(key);
-            //Debug.Log(InputMapItemList.Where(x => x.InputKey == key).Count());
-            return InputMapItemList.Where(x => x.InputKey == key).Select(x => x.InputValue);
+            var find = InputMapList.Find(x => x.InputKey == key);
+            return find?.InputValue??InputValueEnum.NONE;
         }
         public IEnumerable<InputKeyEnum> GetInputKey(InputValueEnum value)
         {
-            return InputMapItemList.Where(x=>x.InputValue==value).Select(x => x.InputKey);
+            return InputMapList.Where(x=>x.InputValue==value).Select(x => x.InputKey);
         }
 
         /// <summary>
         /// 默认输入映射
         /// </summary>
-        public void DefaultInputMap()
+/*        public void DefaultInputMap()
         {
             InputMapItemList.Clear();
 
@@ -80,7 +66,7 @@ namespace MungFramework.Logic.Input
             InputMapItemList.Add(new(InputKeyEnum.GP_RIGHT_SHOULDER, InputValueEnum.RIGTH_PAGE));
             InputMapItemList.Add(new(InputKeyEnum.GP_LEFT_TRIGGER, InputValueEnum.UP_ROLL));
             InputMapItemList.Add(new(InputKeyEnum.GP_RIGHT_TRIGGER, InputValueEnum.DOWN_ROLL));
-        }
+        }*/
 
         /// <summary>
         /// 给某个值绑定按键
@@ -90,15 +76,16 @@ namespace MungFramework.Logic.Input
         /// <returns></returns>
         public bool AddBind(InputKeyEnum key, InputValueEnum value)
         {
-            if (InputMapItemList.Find(x => x.InputKey==key&&x.InputValue==value) != null)
+            if (InputMapList.Find(x => x.InputKey==key) != null)
             {
-                Debug.LogError("已经有按键绑定了这个值");
+                Debug.LogError("按键重复！");
                 return false;
             }
 
-            InputMapItemList.Add(new(key, value));
+            InputMapList.Add(new(key, value));
             return true;
         }
+
         /// <summary>
         /// 改变值的按键
         /// </summary>
@@ -107,7 +94,7 @@ namespace MungFramework.Logic.Input
         /// <returns></returns>
         public bool ChangeBind(InputKeyEnum oldkey,InputKeyEnum newkey,InputValueEnum value)
         {
-            var oldBind = InputMapItemList.Find(x => x.InputKey==oldkey&&x.InputValue == value);
+            var oldBind = InputMapList.Find(x => x.InputKey==oldkey&&x.InputValue == value);
             if (oldBind == null)
             {
                 AddBind(newkey, value);
@@ -125,7 +112,7 @@ namespace MungFramework.Logic.Input
         /// <returns></returns>
         public bool HasBind(InputKeyEnum key, InputValueEnum value)
         {
-            return InputMapItemList.Find(x => x.InputKey == key && x.InputValue == value) != null;
+            return InputMapList.Find(x => x.InputKey == key && x.InputValue == value) != null;
         }
     }
 }
