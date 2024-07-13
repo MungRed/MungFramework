@@ -25,3 +25,5 @@ MonoBehaviour:
     InputValue: 5
   - InputKey: 47
     InputValue: 6
+  - InputKey: 48
+    InputValue: 7

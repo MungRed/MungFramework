@@ -38,7 +38,7 @@ namespace MungFramework.Logic.Save
         /// 初始化数据库
         /// </summary>
         /// <exception cref="System.Exception"></exception>
-        protected IEnumerator InitDatabase()
+        protected virtual IEnumerator InitDatabase()
         {
             bool hasDataBase = Database.ExistDatabase();
 
@@ -63,7 +63,7 @@ namespace MungFramework.Logic.Save
         /// 加载存档文件
         /// 加载存档文件后，系统文件和当前存档文件都不为null
         /// </summary>
-        protected IEnumerator LoadSaves()
+        protected virtual IEnumerator LoadSaves()
         {
             yield return LoadSystemSaveFile();
 
@@ -73,7 +73,7 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 加载系统存档文件
         /// </summary>
-        protected IEnumerator LoadSystemSaveFile()
+        protected virtual IEnumerator LoadSystemSaveFile()
         {
             var loadResult = LoadSaveFile("system");
 
@@ -92,7 +92,7 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 加载玩家存档文件
         /// </summary>
-        protected IEnumerator LoadPlayerSaveFiles()
+        protected virtual IEnumerator LoadPlayerSaveFiles()
         {
             //获取当前使用的存档
             var nowSaveFileName = SystemSaveFile.GetValue("NowSaveFileName");
@@ -127,7 +127,7 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 在存档之前调用
         /// </summary>
-        protected IEnumerator OnSave()
+        protected virtual IEnumerator OnSave()
         {
             //保存所有管理器
             foreach (var savableManager in SavableManagerList)
@@ -139,7 +139,7 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 自动保存
         /// </summary>
-        public IEnumerator AutoSave()
+        public virtual IEnumerator AutoSave()
         {
             yield return OnSave();
 
@@ -152,7 +152,7 @@ namespace MungFramework.Logic.Save
         /// 把当前存档保存到指定存档
         /// </summary>
         /// <param name="saveIndex"></param>
-        public IEnumerator SaveInByIndex(int saveIndex)
+        public virtual IEnumerator SaveInByIndex(int saveIndex)
         {
             yield return OnSave();
 
@@ -164,7 +164,7 @@ namespace MungFramework.Logic.Save
             SetSystemValue("NowSaveFileName", CurrentSaveFile.SaveName);
         }
 
-        protected IEnumerator SaveIn(SaveFile saveFile)
+        protected virtual IEnumerator SaveIn(SaveFile saveFile)
         {
             Database.SetKeyValues(saveFile.SaveName, saveFile.GetKeyValues());
             yield return null;
@@ -172,13 +172,13 @@ namespace MungFramework.Logic.Save
 
 
 
-        public (SaveFile saveFile, bool hasSaveFile) LoadSaveFile(int saveindex)
+        public virtual  (SaveFile saveFile, bool hasSaveFile) LoadSaveFile(int saveindex)
         {
             string saveName = "save" + saveindex;
             return LoadSaveFile(saveName);
         }
 
-        public (SaveFile saveFile, bool hasSaveFile) LoadSaveFile(string saveName)
+        public virtual (SaveFile saveFile, bool hasSaveFile) LoadSaveFile(string saveName)
         {
             var saveFile = Database.GetKeyValues(saveName);
             if (saveFile.Item2 == false)
@@ -197,7 +197,7 @@ namespace MungFramework.Logic.Save
         /// </summary>
         /// <param name="key"></param>
         /// <param name="val"></param>
-        public void SetSystemValue(string key, string val)
+        public virtual void SetSystemValue(string key, string val)
         {
             SystemSaveFile.SetValue(key, val);
             StartCoroutine(SaveIn(SystemSaveFile));
@@ -208,7 +208,7 @@ namespace MungFramework.Logic.Save
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public (string value , bool hasValue) GetSystemValue(string key)
+        public  virtual (string value , bool hasValue) GetSystemValue(string key)
         {
             return SystemSaveFile.GetValue(key);
         }
@@ -218,7 +218,7 @@ namespace MungFramework.Logic.Save
         /// </summary>
         /// <param name="key"></param>
         /// <param name="val"></param>
-        public void SetSaveValue(string key, string val)
+        public virtual void SetSaveValue(string key, string val)
         {
             CurrentSaveFile.SetValue(key, val);
         }
@@ -228,13 +228,13 @@ namespace MungFramework.Logic.Save
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public (string value, bool hasValue) GetSaveValue(string key)
+        public virtual(string value, bool hasValue) GetSaveValue(string key)
         {
             return CurrentSaveFile.GetValue(key);
         }
 
 
-        public void AddManager(SavableGameManagerAbstract savableManager)
+        public virtual void AddManager(SavableGameManagerAbstract savableManager)
         {
             if (SavableManagerList.Contains(savableManager))
             {

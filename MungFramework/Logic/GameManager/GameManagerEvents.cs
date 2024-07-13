@@ -16,14 +16,14 @@ namespace MungFramework.Logic
         }
 
         [SerializeField]
-        private SerializedDictionary<GameMangerEventsEnum, UnityEvent> GameManagerEventMap;
+        private SerializedDictionary<GameMangerEventsEnum, UnityEvent> gameManagerEventMap;
 
 
         public UnityEvent GetEvent(GameMangerEventsEnum gameManagerEventsEnum)
         {
-            if (GameManagerEventMap.ContainsKey(gameManagerEventsEnum))
+            if (gameManagerEventMap.ContainsKey(gameManagerEventsEnum))
             {
-                return GameManagerEventMap[gameManagerEventsEnum];
+                return gameManagerEventMap[gameManagerEventsEnum];
             }
             else
             {
@@ -32,19 +32,19 @@ namespace MungFramework.Logic
         }
         public void AddEvent(GameMangerEventsEnum gameMangerEventsEnum, UnityAction action)
         {
-            if (!GameManagerEventMap.ContainsKey(gameMangerEventsEnum))
+            if (!gameManagerEventMap.ContainsKey(gameMangerEventsEnum))
             {
-                GameManagerEventMap.Add(gameMangerEventsEnum, new UnityEvent());
+                gameManagerEventMap.Add(gameMangerEventsEnum, new UnityEvent());
             }
 
-            GameManagerEventMap[gameMangerEventsEnum].AddListener(action);
+            gameManagerEventMap[gameMangerEventsEnum].AddListener(action);
         }
 
         public void RemoveEvent(GameMangerEventsEnum gameMangerEventsEnum, UnityAction action)
         {
-            if (GameManagerEventMap.ContainsKey(gameMangerEventsEnum))
+            if (gameManagerEventMap.ContainsKey(gameMangerEventsEnum))
             {
-                GameManagerEventMap[gameMangerEventsEnum].RemoveListener(action);
+                gameManagerEventMap[gameMangerEventsEnum].RemoveListener(action);
             }
         }
     }

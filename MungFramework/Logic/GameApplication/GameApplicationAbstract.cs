@@ -75,7 +75,7 @@ namespace MungFramework.Logic
         {
             StartCoroutine(OnGameStart(this));
         }
-        public override IEnumerator OnGameStart(GameManagerAbstract parentManager)
+        public  override IEnumerator OnGameStart(GameManagerAbstract parentManager)
         {
             yield return new WaitUntil(()=>GameState == GameStateEnum.Start);
 

@@ -10,8 +10,25 @@ namespace MungFramework.Logic.Sound
 {
     public abstract class SoundManagerAbstract : SingletonGameManagerAbstract<SoundManagerAbstract>
     {
+#if UNITY_EDITOR
+        private bool isBind
+        {
+            get
+            {
+                bool res =  !(soundDataManager != null && subGameManagerList.Contains(soundDataManager));
+                if (res == true)
+                {
+                    Debug.LogError(name + "需要挂载子管理器");
+                }
+                return res;
+            }
+        }
+#endif
+
+        [InfoBox("需要拖到子管理器中", "isBind", InfoMessageType = InfoMessageType.Error)]
         [SerializeField]
-        private SoundDataManagerAbstract SoundDataManager;
+        [Required("需要拖拽挂载")]
+        protected SoundDataManagerAbstract soundDataManager;
 
 
         [ReadOnly]
@@ -21,15 +38,15 @@ namespace MungFramework.Logic.Sound
         [ReadOnly]
         [SerializeField]
         //默认的声音源
-        protected List<(string, SoundDataManagerAbstract.VolumeTypeEnum)> DefaultSoundSourceList = new List<(string, SoundDataManagerAbstract.VolumeTypeEnum)>() {
+        protected  List<(string, SoundDataManagerAbstract.VolumeTypeEnum)> DefaultSoundSourceList = new List<(string, SoundDataManagerAbstract.VolumeTypeEnum)>() {
             ("music",SoundDataManagerAbstract.VolumeTypeEnum.Music),
             ("effect",SoundDataManagerAbstract.VolumeTypeEnum.Effect),
             ("voice",SoundDataManagerAbstract.VolumeTypeEnum.Voice)
         };
 
-        public void SetSoundVolume(SoundDataManagerAbstract.VolumeTypeEnum volumeType, int val)
+        public virtual void SetSoundVolume(SoundDataManagerAbstract.VolumeTypeEnum volumeType, int val)
         {
-            SoundDataManager.SetVolumeData(volumeType, val);
+            soundDataManager.SetVolumeData(volumeType, val);
         }
 
 
@@ -49,7 +66,7 @@ namespace MungFramework.Logic.Sound
             foreach (var soundSource in SoundSourceList)
             {
                 soundSource.Source.transform.position = soundSource.Follow.position + soundSource.LocalPosition;
-                soundSource.Volume = SoundDataManager.GetVolumeData(soundSource.VolumeType);
+                soundSource.Volume = soundDataManager.GetVolumeData(soundSource.VolumeType);
             }
         }
 
@@ -83,7 +100,7 @@ namespace MungFramework.Logic.Sound
                 return this;
             }
 
-            float volume = SoundDataManager.GetVolumeData(volumeType) / 100f;
+            float volume = soundDataManager.GetVolumeData(volumeType) / 100f;
             //添加声音源游戏对象
             GameObject soundSourceObj = AddSoundSourceObj(id, transform, Vector3.zero, volume);
 
@@ -131,36 +148,6 @@ namespace MungFramework.Logic.Sound
             soundSource.LocalPosition = localPosition;
             return this;
         }
-
-
-/*        /// <summary>
-        /// 设置声音源音量
-        /// </summary>
-        public virtual SoundManagerAbstract SetSoundSourceVolume(string id, float volume, bool transition)
-        {
-
-            var soundSource = GetSoundSource(id);
-            if (soundSource == null)
-            {
-                return this;
-            }
-            soundSource.Volume = volume;
-
-
-            //如果不需要过渡
-            if (transition == false)
-            {
-                soundSource.Source.volume = volume;
-            }
-            else
-            {
-                DOTween.To(() => soundSource.Source.volume, x => soundSource.Source.volume = x, volume, 0.8f)
-                    .SetEase(Ease.InOutSine);
-            }
-
-            return this;
-        }*/
-
         /// <summary>
         /// 添加声音源游戏对象
         /// </summary>
@@ -330,7 +317,7 @@ namespace MungFramework.Logic.Sound
             yield return null;
         }
 
-        private SoundSource GetSoundSource(string id)
+        protected virtual SoundSource GetSoundSource(string id)
         {
             return SoundSourceList.Find(x => x.id == id);
         }

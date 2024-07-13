@@ -24,14 +24,14 @@ namespace MungFramework.Logic.Input
             Load();
         }
 
-        public IEnumerable<InputValueEnum> GetInputValues(InputKeyEnum inputKey)
+        public virtual IEnumerable<InputValueEnum> GetInputValues(InputKeyEnum inputKey)
         {
             foreach (var inputMap in inputMapLayerList)
             {
                 yield return inputMap.GetInputValue(inputKey);
             }
         }
-        public IEnumerable<InputKeyEnum> GetInputKeys(InputValueEnum inputValue)
+        public virtual IEnumerable<InputKeyEnum> GetInputKeys(InputValueEnum inputValue)
         {
             foreach (var inputMap in inputMapLayerList)
             {
@@ -41,7 +41,7 @@ namespace MungFramework.Logic.Input
                 }
             }
         }
-        public InputMapLayer GetInputMap(string inputMapName)
+        public virtual InputMapLayer GetInputMap(string inputMapName)
         {
             return inputMapLayerList.Find(x => x.InputMapLayerName == inputMapName);
         }
@@ -72,7 +72,7 @@ namespace MungFramework.Logic.Input
 
 
 
-        public void Load()
+        public virtual void Load()
         {
             inputMapLayerList.Clear();
             foreach (var inputMapDataSO in inputMapLayerDataSOList)
@@ -93,7 +93,7 @@ namespace MungFramework.Logic.Input
             Save();
         }
 
-        public void Save()
+        public virtual void Save()
         {
             foreach (var inputMap in inputMapLayerList)
             {

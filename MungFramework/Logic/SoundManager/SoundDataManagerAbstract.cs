@@ -29,7 +29,7 @@ namespace MungFramework.Logic.Sound
             Load();
         }
 
-        public int GetVolumeData(VolumeTypeEnum volumeType)
+        public virtual int GetVolumeData(VolumeTypeEnum volumeType)
         {
             switch (volumeType)
             {
@@ -42,7 +42,7 @@ namespace MungFramework.Logic.Sound
             }
             return 0;
         }
-        public void SetVolumeData(VolumeTypeEnum volumeType,int val)
+        public virtual void SetVolumeData(VolumeTypeEnum volumeType,int val)
         {
             switch (volumeType)
             {
@@ -60,7 +60,7 @@ namespace MungFramework.Logic.Sound
         }
 
 
-        public void Load()
+        public virtual void Load()
         {
             var loadSuccess = SaveManagerAbstract.Instance.GetSystemValue("volumedata");
             if (loadSuccess.hasValue == false)
@@ -79,7 +79,7 @@ namespace MungFramework.Logic.Sound
             }
         }
 
-        public void  Save()
+        public virtual void  Save()
         {
             SaveManagerAbstract.Instance.SetSystemValue("volumedata", JsonUtility.ToJson(volumeData));
         }

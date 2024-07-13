@@ -13,38 +13,38 @@ namespace MungFramework.Logic
         [SerializeField]
         [FoldoutGroup("事件")]
         [LabelText("事件")]
-        protected GameManagerEvents GameExecutorEvents = new();
+        protected GameManagerEvents gameExecutorEvents = new();
 
 
         public virtual IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
-            GameExecutorEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnSceneLoad)?.Invoke();
+            gameExecutorEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnSceneLoad)?.Invoke();
             yield return null;
         }
 
         public virtual IEnumerator OnGameStart(GameManagerAbstract parentManager)
         {
-            GameExecutorEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameStart)?.Invoke();
+            gameExecutorEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameStart)?.Invoke();
             yield return null;
         }
         public virtual IEnumerator OnGamePause(GameManagerAbstract parentManager)
         {
-            GameExecutorEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGamePause)?.Invoke();
+            gameExecutorEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGamePause)?.Invoke();
             yield return null;
         }
         public virtual IEnumerator OnGameResume(GameManagerAbstract parentManager)
         {
-            GameExecutorEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameResume)?.Invoke();
+            gameExecutorEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameResume)?.Invoke();
             yield return null;
         }
 
         public virtual void OnGameUpdate(GameManagerAbstract parentManager)
         {
-            GameExecutorEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameUpdate)?.Invoke();
+            gameExecutorEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameUpdate)?.Invoke();
         }
         public virtual void OnGameFixedUpdate(GameManagerAbstract parentManager)
         {
-            GameExecutorEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameFixedUpdate)?.Invoke();
+            gameExecutorEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameFixedUpdate)?.Invoke();
         }
     }
 
