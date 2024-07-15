@@ -107,8 +107,16 @@ namespace MungFramework.Core
                 return (null, false);
             }
 
-            DataTable dataTable = JsonUtility.FromJson<DataTable>(content);
-            return (dataTable, true);
+            try
+            {
+                DataTable dataTable = JsonUtility.FromJson<DataTable>(content);
+                return (dataTable, true);
+            }
+            catch (Exception e)
+            {
+                Debug.Log("解析数据表失败" + tableName + e.Message);
+                return (null, false);
+            }
         }
         /// <summary>
         /// 移除数据表

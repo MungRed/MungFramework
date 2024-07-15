@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MungFramework.Demo
 {
-    public class DemoChangeInputMapExecutor : GameExecutorAbstract
+    public class DemoChangeInputMapExecutor : GameControllerAbstract
     {
         [SerializeField]
         private DemoInputManager InputManager;

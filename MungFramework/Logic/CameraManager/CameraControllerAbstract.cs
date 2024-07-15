@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MungFramework.Logic.Camera
 {
-    public abstract class CameraControllerAbstract : GameExecutorAbstract
+    public abstract class CameraControllerAbstract : GameControllerAbstract
     {
         [Required("需要挂载摄像机")]
         [SerializeField]

@@ -21,7 +21,7 @@ namespace MungFramework.Logic
             get
             {
                 string info = "";
-                if (subGameExecutorList!=null&& !subGameManagerList.Empty())
+                if (subGameControllerList!=null&& !subGameManagerList.Empty())
                 {
                     info += "子管理器：\n";
                     foreach (var subManager in subGameManagerList)
@@ -37,10 +37,10 @@ namespace MungFramework.Logic
 
                     }
                 }
-                if (subGameExecutorList!=null && !subGameExecutorList.Empty())
+                if (subGameControllerList!=null && !subGameControllerList.Empty())
                 {
                     info += "子执行器：\n";
-                    foreach (var subExecutor in subGameExecutorList)
+                    foreach (var subExecutor in subGameControllerList)
                     {
                         if (subExecutor != null)
                         {
@@ -58,7 +58,6 @@ namespace MungFramework.Logic
 #endif
 
         [SerializeField]
-        [FoldoutGroup("事件")]
         [LabelText("事件")]
         protected GameManagerEvents gameManagerEvents = new();
 
@@ -66,7 +65,6 @@ namespace MungFramework.Logic
         /// 按一定顺序获取所有的子管理器
         /// </summary>
         /// <returns></returns>
-        [FoldoutGroup("子管理器")]
         [LabelText("子管理器")]
         [SerializeField]
         protected List<GameManagerAbstract> subGameManagerList;
@@ -75,10 +73,9 @@ namespace MungFramework.Logic
         /// 按一定顺序获取所有的子执行器
         /// </summary>
         /// <returns></returns>
-        [FoldoutGroup("子管理器")]
-        [LabelText("子执行器")]
+        [LabelText("子控制器")]
         [SerializeField]
-        protected List<GameExecutorAbstract> subGameExecutorList;
+        protected List<GameControllerAbstract> subGameControllerList;
 
 
 
@@ -89,7 +86,7 @@ namespace MungFramework.Logic
             {
                 yield return subManager.OnSceneLoad(this);
             }
-            foreach (var subExecutors in subGameExecutorList)
+            foreach (var subExecutors in subGameControllerList)
             {
                 yield return subExecutors.OnSceneLoad(this);
             }
@@ -102,7 +99,7 @@ namespace MungFramework.Logic
             {
                 yield return subManager.OnGameStart(this);
             }
-            foreach (var subExecutors in subGameExecutorList)
+            foreach (var subExecutors in subGameControllerList)
             {
                 yield return subExecutors.OnGameStart(this);
             }
@@ -115,7 +112,7 @@ namespace MungFramework.Logic
             {
                 yield return subManager.OnGamePause(this);
             }
-            foreach (var subExecutors in subGameExecutorList)
+            foreach (var subExecutors in subGameControllerList)
             {
                 yield return subExecutors.OnGamePause(this);
             }
@@ -128,7 +125,7 @@ namespace MungFramework.Logic
             {
                 yield return subManager.OnGameResume(this);
             }
-            foreach (var subExecutors in subGameExecutorList)
+            foreach (var subExecutors in subGameControllerList)
             {
                 yield return subExecutors.OnGameResume(this);
             }
@@ -139,13 +136,13 @@ namespace MungFramework.Logic
         {
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameUpdate)?.Invoke();
             subGameManagerList.ForEach(m => m.OnGameUpdate(this));
-            subGameExecutorList.ForEach(m => m.OnGameUpdate(this));
+            subGameControllerList.ForEach(m => m.OnGameUpdate(this));
         }
         public virtual void OnGameFixedUpdate(GameManagerAbstract parentManager)
         {
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameFixedUpdate)?.Invoke();
             subGameManagerList.ForEach(m => m.OnGameFixedUpdate(this));
-            subGameExecutorList.ForEach(m => m.OnGameFixedUpdate(this));
+            subGameControllerList.ForEach(m => m.OnGameFixedUpdate(this));
         }
     }
 

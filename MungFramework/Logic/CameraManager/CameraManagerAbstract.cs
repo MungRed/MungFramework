@@ -12,7 +12,7 @@ namespace MungFramework.Logic.Camera
         {
             get
             {
-                bool res = !(AimCameraController != null && subGameExecutorList.Contains(AimCameraController));
+                bool res = !(AimCameraController != null && subGameControllerList.Contains(AimCameraController));
                 if (res == true)
                 {
                     Debug.LogError(name+"需要挂载到子执行器");
@@ -24,7 +24,7 @@ namespace MungFramework.Logic.Camera
         {
             get
             {
-                bool res =  !(CameraController != null && subGameExecutorList.Contains(CameraController));
+                bool res =  !(CameraController != null && subGameControllerList.Contains(CameraController));
                 if (res == true)
                 {
                     Debug.LogError(name + "需要挂载到子执行器");

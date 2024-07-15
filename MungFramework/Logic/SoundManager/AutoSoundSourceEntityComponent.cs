@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MungFramework.Logic.Sound
 {
-    public class AutoSoundSource : MonoBehaviour
+    public class AutoSoundSourceEntityComponent : Entity.EntityComponent
     {
         [SerializeField]
         private string soundSourceId;

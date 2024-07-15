@@ -24,8 +24,6 @@ namespace MungFramework.ScriptableObjects
             }
         }
 
-        private string TDataSOName => typeof(TDataSO).Name;
-
         [SerializeField]
         protected List<DataSOItem> DataSOItemList = new();
 
@@ -38,7 +36,8 @@ namespace MungFramework.ScriptableObjects
             return DataSOItemList.Find(item => item.Id == id);
         }
 
-
+#if UNITY_EDITOR
+        private string TDataSOName => typeof(TDataSO).Name;
 
         [Button("@\"获取所有\" + TDataSOName + \"文件\"", ButtonSizes.Medium)]
         private void GetAllSO()
@@ -49,11 +48,11 @@ namespace MungFramework.ScriptableObjects
             {
                 var path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
                 var so = UnityEditor.AssetDatabase.LoadAssetAtPath<TDataSO>(path);
-                DataSOItemList.Add(new(so.Id,so));
+                DataSOItemList.Add(new(so.Id, so));
             }
             SortList();
         }
-        [Button("将所有id设置为资源名称",ButtonSizes.Medium)]
+        [Button("将所有id设置为资源名称", ButtonSizes.Medium)]
         private void SetAllIdWithName()
         {
             foreach (var dataSOItem in DataSOItemList)
@@ -103,10 +102,11 @@ namespace MungFramework.ScriptableObjects
             foreach (var dataSOItem in DataSOItemList)
             {
                 dataSOItem.Item.Id = dataSOItem.Id;
-               UnityEditor.EditorUtility.SetDirty(dataSOItem.Item);
+                UnityEditor.EditorUtility.SetDirty(dataSOItem.Item);
             }
             UnityEditor.AssetDatabase.SaveAssets();
             Debug.Log("已应用id");
         }
+#endif
     }
 }

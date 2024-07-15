@@ -79,7 +79,12 @@ namespace MungFramework.Logic.Save
 
             if (loadResult.Item2 == false)
             {
-                throw new System.Exception("系统存档文件加载失败");
+                //TODO : 如果有存档备份，可以尝试加载备份
+
+                Debug.LogError("系统存档文件加载失败,重置存档");
+
+                Database.CreateDatabase();
+                yield return LoadSystemSaveFile();
             }
             else
             {

@@ -4,32 +4,32 @@ using UnityEngine;
 
 namespace MungFramework.Logic.Camera
 {
-    public class AimCameraControllerAbstarct : GameExecutorAbstract
+    public class AimCameraControllerAbstarct : GameControllerAbstract
     {
 
         private UnityEngine.Camera mainCamera=>UnityEngine.Camera.main;
 
         [ReadOnly]
         [SerializeField]
-        private List<Transform> needAimCameraList = new List<Transform>();
+        private List<AimCameraEntityComponent> needAimCameraList = new();
 
         [SerializeField]
         [Required("需要挂载")]
         private Transform directionTransform;
 
 
-        public void Add(Transform trans)
+        public void Add(AimCameraEntityComponent aimCamera)
         {
-            if (needAimCameraList.Contains(trans))
+            if (needAimCameraList.Contains(aimCamera))
             {
                 return;
             }
 
-            needAimCameraList.Add(trans);
+            needAimCameraList.Add(aimCamera);
         }
-        public void Remove(Transform trans)
+        public void Remove(AimCameraEntityComponent aimCamera)
         {
-            needAimCameraList.Remove(trans);
+            needAimCameraList.Remove(aimCamera);
         }
 
         public override void OnGameUpdate(GameManagerAbstract parentManager)
@@ -40,9 +40,9 @@ namespace MungFramework.Logic.Camera
             directionTransform.eulerAngles = new Vector3(0f, mainCamera.transform.eulerAngles.y, mainCamera.transform.eulerAngles.z);
 
             //更新每个需要朝向摄像机的物体
-            foreach (Transform t in needAimCameraList)
+            foreach (var aimCamera in needAimCameraList)
             {
-                t.rotation = mainCamera.transform.rotation;
+                aimCamera.transform.rotation = mainCamera.transform.rotation;
             }
         }
 

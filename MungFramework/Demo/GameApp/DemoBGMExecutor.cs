@@ -5,7 +5,7 @@ using MungFramework.Logic;
 
 namespace MungFramework.Demo
 {
-    public class DemoBGMExecutor : GameExecutorAbstract
+    public class DemoBGMExecutor : GameControllerAbstract
     {
         public DemoBackGroundMusicSO BgmList;
         public DemoSoundManager SoundManager;
