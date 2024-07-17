@@ -4,13 +4,21 @@ using UnityEngine;
 
 namespace MungFramework.ActionTreeEditor
 {
+
     public abstract class ActionNodeTree : ScriptableObject
     {
         [ReadOnly]
         public List<ActionNode> ActionNodeList;
 
-
 #if UNITY_EDITOR
+        public ActionNode GetNextChild(ActionNode node)
+        {
+            return node.GetNextNode();
+        }
+        public ActionNode GetAtTimeChild(ActionNode node)
+        {
+            return node.GetAtTimeNode();
+        }
 
         /// <summary>
         /// 创建节点
@@ -41,6 +49,8 @@ namespace MungFramework.ActionTreeEditor
 
             return node;
         }
+
+
         public void RemoveChild(ActionNode father, ActionNode child)
         {
             if (GetNextChild(father) == child)
@@ -62,16 +72,9 @@ namespace MungFramework.ActionTreeEditor
         {
             father.SetAtTimeNode(child);
         }
-
-        public ActionNode GetNextChild(ActionNode node)
-        {
-            return node.GetNextNode();
-        }
-        public ActionNode GetAtTimeChild(ActionNode node)
-        {
-            return node.GetAtTimeNode();
-        }
 #endif
+
+
     }
 
 }

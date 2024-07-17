@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using UnityEngine.UIElements;
 
 namespace MungFramework.ActionTreeEditor
 {
+
     /// <summary>
     /// ½ÚµãÊ÷ÊÓÍ¼
     /// </summary>
@@ -182,5 +184,6 @@ namespace MungFramework.ActionTreeEditor
             return ports.ToList().Where(endport => endport.direction != startPort.direction && endport.node != startPort.node).ToList();
         }
     }
-}
 
+}
+#endif

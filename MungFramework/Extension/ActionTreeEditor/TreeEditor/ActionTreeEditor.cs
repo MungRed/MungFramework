@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -5,10 +6,12 @@ using UnityEngine.UIElements;
 
 namespace MungFramework.ActionTreeEditor
 {
+
     public class ActionTreeEditor : EditorWindow
     {
         private ActionTreeViewer nodeTreeViewer;
         private InspectorView inspectorView;
+
 
         [MenuItem("MungFramework/节点编辑器")]
         public static void OpenWindow()
@@ -83,4 +86,4 @@ namespace MungFramework.ActionTreeEditor
         }
     }
 }
-
+#endif

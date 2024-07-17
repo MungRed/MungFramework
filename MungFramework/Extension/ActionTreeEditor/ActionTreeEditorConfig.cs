@@ -1,4 +1,5 @@
-﻿namespace MungFramework.ActionTreeEditor
+﻿#if UNITY_EDITOR
+namespace MungFramework.ActionTreeEditor
 {
     public static class ActionTreeEditorConfig
     {
@@ -6,3 +7,4 @@
         public static string ActionTreeViewerPath => "Assets\\Plugins\\MungRed\\MungFramework\\MungFramework\\Extension\\ActionTreeEditor\\Viewer\\ActionTreeViewer";
     }
 }
+#endif

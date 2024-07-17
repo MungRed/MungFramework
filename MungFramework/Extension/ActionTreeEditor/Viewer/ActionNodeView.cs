@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine.UIElements;
 
 namespace MungFramework.ActionTreeEditor
 {
+
     /// <summary>
     /// Ω⁄µ„ ”Õº
     /// </summary>
@@ -95,5 +97,5 @@ namespace MungFramework.ActionTreeEditor
             Node.SetPosition(newPos.position);
         }
     }
-
 }
+#endif

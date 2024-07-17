@@ -22,7 +22,7 @@ namespace MungFramework.ActionTreeEditor
         //节点类型
         public enum NodeType
         {
-            Root,Node
+            Root, Node
         }
         public abstract NodeType _NodeType
         {
@@ -32,12 +32,23 @@ namespace MungFramework.ActionTreeEditor
         {
             get;
         }
+        public ActionNode GetNextNode()
+        {
+            return Next;
+        }
+        public ActionNode GetAtTimeNode()
+        {
+            return AtTime;
+        }
 
+
+#if UNITY_EDITOR
         public void SetPosition(Vector3 position)
         {
             this.position = position;
             UnityEditor.EditorUtility.SetDirty(this);
         }
+
         public void SetNextNode(ActionNode node)
         {
             Next = node;
@@ -48,14 +59,8 @@ namespace MungFramework.ActionTreeEditor
             AtTime = node;
             UnityEditor.EditorUtility.SetDirty(this);
         }
-        public ActionNode GetNextNode()
-        {
-            return Next;
-        }
-        public ActionNode GetAtTimeNode()
-        {
-            return AtTime;
-        }
+#endif
+
 
 
     }

@@ -1,9 +1,11 @@
+#if UNITY_EDITOR
 using Sirenix.OdinInspector.Editor;
 using UnityEngine;
 
 
 namespace MungFramework.EditorExtension
 {
+
     /// <summary>
     /// SO±à¼­Æ÷µÄ³éÏóÀà
     /// </summary>
@@ -25,13 +27,13 @@ namespace MungFramework.EditorExtension
         {
             get;
         }
-
         protected override OdinMenuTree BuildMenuTree()
         {
             var tree = new OdinMenuTree();
             tree.AddAllAssetsAtPath(Title, Path, typeof(T), true, false);
             return tree;
         }
+
     }
 }
-
+#endif
