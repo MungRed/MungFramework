@@ -43,6 +43,28 @@ namespace MungFramework.Logic.Camera
         public CameraControllerAbstract CameraController;
 
 
+        /// <summary>
+        /// 输入摄像机的相对向量，返回世界向量
+        /// </summary>
+        public Vector3 CameraToWorld(Vector3 input)
+        {
+            return AimCameraController.CameraToWorld(input);
+        }
+
+        /// <summary>
+        /// 输入基于世界的向量，返回基于摄像机的向量
+        /// </summary>
+        public Vector3 WolrdToCamera(Vector3 input)
+        {
+            return AimCameraController.WolrdToCamera(input);
+        }
+
+        public bool IsInView(Vector3 worldPos)
+        {
+            return AimCameraController.IsInView(worldPos);
+        }
+
+
         public void SetFov(int val, float time) => CameraController.SetFov(val, time);
         public void ResetFov(float time) => CameraController.ResetFov(time);
         public IEnumerator ChangeCameraSource(CameraSource cameraSource, float time) => CameraController.ChangeCameraSource(cameraSource, time);

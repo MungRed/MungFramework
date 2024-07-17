@@ -8,5 +8,11 @@ namespace MungFramework.Logic.Camera
     {
         public Transform Follow;
         public Transform LookAt;
+
+        public CameraSource(Transform follow, Transform lookAt)
+        {
+            Follow = follow;
+            LookAt = lookAt;
+        }
     }
 }

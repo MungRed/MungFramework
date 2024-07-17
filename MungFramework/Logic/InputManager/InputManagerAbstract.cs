@@ -234,6 +234,9 @@ namespace MungFramework.Logic.Input
         [ReadOnly]
         protected bool IsUp, IsDown, IsLeft, IsRight;
 
+
+
+
         /// <summary>
         /// ∑µªÿ“∆∂Ø÷·
         /// </summary>
@@ -249,13 +252,13 @@ namespace MungFramework.Logic.Input
                 else
                 {
                     if (IsUp)
-                        res.x += 1;
-                    if (IsDown)
-                        res.x -= 1;
-                    if (IsRight)
                         res.y += 1;
-                    if (IsLeft)
+                    if (IsDown)
                         res.y -= 1;
+                    if (IsRight)
+                        res.x += 1;
+                    if (IsLeft)
+                        res.x -= 1;
                 }
 
                 return res.normalized;

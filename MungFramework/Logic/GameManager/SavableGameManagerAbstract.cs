@@ -14,6 +14,7 @@ namespace MungFramework.Logic
             yield return base.OnSceneLoad(parentManager);
             //把自身添加到存档管理器中
             SaveManagerAbstract.Instance.AddManager(this);
+            yield return Load();
         }
 
 

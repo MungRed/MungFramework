@@ -14,17 +14,9 @@ namespace MungFramework.Logic.Save
         public string SaveName;
 
         [SerializeField]
-        private SerializedDictionary<string, string> DataDictionary;
+        public SerializedDictionary<string, string> DataDictionary = new();
 
-        public SaveFile(string saveName, List<KeyValuePair<string, string>> datas)
-        {
-            SaveName = saveName;
-            DataDictionary = new();
-            foreach (var data in datas)
-            {
-                DataDictionary.Add(data.Key, data.Value);
-            }
-        }
+
 
         public bool HasKey(string key)
         {
@@ -54,6 +46,13 @@ namespace MungFramework.Logic.Save
         {
             return DataDictionary.ToList();
         }
-
+        public void SetKeyValues(List<KeyValuePair<string, string>> keyvalues)
+        {
+            DataDictionary.Clear();
+            foreach (var keyvalue in keyvalues)
+            {
+                DataDictionary.Add(keyvalue.Key, keyvalue.Value);
+            }
+        }
     }
 }

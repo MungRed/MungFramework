@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Rendering;
 
 namespace MungFramework.Core
@@ -70,14 +72,13 @@ namespace MungFramework.Core
         /// <summary>
         /// 创建数据库（会删除原有数据库）
         /// </summary>
-        public static bool CreateDatabase()
+        public static IEnumerator CreateDatabase()
         {
             //删除数据库
             if (Directory.Exists(DatabasePath))
             {
                 Directory.Delete(DatabasePath);
             }
-
             Directory.CreateDirectory(DatabasePath);
 
             //创建系统文件
@@ -85,37 +86,41 @@ namespace MungFramework.Core
             DataTable dataTable = new DataTable();
             dataTable.TableName = systemTableName;
 
-            return FileSystem.WriteFile(DatabasePath, systemTableName, DataTableFormat, JsonUtility.ToJson(dataTable));
+            yield return FileSystem.WriteFileAsync(DatabasePath, systemTableName, DataTableFormat, JsonUtility.ToJson(dataTable));
         }
+
         /// <summary>
         /// 获取数据表
         /// </summary>
-        private static (DataTable, bool) GetDataTable(string tableName)
+        private static IEnumerator GetDataTable(string tableName, UnityAction<DataTable> reasultAction)
         {
             //检查数据库是否存在
             if (!ExistDatabase())
             {
                 Debug.Log("数据库不存在， 获取数据表失败" + tableName);
-                return (null, false);
+                yield break;
             }
 
-            var (content, success) = FileSystem.ReadFile(DatabasePath, tableName, DataTableFormat);
+            string readContent = null;
 
-            if (success == false)
+            yield return FileSystem.ReadFileAsync(DatabasePath, tableName, DataTableFormat, x => { readContent = x;});
+
+            if (readContent == null)
             {
                 Debug.Log("获取数据表失败" + tableName);
-                return (null, false);
+                yield break;
             }
 
             try
             {
-                DataTable dataTable = JsonUtility.FromJson<DataTable>(content);
-                return (dataTable, true);
+                DataTable dataTable = JsonUtility.FromJson<DataTable>(readContent);
+                reasultAction.Invoke(dataTable);
+                yield break;
             }
             catch (Exception e)
             {
                 Debug.Log("解析数据表失败" + tableName + e.Message);
-                return (null, false);
+                yield break;
             }
         }
         /// <summary>
@@ -131,28 +136,32 @@ namespace MungFramework.Core
 
             return FileSystem.DeleteFile(DatabasePath, tableName, DataTableFormat);
         }
+
+
         /// <summary>
         /// 获得数据表的键值对
         /// </summary>
-        public static (List<KeyValuePair<string, string>>, bool) GetKeyValues(string tableName)
+        public static IEnumerator GetKeyValues(string tableName, UnityAction<List<KeyValuePair<string, string>>> resultAction)
         {
-            var (dataTable, success) = GetDataTable(tableName);
-            if (success == false)
+            DataTable dataTable = null;
+            yield return GetDataTable(tableName,x=>dataTable=x);
+
+            if (dataTable == null)
             {
-                return (null, false);
+                yield break;
             }
-            return (dataTable.GetKeyValues(), true);
+            resultAction.Invoke(dataTable.GetKeyValues());
         }
         /// <summary>
         /// 设置数据表的键值对
         /// </summary>
-        public static void SetKeyValues(string tableName, List<KeyValuePair<string, string>> keyValues)
+        public static IEnumerator SetKeyValues(string tableName, List<KeyValuePair<string, string>> keyValues)
         {
             DataTable dataTable = new();
             dataTable.TableName = tableName;
             dataTable.SetKeyValues(keyValues);
 
-            FileSystem.WriteFile(DatabasePath, tableName, DataTableFormat, JsonUtility.ToJson(dataTable,true));
+            yield return FileSystem.WriteFileAsync(DatabasePath, tableName, DataTableFormat, JsonUtility.ToJson(dataTable,true));
         }
     }
 }
