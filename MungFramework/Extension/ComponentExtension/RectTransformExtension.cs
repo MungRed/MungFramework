@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace MungFramework.ComponentExtension
+namespace MungFramework.Extension.ComponentExtension
 {
     public static class RectTransformExtension
     {

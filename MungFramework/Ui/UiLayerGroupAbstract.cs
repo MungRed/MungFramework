@@ -1,4 +1,4 @@
-using MungFramework.ComponentExtension;
+using MungFramework.Extension.ComponentExtension;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;

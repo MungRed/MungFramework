@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MungFramework.ComponentExtension
+namespace MungFramework.Extension.ComponentExtension
 {
     public static class ListExtension
     {

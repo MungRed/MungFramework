@@ -1,6 +1,6 @@
 #if UNITY_EDITOR
 using UnityEditor;
-namespace MungFramework.EditorExtension
+namespace MungFramework.Extension.EditorExtension
 {
     public class FileCreater : Editor
     {

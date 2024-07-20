@@ -1,5 +1,5 @@
 using DG.Tweening;
-using MungFramework.ComponentExtension;
+using MungFramework.Extension.ComponentExtension;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

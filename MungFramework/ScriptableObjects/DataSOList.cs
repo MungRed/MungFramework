@@ -62,6 +62,17 @@ namespace MungFramework.ScriptableObjects
             Debug.Log("已设置");
         }
 
+        [Button("将所有资源名称设置为id", ButtonSizes.Medium)]
+        private void SetAllNameWithId()
+        {
+            foreach (var dataSOItem in DataSOItemList)
+            {
+                UnityEditor.AssetDatabase.RenameAsset(UnityEditor.AssetDatabase.GetAssetPath(dataSOItem.Item), dataSOItem.Id);
+                UnityEditor.EditorUtility.SetDirty(dataSOItem.Item);
+            }
+            Debug.Log("已设置");
+        }
+
 
         [Button("对id排序", ButtonSizes.Medium)]
         private void SortList()

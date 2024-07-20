@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-namespace MungFramework.MonoBehaviourExtension
+namespace MungFramework.Extension.MonoBehaviourExtension
 {
     public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
     {

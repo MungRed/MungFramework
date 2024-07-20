@@ -2,7 +2,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
-using MungFramework.ComponentExtension;
+using MungFramework.Extension.ComponentExtension;
 using MungFramework.Logic.Sound;
 
 namespace MungFramework.Ui

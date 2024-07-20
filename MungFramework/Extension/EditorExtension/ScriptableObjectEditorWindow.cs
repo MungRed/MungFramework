@@ -3,7 +3,7 @@ using Sirenix.OdinInspector.Editor;
 using UnityEngine;
 
 
-namespace MungFramework.EditorExtension
+namespace MungFramework.Extension.EditorExtension
 {
 
     /// <summary>

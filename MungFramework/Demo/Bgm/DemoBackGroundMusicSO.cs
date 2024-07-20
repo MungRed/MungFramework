@@ -1,4 +1,4 @@
-﻿using MungFramework.ComponentExtension;
+﻿using MungFramework.Extension.ComponentExtension;
 using MungFramework.ScriptableObjects;
 using System.Collections.Generic;
 using UnityEngine;
