@@ -12,6 +12,7 @@ namespace MungFramework.Logic
         {
             OnSceneLoad,OnGameStart,
             OnGamePause,OnGameResume,
+            OnGameReload,OnGameReloadFinish,OnGameQuit,
             OnGameUpdate,OnGameFixedUpdate
         }
 

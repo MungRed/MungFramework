@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace MungFramework.Logic.Input
 {
@@ -19,6 +20,8 @@ namespace MungFramework.Logic.Input
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
             yield return base.OnSceneLoad(parentManager);
+            InputSystem.DisableAllEnabledActions();
+
             InputSource = new();
             InputSource.Enable();
             Load();
@@ -55,7 +58,11 @@ namespace MungFramework.Logic.Input
             get
             {
                 Vector2 res = InputSource.Controll.MoveAxis.ReadValue<Vector2>();
-                return res.normalized;
+                if (res.sqrMagnitude > 1)
+                {
+                    return res.normalized;
+                }
+                return res;
             }
         }
         /// <summary>
@@ -83,6 +90,7 @@ namespace MungFramework.Logic.Input
                 {
                     Debug.Log("读取按键层" + savename + "不存在，新建");
                     inputMapLayerList.Add(new InputMapLayerSOModelStream().Stream(inputMapDataSO));
+
                 }
                 else
                 {

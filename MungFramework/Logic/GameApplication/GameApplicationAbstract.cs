@@ -18,6 +18,10 @@ namespace MungFramework.Logic
             Awake,
             Start,
             Update,
+
+            Reload,//重新载入
+            Quit,//退出
+
             PauseIn,//暂停中
             Pause,//暂停状态
             ResumeIn,//恢复中
@@ -127,7 +131,7 @@ namespace MungFramework.Logic
         /// </summary>
         public virtual void DOGameResume()
         {
-            //只有在游戏暂停状态下才能恢复
+            //只有在游戏暂停状态下才能恢复暂停
             if (GameState == GameStateEnum.Pause)
             {
                 StartCoroutine(OnGameResume(this));
@@ -140,6 +144,37 @@ namespace MungFramework.Logic
             yield return base.OnGameResume(parentManager);
             Debug.Log("GameResume");
             GameState = GameStateEnum.Update;
+        }
+
+        /// <summary>
+        /// 重新载入场景，用于完成某个任务后刷新npc等
+        /// </summary>
+        public virtual void DOGameReload()
+        {
+            //只有在游戏更新状态下才能重新载入
+            if (GameState == GameStateEnum.Update)
+            {
+                StartCoroutine(OnGameReload(this));
+            }
+        }
+        public override IEnumerator OnGameReload(GameManagerAbstract parentManager)
+        {
+            GameState = GameStateEnum.Reload;
+            Debug.Log("GameReload");
+            yield return base.OnGameReload(parentManager);
+            yield return OnGameReloadFinish(parentManager);
+            GameState = GameStateEnum.Update;
+        }
+        public virtual void DOGameQuit()
+        {
+            StartCoroutine(OnGameQuit(this));
+        }
+        public override IEnumerator OnGameQuit(GameManagerAbstract parentManager)
+        {
+            GameState = GameStateEnum.Quit;
+            Debug.Log("GameQuit");
+            yield return base.OnGameQuit(parentManager);
+            Application.Quit();
         }
 
 

@@ -37,6 +37,22 @@ namespace MungFramework.Logic
             gameControllerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameResume)?.Invoke();
             yield return null;
         }
+        public virtual IEnumerator OnGameReload(GameManagerAbstract parentManager)
+        {
+            gameControllerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameReload)?.Invoke();
+            yield return null;
+        }
+        public virtual IEnumerator OnGameReloadFinish(GameManagerAbstract parentManager)
+        {
+            gameControllerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameReloadFinish)?.Invoke();
+            yield return null;
+        }
+
+        public virtual IEnumerator OnGameQuit(GameManagerAbstract parentManager)
+        {
+            gameControllerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameQuit)?.Invoke();
+            yield return null;
+        }
 
         public virtual void OnGameUpdate(GameManagerAbstract parentManager)
         {

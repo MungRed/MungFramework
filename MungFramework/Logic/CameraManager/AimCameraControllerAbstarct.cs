@@ -26,6 +26,7 @@ namespace MungFramework.Logic.Camera
             }
 
             needAimCameraList.Add(aimCamera);
+            aimCamera.transform.rotation = mainCamera.transform.rotation;
         }
         public void Remove(AimCameraEntityComponent aimCamera)
         {

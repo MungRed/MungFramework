@@ -1,3 +1,4 @@
+using MungFramework.ActionTreeEditor;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -91,7 +92,7 @@ namespace MungFramework.Logic.Input
         [ReadOnly]
         private List<IInputAcceptor> inputAcceptorStack = new();
 
-        private Dictionary<InputValueEnum, UnityEvent> InputActionListener_Performerd = new();
+        private Dictionary<InputValueEnum, UnityEvent> InputActionListener_Performed = new();
 
         private Dictionary<InputValueEnum, UnityEvent> InputActionListener_Canceled = new();
 
@@ -156,13 +157,28 @@ namespace MungFramework.Logic.Input
                 {
                     if (Enum.IsDefined(typeof(InputKeyEnum), actionname))
                     {
-                        action.performed += (CNT cnt) => { InputAction_Performerd((InputKeyEnum)Enum.Parse(typeof(InputKeyEnum), actionname)); };
-                        action.canceled += (CNT cnt) => { InputAction_Canceled((InputKeyEnum)Enum.Parse(typeof(InputKeyEnum), actionname)); };
+                        action.performed -= InputActionPerformedHelp;
+                        action.performed -= InputActionPerformedHelp;
+                        action.performed += InputActionPerformedHelp;
+
+                        action.canceled -= InputActionCanceledHelp;
+                        action.canceled -= InputActionCanceledHelp;
+                        action.canceled += InputActionCanceledHelp;
+/*                        action.performed += (CNT cnt) => { InputAction_Performed((InputKeyEnum)Enum.Parse(typeof(InputKeyEnum), actionname)); };
+                        action.canceled += (CNT cnt) => { InputAction_Canceled((InputKeyEnum)Enum.Parse(typeof(InputKeyEnum), actionname)); };*/
                     }
                 }
             }
 
             AddMoveAxisBind();
+        }
+        private void InputActionPerformedHelp(CNT cnt)
+        {
+            InputAction_Performed((InputKeyEnum)Enum.Parse(typeof(InputKeyEnum), cnt.action.name));
+        }
+        private void InputActionCanceledHelp(CNT cnt)
+        {
+            InputAction_Canceled((InputKeyEnum)Enum.Parse(typeof(InputKeyEnum), cnt.action.name));
         }
 
         /// <summary>
@@ -261,7 +277,14 @@ namespace MungFramework.Logic.Input
                         res.x -= 1;
                 }
 
-                return res.normalized;
+                if (res.sqrMagnitude > 1)
+                {
+                    return res.normalized;
+                }
+                else
+                {
+                    return res;
+                }
             }
         }
 
@@ -275,10 +298,10 @@ namespace MungFramework.Logic.Input
         /// </summary>
         protected virtual void AddMoveAxisBind()
         {
-            Add_InputAction_Performerd(InputValueEnum.UP, () => IsUp = true);
-            Add_InputAction_Performerd(InputValueEnum.DOWN, () => IsDown = true);
-            Add_InputAction_Performerd(InputValueEnum.LEFT, () => IsLeft = true);
-            Add_InputAction_Performerd(InputValueEnum.RIGHT, () => IsRight = true);
+            Add_InputAction_Performed(InputValueEnum.UP, () => IsUp = true);
+            Add_InputAction_Performed(InputValueEnum.DOWN, () => IsDown = true);
+            Add_InputAction_Performed(InputValueEnum.LEFT, () => IsLeft = true);
+            Add_InputAction_Performed(InputValueEnum.RIGHT, () => IsRight = true);
 
             Add_InputAction_Canceled(InputValueEnum.UP, () => IsUp = false);
             Add_InputAction_Canceled(InputValueEnum.DOWN, () => IsDown = false);
@@ -294,24 +317,24 @@ namespace MungFramework.Logic.Input
         /// </summary>
         /// <param name="type"></param>
         /// <param name="action"></param>
-        public virtual void Add_InputAction_Performerd(InputValueEnum type, UnityAction action)
+        public virtual void Add_InputAction_Performed(InputValueEnum type, UnityAction action)
         {
-            if (!InputActionListener_Performerd.ContainsKey(type))
+            if (!InputActionListener_Performed.ContainsKey(type))
             {
-                InputActionListener_Performerd.Add(type, new());
+                InputActionListener_Performed.Add(type, new());
             }
-            InputActionListener_Performerd[type].AddListener(action);
+            InputActionListener_Performed[type].AddListener(action);
         }
         /// <summary>
         /// 移除某个输入的按下事件
         /// </summary>
         /// <param name="type"></param>
         /// <param name="action"></param>
-        public virtual void Remove_InputAction_Performerd(InputValueEnum type, UnityAction action)
+        public virtual void Remove_InputAction_Performed(InputValueEnum type, UnityAction action)
         {
-            if (InputActionListener_Performerd.ContainsKey(type))
+            if (InputActionListener_Performed.ContainsKey(type))
             {
-                InputActionListener_Performerd[type].RemoveListener(action);
+                InputActionListener_Performed[type].RemoveListener(action);
                 Debug.Log("RemovePerformed" + action);
             }
         }
@@ -366,8 +389,9 @@ namespace MungFramework.Logic.Input
         /// 按下事件
         /// </summary>
         /// <param name="inputkey"></param>
-        protected virtual void InputAction_Performerd(InputKeyEnum inputkey)
+        protected virtual void InputAction_Performed(InputKeyEnum inputkey)
         {
+            Debug.Log(inputkey);
             //如果不是任意键，就触发一次任意键按下的事件
             if (inputkey != InputKeyEnum.ANYKEY)
             {
@@ -377,10 +401,9 @@ namespace MungFramework.Logic.Input
             //根据按键的key获取输入值
             foreach (var inputvalue in inputDataManager.GetInputValues(inputkey))
             {
-                //Debug.Log(iv);
-                if (InputActionListener_Performerd.ContainsKey(inputvalue))
+                if (InputActionListener_Performed.ContainsKey(inputvalue))
                 {
-                    InputActionListener_Performerd[inputvalue].Invoke();
+                    InputActionListener_Performed[inputvalue].Invoke();
                 }
 
                 if (inputAcceptorStack.Count > 0)
