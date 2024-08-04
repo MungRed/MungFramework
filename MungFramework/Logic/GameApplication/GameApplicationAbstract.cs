@@ -29,7 +29,7 @@ namespace MungFramework.Logic
 
         [SerializeField]
         [ReadOnly]
-        protected GameStateEnum GameState;
+        public GameStateEnum GameState;
 
 
         #region Unityœ˚œ¢
@@ -159,11 +159,16 @@ namespace MungFramework.Logic
         }
         public override IEnumerator OnGameReload(GameManagerAbstract parentManager)
         {
-            GameState = GameStateEnum.Reload;
             Debug.Log("GameReload");
+            GameState = GameStateEnum.Reload;
             yield return base.OnGameReload(parentManager);
             yield return OnGameReloadFinish(parentManager);
+        }
+        public override IEnumerator OnGameReloadFinish(GameManagerAbstract parentManager)
+        {
+            yield return base.OnGameReloadFinish(parentManager);
             GameState = GameStateEnum.Update;
+            Debug.Log("GameReloadFinish");
         }
         public virtual void DOGameQuit()
         {

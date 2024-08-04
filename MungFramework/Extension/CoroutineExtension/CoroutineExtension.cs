@@ -1,6 +1,7 @@
 using MungFramework.Logic;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace MungFramework.Extension.CoroutineExtension
 {
@@ -10,6 +11,7 @@ namespace MungFramework.Extension.CoroutineExtension
         {
             return GameApplicationAbstract.Instance.StartCoroutine(enumerator);
         }
+
     }
 
 }

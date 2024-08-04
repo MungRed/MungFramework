@@ -156,9 +156,13 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 把当前存档保存到指定存档
         /// </summary>
-        public virtual IEnumerator SaveInByIndex(int saveIndex)
+        public virtual IEnumerator SaveInByIndex(int saveIndex,bool onSave = true)
         {
-            yield return OnSave();
+            //是否在存档之前调用
+            if (onSave)
+            {
+                yield return OnSave();
+            }
 
             CurrentSaveFile.SaveName = "save" + saveIndex;
 
@@ -181,7 +185,7 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 通过存档索引加载存档文件
         /// </summary>
-        public virtual  IEnumerator LoadSaveFile(int saveindex, UnityAction<SaveFile> resultAction)
+        protected virtual  IEnumerator LoadSaveFile(int saveindex, UnityAction<SaveFile> resultAction)
         {
             string saveName = "save" + saveindex;
             yield return LoadSaveFile(saveName,resultAction);
@@ -191,7 +195,7 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 加载存档文件
         /// </summary>
-        public virtual IEnumerator LoadSaveFile(string saveName,UnityAction<SaveFile> resultAction)
+        protected virtual IEnumerator LoadSaveFile(string saveName,UnityAction<SaveFile> resultAction)
         {
             List<KeyValuePair<string, string>> saveData = null;
             yield return Database.GetKeyValues(saveName,x=>saveData = x);

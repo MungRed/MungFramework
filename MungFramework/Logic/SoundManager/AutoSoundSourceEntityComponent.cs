@@ -19,7 +19,7 @@ namespace MungFramework.Logic.Sound
                 .SetSoundSourceLocalPosition(soundSourceId,soundSourceLocalPosition);
             if (soundSourceFollow != null)
             {
-                SoundManagerAbstract.Instance.SetSoundeSourceFollow(soundSourceId, soundSourceFollow);
+                SoundManagerAbstract.Instance.SetSoundSourceFollow(soundSourceId, soundSourceFollow);
             }
         }
         private void OnDisable()

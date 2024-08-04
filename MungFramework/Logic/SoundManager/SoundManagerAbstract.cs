@@ -66,7 +66,7 @@ namespace MungFramework.Logic.Sound
             foreach (var soundSource in SoundSourceList)
             {
                 soundSource.Source.transform.position = soundSource.Follow.position + soundSource.LocalPosition;
-                soundSource.Volume = soundDataManager.GetVolumeData(soundSource.VolumeType);
+                soundSource.Volume = soundDataManager.GetVolumeData(soundSource.VolumeType)/100f;
             }
         }
 
@@ -123,7 +123,7 @@ namespace MungFramework.Logic.Sound
         /// <summary>
         /// 设置声音源跟随
         /// </summary>
-        public virtual SoundManagerAbstract SetSoundeSourceFollow(string id, Transform follow)
+        public virtual SoundManagerAbstract SetSoundSourceFollow(string id, Transform follow)
         {
             var soundSource = GetSoundSource(id);
             if (soundSource == null)
@@ -198,6 +198,10 @@ namespace MungFramework.Logic.Sound
             {
                 return this;
             }
+            if (soundSource.Source.clip == audioclip)
+            {
+                return this;
+            }
 
             var audioSource = soundSource.Source;
             var audioSourceObj = audioSource.gameObject;
@@ -252,7 +256,6 @@ namespace MungFramework.Logic.Sound
             {
                 yield break;
             }
-
             var audioSource = soundSource.Source;
             var volume = soundSource.Volume;
             //如果不需要过渡

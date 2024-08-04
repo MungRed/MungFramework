@@ -28,12 +28,12 @@ namespace MungFramework.Logic.Camera
 
         public override void OnGameUpdate(GameManagerAbstract parentManager)
         {
-            if (follow_isBinding)
+            if (follow_isBinding&&follow_Bind!=null)
             {
                 follow_Pos.position = follow_Bind.position;
             }
 
-            if (lookAt_isBinding)
+            if (lookAt_isBinding&&lookAt_Bind!=null)
             {
                 lookAt_Pos.position = lookAt_Bind.position;
             }

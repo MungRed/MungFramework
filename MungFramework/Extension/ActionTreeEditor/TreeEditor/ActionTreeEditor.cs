@@ -13,7 +13,7 @@ namespace MungFramework.ActionTreeEditor
         private InspectorView inspectorView;
 
 
-        [MenuItem("MungFramework/节点编辑器")]
+        [MenuItem("Tools/MungFramework/节点编辑器")]
         public static void OpenWindow()
         {
             ActionTreeEditor wnd = GetWindow<ActionTreeEditor>();
@@ -40,7 +40,7 @@ namespace MungFramework.ActionTreeEditor
         {
             VisualElement root = rootVisualElement;
 
-            var nodeTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(ActionTreeEditorConfig.ActionTreeEditorPath+ ".uxml");
+            var nodeTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(ActionTreeEditorConfig.ActionTreeEditorPath + ".uxml");
             var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(ActionTreeEditorConfig.ActionTreeEditorPath + ".uss");
 
             nodeTree.CloneTree(root);

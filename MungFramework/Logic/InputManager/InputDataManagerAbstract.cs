@@ -1,8 +1,8 @@
-﻿using MungFramework.Demo;
+﻿
+using MungFramework.Logic.Save;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace MungFramework.Logic.Input
@@ -85,7 +85,7 @@ namespace MungFramework.Logic.Input
             foreach (var inputMapDataSO in inputMapLayerDataSOList)
             {
                 var savename = "INPUTMAP_LAYER_" + inputMapDataSO.InputMapLayerName;
-                var loadSuccess = DemoSaveManager.Instance.GetSystemValue(savename);
+                var loadSuccess = SaveManagerAbstract.Instance.GetSystemValue(savename);
                 if (loadSuccess.hasValue == false)
                 {
                     Debug.Log("读取按键层" + savename + "不存在，新建");
@@ -106,7 +106,7 @@ namespace MungFramework.Logic.Input
             foreach (var inputMap in inputMapLayerList)
             {
                 var savename = "INPUTMAP_LAYER_" + inputMap.InputMapLayerName;
-                DemoSaveManager.Instance.SetSystemValue(savename, JsonUtility.ToJson(inputMap));
+                SaveManagerAbstract.Instance.SetSystemValue(savename, JsonUtility.ToJson(inputMap));
             }
         }
     }

@@ -157,15 +157,8 @@ namespace MungFramework.Logic.Input
                 {
                     if (Enum.IsDefined(typeof(InputKeyEnum), actionname))
                     {
-                        action.performed -= InputActionPerformedHelp;
-                        action.performed -= InputActionPerformedHelp;
                         action.performed += InputActionPerformedHelp;
-
-                        action.canceled -= InputActionCanceledHelp;
-                        action.canceled -= InputActionCanceledHelp;
                         action.canceled += InputActionCanceledHelp;
-/*                        action.performed += (CNT cnt) => { InputAction_Performed((InputKeyEnum)Enum.Parse(typeof(InputKeyEnum), actionname)); };
-                        action.canceled += (CNT cnt) => { InputAction_Canceled((InputKeyEnum)Enum.Parse(typeof(InputKeyEnum), actionname)); };*/
                     }
                 }
             }
@@ -391,7 +384,7 @@ namespace MungFramework.Logic.Input
         /// <param name="inputkey"></param>
         protected virtual void InputAction_Performed(InputKeyEnum inputkey)
         {
-            Debug.Log(inputkey);
+            // Debug.Log(inputkey);
             //如果不是任意键，就触发一次任意键按下的事件
             if (inputkey != InputKeyEnum.ANYKEY)
             {
