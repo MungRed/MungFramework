@@ -4,6 +4,7 @@ using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
 using Sirenix.OdinInspector;
 using System.Collections;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using UnityEngine;
 
 namespace MungFramework.Logic.Camera
@@ -148,6 +149,13 @@ namespace MungFramework.Logic.Camera
 
         private IEnumerator MoveFollow(Transform aim, float time)
         {
+/*            float nowTime = 0;
+            while (nowTime < time)
+            {
+                follow_Pos.transform.position = Vector3.LerpUnclamped(follow_Pos.position, aim.position, nowTime / time);
+                nowTime += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }*/
             yield return follow_Pos.DOMove(aim.position, time).SetEase(Ease.OutCubic).WaitForCompletion();
 
             follow_isBinding = true;
@@ -155,6 +163,13 @@ namespace MungFramework.Logic.Camera
 
         private IEnumerator MoveLookAt(Transform aim, float time)
         {
+/*            float nowTime = 0;
+            while (nowTime < time)
+            {
+                lookAt_Pos.transform.position = Vector3.LerpUnclamped(lookAt_Pos.position, aim.position, nowTime / time);
+                nowTime += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }*/
             yield return lookAt_Pos.DOMove(aim.position, time).SetEase(Ease.OutCubic).WaitForCompletion();
             lookAt_isBinding = true;
         }

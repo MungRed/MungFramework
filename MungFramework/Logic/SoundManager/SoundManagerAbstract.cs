@@ -1,4 +1,6 @@
 using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
 using MungFramework.Extension.ComponentExtension;
 using Sirenix.OdinInspector;
 using System;
@@ -190,7 +192,7 @@ namespace MungFramework.Logic.Sound
 
 
 
-        public virtual SoundManagerAbstract PlayAudio(string id, AudioClip audioclip, bool loop = false, bool transition = false)
+        public virtual SoundManagerAbstract PlayAudio(string id, AudioClip audioclip, bool loop = false, bool transition = false,bool replace = false)
         {
             var soundSource = GetSoundSource(id);
 
@@ -198,7 +200,8 @@ namespace MungFramework.Logic.Sound
             {
                 return this;
             }
-            if (soundSource.Source.clip == audioclip)
+
+            if (soundSource.Source.clip == audioclip&&replace==false)
             {
                 return this;
             }
@@ -249,12 +252,22 @@ namespace MungFramework.Logic.Sound
             return this;
         }
 
+
+        private TweenerCore<float,float, FloatOptions> tmpTweenCore;
+
         public virtual IEnumerator PauseAudio(string id, bool transition = false)
         {
             var soundSource = GetSoundSource(id);
             if (soundSource == null)
             {
                 yield break;
+            }
+            if (tmpTweenCore != null)
+            {
+                if (!tmpTweenCore.IsComplete())
+                {
+                    tmpTweenCore.Kill();          
+                }
             }
             var audioSource = soundSource.Source;
             var volume = soundSource.Volume;
@@ -276,7 +289,7 @@ namespace MungFramework.Logic.Sound
                     audioSource.Pause();
                     audioSource.volume = volume;
                 };
-
+                tmpTweenCore = dt;
                 yield return dt.WaitForCompletion();
             }
 
@@ -289,7 +302,13 @@ namespace MungFramework.Logic.Sound
             {
                 yield break;
             }
-
+            if (tmpTweenCore != null)
+            {
+                if (!tmpTweenCore.IsComplete())
+                {
+                    tmpTweenCore.Kill();
+                }
+            }
             var audioSource = soundSource.Source;
             var volume = soundSource.Volume;
 
@@ -313,6 +332,8 @@ namespace MungFramework.Logic.Sound
                 {
                     audioSource.volume = volume;
                 };
+
+                tmpTweenCore = dt;
 
                 yield return dt.WaitForCompletion();
 

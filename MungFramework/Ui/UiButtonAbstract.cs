@@ -63,7 +63,7 @@ namespace MungFramework.Ui
             DoAction(UiButtonActionType.Select);
             if (checkAudio != null)
             {
-                SoundManagerAbstract.Instance.PlayAudio("effect", checkAudio);
+                SoundManagerAbstract.Instance.PlayAudio("effect", checkAudio,replace:true);
             }
             if (SelectObject != null)
             {
