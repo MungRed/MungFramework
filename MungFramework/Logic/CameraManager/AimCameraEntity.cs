@@ -4,7 +4,7 @@ using MungFramework.Entity;
 /// </summary>
 namespace MungFramework.Logic.Camera
 {
-    public class AimCameraEntityComponent : EntityComponent
+    public class AimCameraEntity : MungFramework.Entity.Entity
     {
         public void OnEnable()
         {

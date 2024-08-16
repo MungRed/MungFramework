@@ -43,10 +43,22 @@ namespace MungFramework.Logic.Input
     {
         NONE,
         ANYKEY,
+
         LEFT, UP, DOWN, RIGHT,
+
         OK, CANCEL,
         LEFT_PAGE, RIGTH_PAGE,
         UP_ROLL, DOWN_ROLL,
+
+        MENU,ACTION,
+
+        ATTACK,
+        SKILL,
+        MAGICK,
+        DEFENSE,
+        OVERDRIVE, 
+        EXTRA,
+        DEPLOY,
     }
 
     /// <summary>

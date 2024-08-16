@@ -31,6 +31,7 @@ namespace MungFramework.Extension.EditorExtension
         {
             var tree = new OdinMenuTree();
             tree.AddAllAssetsAtPath(Title, Path, typeof(T), true, false);
+
             return tree;
         }
 

@@ -209,6 +209,12 @@ namespace MungFramework.Logic.Save
             }
         }
 
+        public virtual void ClearSystemSave()
+        {
+            SystemSaveFile.Clear();
+            StartCoroutine(SaveIn(SystemSaveFile));
+        }
+
         /// <summary>
         /// 设置系统存档值
         /// </summary>

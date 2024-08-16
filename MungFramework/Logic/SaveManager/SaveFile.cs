@@ -54,5 +54,10 @@ namespace MungFramework.Logic.Save
                 DataDictionary.Add(keyvalue.Key, keyvalue.Value);
             }
         }
+
+        public void Clear()
+        {
+            DataDictionary.Clear();
+        }
     }
 }

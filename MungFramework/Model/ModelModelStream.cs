@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MungFramework.Model
+﻿namespace MungFramework.Model
 {
     /// <summary>
     /// 从输入模型到输出模型的流

@@ -11,14 +11,14 @@ namespace MungFramework.Logic.Camera
 
         [ReadOnly]
         [SerializeField]
-        private List<AimCameraEntityComponent> needAimCameraList = new();
+        private List<AimCameraEntity> needAimCameraList = new();
 
         [SerializeField]
         [Required("–Ë“™π“‘ÿ")]
         private Transform directionTransform;
 
 
-        public void Add(AimCameraEntityComponent aimCamera)
+        public void Add(AimCameraEntity aimCamera)
         {
             if (needAimCameraList.Contains(aimCamera))
             {
@@ -28,7 +28,7 @@ namespace MungFramework.Logic.Camera
             needAimCameraList.Add(aimCamera);
             aimCamera.transform.rotation = mainCamera.transform.rotation;
         }
-        public void Remove(AimCameraEntityComponent aimCamera)
+        public void Remove(AimCameraEntity aimCamera)
         {
             needAimCameraList.Remove(aimCamera);
         }

@@ -1,5 +1,4 @@
-﻿using System;
-namespace MungFramework.Model
+﻿namespace MungFramework.Model
 {
     /// <summary>
     /// 从SO到数据模型的流
