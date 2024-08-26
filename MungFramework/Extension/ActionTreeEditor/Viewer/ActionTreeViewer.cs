@@ -58,7 +58,7 @@ namespace MungFramework.ActionTreeEditor
         {
             var node = NodeTree.CreateNode(type);
 
-            if (node._NodeType != ActionNode.NodeType.Root)
+            if (node.NodeType != ActionNode.NodeTypeEnum.Root)
             {
                 var mousePosition = a.eventInfo.mousePosition;
                 var localPosition = contentViewContainer.WorldToLocal(mousePosition);

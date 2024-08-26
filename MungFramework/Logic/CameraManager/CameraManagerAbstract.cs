@@ -68,6 +68,8 @@ namespace MungFramework.Logic.Camera
         public void SetFov(int val, float time) => CameraController.SetFov(val, time);
         public void ResetFov(float time) => CameraController.ResetFov(time);
 
+        public CameraSource GetCameraSource() => CameraController.GetCameraSource();
+
         public IEnumerator ChangeCameraSource(CameraSource cameraSource, float time) => CameraController.ChangeCameraSource(cameraSource, time);
         public IEnumerator ChangeBindFollow(Transform aim, float time) => CameraController.ChangeBindFollow(aim, time);
         public IEnumerator ChangeBindLookAt(Transform aim, float time) => CameraController.ChangeBindLookAt(aim, time);

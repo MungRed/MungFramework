@@ -17,15 +17,29 @@ MonoBehaviour:
   InputMapList:
   - InputKey: 47
     InputValue: 14
+  - InputKey: 61
+    InputValue: 14
   - InputKey: 48
+    InputValue: 17
+  - InputKey: 62
     InputValue: 17
   - InputKey: 37
     InputValue: 15
+  - InputKey: 63
+    InputValue: 15
   - InputKey: 38
-    InputValue: 17
-  - InputKey: 33
+    InputValue: 16
+  - InputKey: 64
+    InputValue: 16
+  - InputKey: 31
     InputValue: 18
-  - InputKey: 39
-    InputValue: 19
+  - InputKey: 65
+    InputValue: 18
   - InputKey: 40
+    InputValue: 19
+  - InputKey: 68
+    InputValue: 19
+  - InputKey: 33
+    InputValue: 20
+  - InputKey: 66
     InputValue: 20

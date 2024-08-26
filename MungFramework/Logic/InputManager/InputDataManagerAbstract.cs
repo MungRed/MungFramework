@@ -34,6 +34,7 @@ namespace MungFramework.Logic.Input
                 yield return inputMap.GetInputValue(inputKey);
             }
         }
+
         public virtual IEnumerable<InputKeyEnum> GetInputKeys(InputValueEnum inputValue)
         {
             foreach (var inputMap in inputMapLayerList)
@@ -44,6 +45,7 @@ namespace MungFramework.Logic.Input
                 }
             }
         }
+
         public virtual InputMapLayer GetInputMap(string inputMapName)
         {
             return inputMapLayerList.Find(x => x.InputMapLayerName == inputMapName);

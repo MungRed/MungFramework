@@ -126,7 +126,7 @@ namespace MungFramework.Ui
         }
 
         [ShowInInspector]
-        public Vector2 Position => GetComponent<RectTransform>().MAnchoredPosition();
+        public Vector2 AnchoredPosition => GetComponent<RectTransform>().MAnchoredPosition();
         [ShowInInspector]
         public Vector2 Size => GetComponent<RectTransform>().MRectSize();
         [ShowInInspector]

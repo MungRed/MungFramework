@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector.Editor.Validation;
 using UnityEngine;
 
 namespace MungFramework.Extension.ComponentExtension
@@ -27,6 +28,11 @@ namespace MungFramework.Extension.ComponentExtension
             pos.x -= size.x * pivot.x;
             return pos.x;
         }
+        public static void MLeft_Set(this RectTransform rectTransform, float val)
+        {
+            var oldLeft = rectTransform.MLeft();
+            rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x + val - oldLeft, rectTransform.anchoredPosition.y);
+        }
         public static float MRight(this RectTransform rectTransform)
         {
 
@@ -36,6 +42,11 @@ namespace MungFramework.Extension.ComponentExtension
 
             pos.x += size.x * (1 - pivot.x);
             return pos.x;
+        }
+        public static void MRight_Set(this RectTransform rectTrasnform, float val)
+        {
+            var oldRight = rectTrasnform.MRight();
+            rectTrasnform.anchoredPosition = new Vector2(rectTrasnform.anchoredPosition.x + val - oldRight, rectTrasnform.anchoredPosition.y);
         }
         public static float MTop(this RectTransform rectTransform)
         {
@@ -47,6 +58,11 @@ namespace MungFramework.Extension.ComponentExtension
             pos.y += size.y * (1 - pivot.y);
             return pos.y;
         }
+        public static void MTop_Set(this RectTransform rectTransform, float val)
+        {
+            var oldTop = rectTransform.MTop();
+            rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, rectTransform.anchoredPosition.y + val - oldTop);
+        }
         public static float MBottom(this RectTransform rectTransform)
         {
             var pos = rectTransform.MAnchoredPosition();
@@ -55,6 +71,11 @@ namespace MungFramework.Extension.ComponentExtension
 
             pos.y -= size.y * pivot.y;
             return pos.y;
+        }
+        public static void MBottom_Set(this RectTransform rectTransform, float val)
+        {
+            var oldBottom = rectTransform.MBottom();
+            rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, rectTransform.anchoredPosition.y + val - oldBottom);
         }
     }
 }

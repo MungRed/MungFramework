@@ -157,18 +157,19 @@ namespace MungFramework.Logic
                 StartCoroutine(OnGameReload(this));
             }
         }
-        public override IEnumerator OnGameReload(GameManagerAbstract parentManager)
+        public virtual new IEnumerator OnGameReload(GameManagerAbstract parentManager)
         {
             Debug.Log("GameReload");
             GameState = GameStateEnum.Reload;
-            yield return base.OnGameReload(parentManager);
+            base.OnGameReload(parentManager);
             yield return OnGameReloadFinish(parentManager);
         }
-        public override IEnumerator OnGameReloadFinish(GameManagerAbstract parentManager)
+        public virtual new IEnumerator OnGameReloadFinish(GameManagerAbstract parentManager)
         {
-            yield return base.OnGameReloadFinish(parentManager);
+            base.OnGameReloadFinish(parentManager);
             GameState = GameStateEnum.Update;
             Debug.Log("GameReloadFinish");
+            yield return null;
         }
         public virtual void DOGameQuit()
         {

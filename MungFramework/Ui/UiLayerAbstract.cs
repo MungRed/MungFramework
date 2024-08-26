@@ -1,4 +1,3 @@
-using MungFramework.Logic;
 using MungFramework.Logic.Input;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,11 +21,11 @@ namespace MungFramework.Ui
 
         //打开和关闭事件
         [SerializeField]
-        protected UnityEvent OpenEvent, CloseEvent;
+        protected UnityEvent OpenEvent = new(), CloseEvent = new();
 
         protected UiLayerGroupAbstract UiLayerGroup => GetComponentInParent<UiLayerGroupAbstract>();
 
-        public InputManagerAbstract InputManager =>InputManagerAbstract.Instance;
+        public InputManagerAbstract InputManager => InputManagerAbstract.Instance;
 
         public virtual void OnInput(InputValueEnum inputType)
         {
@@ -331,6 +330,25 @@ namespace MungFramework.Ui
             ButtonList.Remove(button);
         }
 
+        #region Listener
+        public void AddOpenEventListener(UnityAction action)
+        {
+            OpenEvent.AddListener(action);
+        }
+        public void AddCloseEventListener(UnityAction action)
+        {
+            CloseEvent.AddListener(action);
+        }
+        public void RemoveOpenEventListener(UnityAction action)
+        {
+            OpenEvent.RemoveListener(action);
+        }
+        public void RemoveCloseEventListener(UnityAction action)
+        {
+            CloseEvent.RemoveListener(action);
+        }
+        #endregion
+
         private bool SelectFirstButton()
         {
             //如果当前没有选中按钮或者当前选中的按钮无效,就尝试选中第一个按钮
@@ -357,14 +375,14 @@ namespace MungFramework.Ui
             foreach (UiButtonAbstract button in ButtonList)
             {
                 button.UnSelect();
-                if (Mathf.Abs(button.Position.x - nowButton.Position.x) < 1)
+                if (Mathf.Abs(button.AnchoredPosition.x - nowButton.AnchoredPosition.x) < 1)
                 {
-                    if (button.Position.y > nowButton.Position.y)
+                    if (button.AnchoredPosition.y > nowButton.AnchoredPosition.y)
                     {
                         nowButton = button;
                     }
                 }
-                else if (button.Position.x < nowButton.Position.x)
+                else if (button.AnchoredPosition.x < nowButton.AnchoredPosition.x)
                 {
                     nowButton = button;
                 }
@@ -401,14 +419,14 @@ namespace MungFramework.Ui
             UiButtonAbstract res = buttons[0];
             foreach (UiButtonAbstract button in buttons)
             {
-                if (Mathf.Abs(button.Position.y - res.Position.y) < 1)
+                if (Mathf.Abs(button.AnchoredPosition.y - res.AnchoredPosition.y) < 1)
                 {
                     if (isNearThanOld(button, res, aim))
                     {
                         res = button;
                     }
                 }
-                else if (button.Position.y > res.Position.y)
+                else if (button.AnchoredPosition.y > res.AnchoredPosition.y)
                 {
                     res = button;
                 }
@@ -424,14 +442,14 @@ namespace MungFramework.Ui
             UiButtonAbstract res = buttons[0];
             foreach (UiButtonAbstract button in buttons)
             {
-                if (Mathf.Abs(button.Position.y - res.Position.y) < 1)
+                if (Mathf.Abs(button.AnchoredPosition.y - res.AnchoredPosition.y) < 1)
                 {
                     if (isNearThanOld(button, res, aim))
                     {
                         res = button;
                     }
                 }
-                else if (button.Position.y < res.Position.y)
+                else if (button.AnchoredPosition.y < res.AnchoredPosition.y)
                 {
                     res = button;
                 }
@@ -447,14 +465,14 @@ namespace MungFramework.Ui
             UiButtonAbstract res = buttons[0];
             foreach (UiButtonAbstract button in buttons)
             {
-                if (Mathf.Abs(button.Position.x - res.Position.x) < 1)
+                if (Mathf.Abs(button.AnchoredPosition.x - res.AnchoredPosition.x) < 1)
                 {
                     if (isNearThanOld(button, res, aim))
                     {
                         res = button;
                     }
                 }
-                else if (button.Position.x < res.Position.x)
+                else if (button.AnchoredPosition.x < res.AnchoredPosition.x)
                 {
                     res = button;
                 }
@@ -470,14 +488,14 @@ namespace MungFramework.Ui
             UiButtonAbstract res = buttons[0];
             foreach (UiButtonAbstract button in buttons)
             {
-                if (Mathf.Abs(button.Position.x - res.Position.x) < 1)
+                if (Mathf.Abs(button.AnchoredPosition.x - res.AnchoredPosition.x) < 1)
                 {
                     if (isNearThanOld(button, res, aim))
                     {
                         res = button;
                     }
                 }
-                else if (button.Position.x > res.Position.x)
+                else if (button.AnchoredPosition.x > res.AnchoredPosition.x)
                 {
                     res = button;
                 }
@@ -504,7 +522,7 @@ namespace MungFramework.Ui
         }
         private static bool isNearThanOld(UiButtonAbstract newButton, UiButtonAbstract oldButton, UiButtonAbstract aim)
         {
-            return Vector3.Magnitude(newButton.Position - aim.Position) < Vector3.Magnitude(oldButton.Position - aim.Position);
+            return Vector3.Magnitude(newButton.AnchoredPosition - aim.AnchoredPosition) < Vector3.Magnitude(oldButton.AnchoredPosition - aim.AnchoredPosition);
         }
     }
 }

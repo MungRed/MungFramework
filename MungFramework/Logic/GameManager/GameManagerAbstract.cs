@@ -131,31 +131,29 @@ namespace MungFramework.Logic
             }
             yield return null;
         }
-        public virtual IEnumerator OnGameReload(GameManagerAbstract parentManager)
+        public virtual void OnGameReload(GameManagerAbstract parentManager)
         {
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameReload)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
-                yield return subManager.OnGameReload(this);
+                subManager.OnGameReload(this);
             }
             foreach (var subExecutors in subGameControllerList)
             {
-                yield return subExecutors.OnGameReload(this);
+                subExecutors.OnGameReload(this);
             }
-            yield return null;
         }
-        public virtual IEnumerator OnGameReloadFinish(GameManagerAbstract parentManager)
+        public virtual void OnGameReloadFinish(GameManagerAbstract parentManager)
         {
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameReloadFinish)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
-                yield return subManager.OnGameReloadFinish(this);
+                subManager.OnGameReloadFinish(this);
             }
             foreach (var subExecutors in subGameControllerList)
             {
-                yield return subExecutors.OnGameReloadFinish(this);
+                subExecutors.OnGameReloadFinish(this);
             }
-            yield return null;
         }
 
         public virtual IEnumerator OnGameQuit(GameManagerAbstract parentManager)

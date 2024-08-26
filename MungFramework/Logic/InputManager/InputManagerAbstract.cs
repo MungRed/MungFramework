@@ -11,6 +11,7 @@ using CNT = UnityEngine.InputSystem.InputAction.CallbackContext;
 
 namespace MungFramework.Logic.Input
 {
+
     /// <summary>
     /// °´¼ü
     /// </summary>
@@ -143,14 +144,27 @@ namespace MungFramework.Logic.Input
             //ÇÐ»»¼üÊó»òÕßÊó±ê
             if (Keyboard.current != null && Keyboard.current.anyKey.IsPressed())
             {
-                InputDevice = InputDeviceEnum.¼üÊó;
+                if (InputDevice == InputDeviceEnum.ÊÖ±ú)
+                {
+                    InputDevice = InputDeviceEnum.¼üÊó;
+                    OnChangeDevice();
+                }
+
             }
             else if (Gamepad.current != null && Gamepad.current.IsActuated())
             {
-                InputDevice = InputDeviceEnum.ÊÖ±ú;
+                if (InputDevice == InputDeviceEnum.¼üÊó)
+                {
+                    InputDevice = InputDeviceEnum.ÊÖ±ú;
+                    OnChangeDevice();
+                }
             }
         }
 
+        public virtual void OnChangeDevice()
+        {
+
+        }
 
 
         /// <summary>
@@ -239,13 +253,16 @@ namespace MungFramework.Logic.Input
                 Remove_InputAction_AnyKeyDown(changeBind);
             }
             inputDataManager.Save();
+            OnChangeKeyBind();
+        }
+        public virtual void OnChangeKeyBind()
+        {
         }
 
         public virtual IEnumerable<InputKeyEnum> GetCurrentBind(InputValueEnum value)
         {
             return inputDataManager.GetInputKeys(value);
         }
-
 
         #region Öá
         /// <summary>
@@ -450,6 +467,10 @@ namespace MungFramework.Logic.Input
         /// <param name="time"></param>
         public virtual void DefaultMoter(float time)
         {
+            if (InputDevice != InputDeviceEnum.ÊÖ±ú)
+            {
+                return;
+            }
             StartCoroutine(_DefaultMoter(time));
         }
         protected virtual IEnumerator _DefaultMoter(float time)
@@ -464,6 +485,11 @@ namespace MungFramework.Logic.Input
         /// </summary>
         public virtual void Moter(Gamepad pad, float _low, float _max)
         {
+            if (InputDevice != InputDeviceEnum.ÊÖ±ú)
+            {
+                return;
+            }
+
             if (pad == null)
             {
                 return;

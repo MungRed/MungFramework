@@ -20,11 +20,11 @@ namespace MungFramework.ActionTreeEditor
         public string 备注 = "";
 
         //节点类型
-        public enum NodeType
+        public enum NodeTypeEnum
         {
             Root, Node
         }
-        public abstract NodeType _NodeType
+        public abstract NodeTypeEnum NodeType
         {
             get;
         }

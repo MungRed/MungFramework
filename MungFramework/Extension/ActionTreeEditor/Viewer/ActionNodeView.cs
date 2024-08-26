@@ -39,7 +39,7 @@ namespace MungFramework.ActionTreeEditor
             style.top = Node.position.y;
 
             //如果不是根节点，创建输入端口
-            if (Node._NodeType != ActionNode.NodeType.Root)
+            if (Node.NodeType != ActionNode.NodeTypeEnum.Root)
             {
                 CreateInputPort();
             }

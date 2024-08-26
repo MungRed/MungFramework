@@ -27,6 +27,13 @@ namespace MungFramework.Logic.Camera
         [ReadOnly]
         private bool follow_isBinding, lookAt_isBinding;
 
+        [SerializeField]
+        private bool isPause;
+
+        public CameraSource GetCameraSource()
+        {
+            return new CameraSource(follow_Bind, lookAt_Bind);
+        }
         public override void OnGameUpdate(GameManagerAbstract parentManager)
         {
             if (follow_isBinding&&follow_Bind!=null)
@@ -74,6 +81,7 @@ namespace MungFramework.Logic.Camera
             }
             follow_Pos.DOPause();
             lookAt_Pos.DOPause();
+            isPause = true;
         }
         public override IEnumerator OnGameResume(GameManagerAbstract parentManager)
         {
@@ -84,6 +92,7 @@ namespace MungFramework.Logic.Camera
             }
             follow_Pos.DOPlay();
             lookAt_Pos.DOPlay();
+            isPause = false;
         }
 
 
@@ -149,28 +158,41 @@ namespace MungFramework.Logic.Camera
 
         private IEnumerator MoveFollow(Transform aim, float time)
         {
-/*            float nowTime = 0;
+            float nowTime = 0;
+/*            float smoothTime = 0.2f; // Adjust the smooth time as needed
+            Vector3 velocity = Vector3.zero;*/
+
             while (nowTime < time)
             {
-                follow_Pos.transform.position = Vector3.LerpUnclamped(follow_Pos.position, aim.position, nowTime / time);
-                nowTime += Time.deltaTime;
+                if (!isPause)
+                {
+                    float t = nowTime / time;
+                    float smoothTime = Mathf.SmoothStep(0, 1, t); // Apply smooth step function
+                    follow_Pos.transform.position = Vector3.Lerp(follow_Pos.position, aim.position, smoothTime);
+                    nowTime += Time.deltaTime;
+                }
                 yield return new WaitForEndOfFrame();
-            }*/
-            yield return follow_Pos.DOMove(aim.position, time).SetEase(Ease.OutCubic).WaitForCompletion();
+            }
+            //yield return follow_Pos.DOMove(aim.position, time).SetEase(Ease.OutCubic).WaitForCompletion();
 
             follow_isBinding = true;
         }
 
         private IEnumerator MoveLookAt(Transform aim, float time)
         {
-/*            float nowTime = 0;
+            float nowTime = 0;
             while (nowTime < time)
             {
-                lookAt_Pos.transform.position = Vector3.LerpUnclamped(lookAt_Pos.position, aim.position, nowTime / time);
-                nowTime += Time.deltaTime;
+                if (!isPause)
+                {
+                    float t = nowTime / time;
+                    float smoothT = Mathf.SmoothStep(0, 1, t); // Apply smooth step function
+                    lookAt_Pos.transform.position = Vector3.Lerp(lookAt_Pos.position, aim.position, smoothT);
+                    nowTime += Time.deltaTime;
+                }
                 yield return new WaitForEndOfFrame();
-            }*/
-            yield return lookAt_Pos.DOMove(aim.position, time).SetEase(Ease.OutCubic).WaitForCompletion();
+            }
+            //yield return lookAt_Pos.DOMove(aim.position, time).SetEase(Ease.OutCubic).WaitForCompletion();
             lookAt_isBinding = true;
         }
     }
