@@ -77,29 +77,11 @@ namespace MungFramework.Logic.Input
     /// </summary>
     public abstract class InputManagerAbstract : SingletonGameManagerAbstract<InputManagerAbstract>
     {
-#if UNITY_EDITOR
-        private bool isBind
-        {
-            get
-            {            
-                bool res = !(inputDataManager!=null&&subGameManagerList.Contains(inputDataManager));
-                if (res == true)
-                {
-                    Debug.LogError(name + "需要挂载子管理器");
-                }
-                return res;
-            }
-        }
-#endif
-
-
         [SerializeField]
         [Required("需要拖拽挂载")]
-        [InfoBox("需要拖到子管理器中","isBind", InfoMessageType = InfoMessageType.Error)]
         private InputDataManagerAbstract inputDataManager;
 
         public InputDeviceEnum InputDevice;
-
 
         [ShowInInspector]
         [ReadOnly]
@@ -271,9 +253,6 @@ namespace MungFramework.Logic.Input
         [SerializeField]
         [ReadOnly]
         protected bool IsUp, IsDown, IsLeft, IsRight;
-
-
-
 
         /// <summary>
         /// 返回移动轴

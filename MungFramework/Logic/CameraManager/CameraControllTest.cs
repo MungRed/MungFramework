@@ -29,13 +29,13 @@ namespace MungFramework.Logic.Camera
         [Button("Pause", ButtonSizes.Medium)]
         public void Pause()
         {
-            StartCoroutine(CameraManagerAbstract.Instance.OnGamePause(null));
+            CameraManagerAbstract.Instance.OnGamePause(null);
         }
 
         [Button("Resume", ButtonSizes.Medium)]
         public void Resume()
         {
-            StartCoroutine(CameraManagerAbstract.Instance.OnGameResume(null));
+            CameraManagerAbstract.Instance.OnGameResume(null);
         }
 
     }

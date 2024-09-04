@@ -6,7 +6,6 @@ namespace MungFramework.Logic.Camera
 {
     public class AimCameraControllerAbstarct : GameControllerAbstract
     {
-
         private UnityEngine.Camera mainCamera=>UnityEngine.Camera.main;
 
         [ReadOnly]
@@ -18,7 +17,7 @@ namespace MungFramework.Logic.Camera
         private Transform directionTransform;
 
 
-        public void Add(AimCameraEntity aimCamera)
+        public void AddAimCameraEntity(AimCameraEntity aimCamera)
         {
             if (needAimCameraList.Contains(aimCamera))
             {
@@ -28,7 +27,7 @@ namespace MungFramework.Logic.Camera
             needAimCameraList.Add(aimCamera);
             aimCamera.transform.rotation = mainCamera.transform.rotation;
         }
-        public void Remove(AimCameraEntity aimCamera)
+        public void RemoveAimCamerEntity(AimCameraEntity aimCamera)
         {
             needAimCameraList.Remove(aimCamera);
         }
@@ -47,22 +46,20 @@ namespace MungFramework.Logic.Camera
             }
         }
 
+
         /// <summary>
         /// 输入摄像机的相对向量，返回世界向量
         /// </summary>
-        public Vector3 CameraToWorld(Vector3 input)
-        {
-            return directionTransform.TransformDirection(input);
-        }
-
+        public Vector3 CameraToWorld(Vector3 input)=> directionTransform.TransformDirection(input);
+ 
         /// <summary>
         /// 输入基于世界的向量，返回基于摄像机的向量
         /// </summary>
-        public Vector3 WolrdToCamera(Vector3 input)
-        {
-            return directionTransform.InverseTransformDirection(input);
-        }
+        public Vector3 WolrdToCamera(Vector3 input)=> directionTransform.InverseTransformDirection(input);
 
+        /// <summary>
+        /// 判断某个坐标是否在视野内
+        /// </summary>
         public bool IsInView(Vector3 worldPos)
         {
             Transform camTransform = mainCamera.transform;

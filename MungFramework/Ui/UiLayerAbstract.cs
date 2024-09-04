@@ -9,23 +9,32 @@ namespace MungFramework.Ui
 {
     public abstract class UiLayerAbstract : MonoBehaviour, IInputAcceptor
     {
-        [SerializeField]
-        protected List<UiButtonAbstract> ButtonList = new();
-
-        [SerializeField]
-        protected UiButtonAbstract NowSelectButton;
-
-        //能否通过按键关闭当前层
-        [SerializeField]
-        protected bool CouldKeyToClose = true;
-
-        //打开和关闭事件
-        [SerializeField]
-        protected UnityEvent OpenEvent = new(), CloseEvent = new();
-
-        protected UiLayerGroupAbstract UiLayerGroup => GetComponentInParent<UiLayerGroupAbstract>();
-
         public InputManagerAbstract InputManager => InputManagerAbstract.Instance;
+
+        protected UiLayerGroupAbstract _uiLayerGroup;
+        protected UiLayerGroupAbstract uiLayerGroup
+        {
+            get
+            {
+                if (_uiLayerGroup == null)
+                {
+                    _uiLayerGroup = GetComponentInParent<UiLayerGroupAbstract>();
+                }
+                return _uiLayerGroup;
+            }
+        }
+
+
+
+        [SerializeField]
+        protected List<UiButtonAbstract> buttonList = new(); //按钮列表
+        [SerializeField]
+        protected UiButtonAbstract nowSelectButton; //当前选中的按钮
+        [SerializeField]
+        protected bool couldKeyToClose = true;      //能否通过按键关闭当前层
+        [SerializeField]
+        protected UnityEvent openEvent = new(), closeEvent = new();        //打开和关闭事件
+
 
         public virtual void OnInput(InputValueEnum inputType)
         {
@@ -75,7 +84,8 @@ namespace MungFramework.Ui
                     break;
             }
         }
-        private void AddTapping(InputValueEnum input, UnityAction action)
+
+        protected void AddTapping(InputValueEnum input, UnityAction action)
         {
             //开始连续敲击
             var cor = StartCoroutine(Tapping(action));
@@ -84,16 +94,14 @@ namespace MungFramework.Ui
                 StopCoroutine(cor);
             };
             cancel += () => InputManager.Remove_InputAction_Canceled(input, cancel);
-
             InputManager.Add_InputAction_Canceled(input, cancel);
         }
-
-        private IEnumerator Tapping(UnityAction handle)
+        protected IEnumerator Tapping(UnityAction handle)
         {
             yield return new WaitForSeconds(0.5f);
             while (true)
             {
-                handle?.Invoke();
+                handle.Invoke();
                 yield return new WaitForSeconds(0.1f);
             }
         }
@@ -103,35 +111,40 @@ namespace MungFramework.Ui
             gameObject.SetActive(true);
 
             //获取所有的按钮
-            ButtonList = GetComponentsInChildren<UiButtonAbstract>().ToList();
+            buttonList = GetComponentsInChildren<UiButtonAbstract>().ToList();
 
             //如果当前没有选中的按钮，或者选中的按钮无效
             //则选中第一个按钮
-            if (NowSelectButton == null || NowSelectButton.gameObject.activeSelf == false)
+            if (nowSelectButton == null || nowSelectButton.gameObject.activeSelf == false)
             {
                 if (FindFirstButton())
                 {
-                    NowSelectButton.SelectWithoutAudio();
+                    nowSelectButton.SelectWithoutAudio();
                 }
             }
             else
             {
-                NowSelectButton.SelectWithoutAudio();
+                nowSelectButton.SelectWithoutAudio();
             }
 
             //将当前层推入栈
             InputManager.Push_InputAcceptor(this);
 
-            OpenEvent.Invoke();
+            openEvent.Invoke();
         }
         public virtual void Close()
         {
-            NowSelectButton?.UnSelect();
-            ButtonList.Clear();
+            if (nowSelectButton != null)
+            {
+                nowSelectButton.UnSelect();
+            }
+
+            buttonList.Clear();
+
             InputManager.Pop_InputAcceptor(this);
 
             gameObject.SetActive(false);
-            CloseEvent.Invoke();
+            closeEvent.Invoke();
         }
         public virtual void Up()
         {
@@ -140,24 +153,24 @@ namespace MungFramework.Ui
                 return;
             }
 
-            NowSelectButton.Up();
+            nowSelectButton.Up();
 
-            if (!NowSelectButton.CouldUp)
+            if (!nowSelectButton.CouldUp)
             {
                 return;
             }
 
-            List<UiButtonAbstract> nextButtons = GetUpButtons(ButtonList, NowSelectButton);
+            var nextButtons = GetUpButtons(buttonList, nowSelectButton);
 
             UiButtonAbstract nextButton;
 
-            if (nextButtons.Count == 0)
+            if (nextButtons.Count() == 0)
             {
-                nextButton = GetBottomButton(ButtonList, NowSelectButton);
+                nextButton = GetBottomButton(buttonList, nowSelectButton);
             }
             else
             {
-                nextButton = GetNearstButton(nextButtons, NowSelectButton);
+                nextButton = GetNearstButton(nextButtons, nowSelectButton);
             }
 
             if (nextButton != null)
@@ -172,23 +185,23 @@ namespace MungFramework.Ui
             {
                 return;
             }
-            NowSelectButton.Down();
+            nowSelectButton.Down();
 
-            if (!NowSelectButton.CouldDown)
+            if (!nowSelectButton.CouldDown)
             {
                 return;
             }
 
 
-            List<UiButtonAbstract> nextButtons = GetDownButtons(ButtonList, NowSelectButton);
+            var nextButtons = GetDownButtons(buttonList, nowSelectButton);
             UiButtonAbstract nextButton;
-            if (nextButtons.Count == 0)
+            if (nextButtons.Count() == 0)
             {
-                nextButton = GetTopButton(ButtonList, NowSelectButton);
+                nextButton = GetTopButton(buttonList, nowSelectButton);
             }
             else
             {
-                nextButton = GetNearstButton(nextButtons, NowSelectButton);
+                nextButton = GetNearstButton(nextButtons, nowSelectButton);
             }
             if (nextButton != null)
             {
@@ -201,23 +214,23 @@ namespace MungFramework.Ui
             {
                 return;
             }
-            NowSelectButton.Left();
+            nowSelectButton.Left();
 
-            if (!NowSelectButton.CouldLeft)
+            if (!nowSelectButton.CouldLeft)
             {
                 return;
             }
 
 
-            List<UiButtonAbstract> nextButtons = GetLeftButtons(ButtonList, NowSelectButton);
+            var nextButtons = GetLeftButtons(buttonList, nowSelectButton);
             UiButtonAbstract nextButton;
-            if (nextButtons.Count == 0)
+            if (nextButtons.Count() == 0)
             {
-                nextButton = GetRightMostButton(ButtonList, NowSelectButton);
+                nextButton = GetRightMostButton(buttonList, nowSelectButton);
             }
             else
             {
-                nextButton = GetNearstButton(nextButtons, NowSelectButton);
+                nextButton = GetNearstButton(nextButtons, nowSelectButton);
             }
             if (nextButton != null)
             {
@@ -232,23 +245,23 @@ namespace MungFramework.Ui
                 return;
             }
 
-            NowSelectButton.Right();
+            nowSelectButton.Right();
 
-            if (!NowSelectButton.CouldRight)
+            if (!nowSelectButton.CouldRight)
             {
                 return;
             }
 
 
-            List<UiButtonAbstract> nextButtons = GetRightButtons(ButtonList, NowSelectButton);
+            var nextButtons = GetRightButtons(buttonList, nowSelectButton);
             UiButtonAbstract nextButton;
-            if (nextButtons.Count == 0)
+            if (nextButtons.Count() == 0)
             {
-                nextButton = GetLeftMostButton(ButtonList, NowSelectButton);
+                nextButton = GetLeftMostButton(buttonList, nowSelectButton);
             }
             else
             {
-                nextButton = GetNearstButton(nextButtons, NowSelectButton);
+                nextButton = GetNearstButton(nextButtons, nowSelectButton);
             }
             if (nextButton != null)
             {
@@ -257,20 +270,20 @@ namespace MungFramework.Ui
         }
         public virtual void OK()
         {
-            if (NowSelectButton == null || NowSelectButton.gameObject.activeSelf == false)
+            if (nowSelectButton == null || nowSelectButton.gameObject.activeSelf == false)
             {
                 return;
             }
 
-            NowSelectButton.OK();
+            nowSelectButton.OK();
         }
         public virtual void Cancel()
         {
-            if (CouldKeyToClose)
+            if (couldKeyToClose)
             {
-                if (UiLayerGroup != null)
+                if (uiLayerGroup != null)
                 {
-                    UiLayerGroup.Close();
+                    uiLayerGroup.Close();
                     return;
                 }
                 Close();
@@ -278,16 +291,16 @@ namespace MungFramework.Ui
         }
         public virtual void LeftPage()
         {
-            if (UiLayerGroup != null)
+            if (uiLayerGroup != null)
             {
-                UiLayerGroup.LeftPage();
+                uiLayerGroup.LeftPage();
             }
         }
         public virtual void RightPage()
         {
-            if (UiLayerGroup != null)
+            if (uiLayerGroup != null)
             {
-                UiLayerGroup.RightPage();
+                uiLayerGroup.RightPage();
             }
         }
         public virtual void UpRoll()
@@ -299,27 +312,27 @@ namespace MungFramework.Ui
 
         public void JumpButton(UiButtonAbstract nextButton)
         {
-            if (ButtonList.Contains(nextButton))
+            if (buttonList.Contains(nextButton))
             {
-                if (NowSelectButton != null)
+                if (nowSelectButton != null)
                 {
-                    NowSelectButton.UnSelect();
+                    nowSelectButton.UnSelect();
                 }
                 nextButton.Select();
-                NowSelectButton = nextButton;
+                nowSelectButton = nextButton;
             }
         }
 
         public void AddButton(UiButtonAbstract button)
         {
-            if (!ButtonList.Contains(button))
+            if (!buttonList.Contains(button))
             {
-                ButtonList.Add(button);
+                buttonList.Add(button);
             }
         }
         public void RemoveButton(UiButtonAbstract button)
         {
-            if (ButtonList.Contains(button))
+            if (buttonList.Contains(button))
             {
                 if (button.IsSelected)
                 {
@@ -327,52 +340,52 @@ namespace MungFramework.Ui
                     FindFirstButton();
                 }
             }
-            ButtonList.Remove(button);
+            buttonList.Remove(button);
         }
 
         #region Listener
         public void AddOpenEventListener(UnityAction action)
         {
-            OpenEvent.AddListener(action);
+            openEvent.AddListener(action);
         }
         public void AddCloseEventListener(UnityAction action)
         {
-            CloseEvent.AddListener(action);
+            closeEvent.AddListener(action);
         }
         public void RemoveOpenEventListener(UnityAction action)
         {
-            OpenEvent.RemoveListener(action);
+            openEvent.RemoveListener(action);
         }
         public void RemoveCloseEventListener(UnityAction action)
         {
-            CloseEvent.RemoveListener(action);
+            closeEvent.RemoveListener(action);
         }
         #endregion
 
-        private bool SelectFirstButton()
+        protected bool SelectFirstButton()
         {
             //如果当前没有选中按钮或者当前选中的按钮无效,就尝试选中第一个按钮
-            if (NowSelectButton == null || NowSelectButton.gameObject.activeSelf == false)
+            if (nowSelectButton == null || nowSelectButton.gameObject.activeSelf == false)
             {
                 if (FindFirstButton())
                 {
-                    NowSelectButton.Select();
+                    nowSelectButton.Select();
                 }
                 return true;
             }
             return false;
         }
         //获取第一个按钮（左上角）
-        private bool FindFirstButton()
+        protected bool FindFirstButton()
         {
-            if (ButtonList.Count == 0)
+            if (buttonList.Count == 0)
             {
-                NowSelectButton = null;
+                nowSelectButton = null;
                 return false;
             }
 
-            UiButtonAbstract nowButton = ButtonList[0];
-            foreach (UiButtonAbstract button in ButtonList)
+            UiButtonAbstract nowButton = buttonList[0];
+            foreach (UiButtonAbstract button in buttonList)
             {
                 button.UnSelect();
                 if (Mathf.Abs(button.AnchoredPosition.x - nowButton.AnchoredPosition.x) < 1)
@@ -387,36 +400,36 @@ namespace MungFramework.Ui
                     nowButton = button;
                 }
             }
-            NowSelectButton = nowButton;
+            nowSelectButton = nowButton;
             return true;
         }
 
         //获取上下左右方向的按钮
-        private static List<UiButtonAbstract> GetUpButtons(List<UiButtonAbstract> buttons, UiButtonAbstract aim)
+        protected static IEnumerable<UiButtonAbstract> GetUpButtons(IEnumerable<UiButtonAbstract> buttons, UiButtonAbstract aim)
         {
-            return buttons.Where(button => button.RightBottom.y > aim.LeftTop.y).ToList();
+            return buttons.Where(button => button.RightBottom.y > aim.LeftTop.y);
         }
-        private static List<UiButtonAbstract> GetDownButtons(List<UiButtonAbstract> buttons, UiButtonAbstract aim)
+        protected static IEnumerable<UiButtonAbstract> GetDownButtons(IEnumerable<UiButtonAbstract> buttons, UiButtonAbstract aim)
         {
-            return buttons.Where(button => button.LeftTop.y < aim.RightBottom.y).ToList();
+            return buttons.Where(button => button.LeftTop.y < aim.RightBottom.y);
         }
-        private static List<UiButtonAbstract> GetLeftButtons(List<UiButtonAbstract> buttons, UiButtonAbstract aim)
+        protected static IEnumerable<UiButtonAbstract> GetLeftButtons(IEnumerable<UiButtonAbstract> buttons, UiButtonAbstract aim)
         {
-            return buttons.Where(button => button.RightBottom.x < aim.LeftTop.x).ToList();
+            return buttons.Where(button => button.RightBottom.x < aim.LeftTop.x);
         }
-        private static List<UiButtonAbstract> GetRightButtons(List<UiButtonAbstract> buttons, UiButtonAbstract aim)
+        protected static IEnumerable<UiButtonAbstract> GetRightButtons(IEnumerable<UiButtonAbstract> buttons, UiButtonAbstract aim)
         {
-            return buttons.Where(button => button.LeftTop.x > aim.RightBottom.x).ToList();
+            return buttons.Where(button => button.LeftTop.x > aim.RightBottom.x);
         }
 
-        private static UiButtonAbstract GetTopButton(List<UiButtonAbstract> buttons, UiButtonAbstract aim)
+        protected static UiButtonAbstract GetTopButton(IEnumerable<UiButtonAbstract> buttons, UiButtonAbstract aim)
         {
-            if (buttons.Count == 0)
+            if (buttons.Count() == 0)
             {
                 return null;
             }
 
-            UiButtonAbstract res = buttons[0];
+            UiButtonAbstract res = buttons.First();
             foreach (UiButtonAbstract button in buttons)
             {
                 if (Mathf.Abs(button.AnchoredPosition.y - res.AnchoredPosition.y) < 1)
@@ -433,13 +446,13 @@ namespace MungFramework.Ui
             }
             return res;
         }
-        private static UiButtonAbstract GetBottomButton(List<UiButtonAbstract> buttons, UiButtonAbstract aim)
+        protected static UiButtonAbstract GetBottomButton(IEnumerable<UiButtonAbstract> buttons, UiButtonAbstract aim)
         {
-            if (buttons.Count == 0)
+            if (buttons.Count() == 0)
             {
                 return null;
             }
-            UiButtonAbstract res = buttons[0];
+            UiButtonAbstract res = buttons.First();
             foreach (UiButtonAbstract button in buttons)
             {
                 if (Mathf.Abs(button.AnchoredPosition.y - res.AnchoredPosition.y) < 1)
@@ -456,13 +469,13 @@ namespace MungFramework.Ui
             }
             return res;
         }
-        private static UiButtonAbstract GetLeftMostButton(List<UiButtonAbstract> buttons, UiButtonAbstract aim)
+        protected static UiButtonAbstract GetLeftMostButton(IEnumerable<UiButtonAbstract> buttons, UiButtonAbstract aim)
         {
-            if (buttons.Count == 0)
+            if (buttons.Count() == 0)
             {
                 return null;
             }
-            UiButtonAbstract res = buttons[0];
+            UiButtonAbstract res = buttons.First();
             foreach (UiButtonAbstract button in buttons)
             {
                 if (Mathf.Abs(button.AnchoredPosition.x - res.AnchoredPosition.x) < 1)
@@ -479,13 +492,14 @@ namespace MungFramework.Ui
             }
             return res;
         }
-        private static UiButtonAbstract GetRightMostButton(List<UiButtonAbstract> buttons, UiButtonAbstract aim)
+        protected static UiButtonAbstract GetRightMostButton(IEnumerable<UiButtonAbstract> buttons, UiButtonAbstract aim)
         {
-            if (buttons.Count == 0)
+            if (buttons.Count() == 0)
             {
                 return null;
             }
-            UiButtonAbstract res = buttons[0];
+            UiButtonAbstract res = buttons.First();
+
             foreach (UiButtonAbstract button in buttons)
             {
                 if (Mathf.Abs(button.AnchoredPosition.x - res.AnchoredPosition.x) < 1)
@@ -503,14 +517,14 @@ namespace MungFramework.Ui
             return res;
         }
 
-        private static UiButtonAbstract GetNearstButton(List<UiButtonAbstract> buttons, UiButtonAbstract aim)
+        protected static UiButtonAbstract GetNearstButton(IEnumerable<UiButtonAbstract> buttons, UiButtonAbstract aim)
         {
-            if (buttons.Count == 0)
+            if (buttons.Count() == 0)
             {
                 return null;
             }
 
-            UiButtonAbstract nearstButton = buttons[0];
+            UiButtonAbstract nearstButton = buttons.First();
             foreach (UiButtonAbstract button in buttons)
             {
                 if (isNearThanOld(button, nearstButton, aim))
@@ -520,9 +534,9 @@ namespace MungFramework.Ui
             }
             return nearstButton;
         }
-        private static bool isNearThanOld(UiButtonAbstract newButton, UiButtonAbstract oldButton, UiButtonAbstract aim)
+        protected static bool isNearThanOld(UiButtonAbstract newButton, UiButtonAbstract oldButton, UiButtonAbstract aim)
         {
-            return Vector3.Magnitude(newButton.AnchoredPosition - aim.AnchoredPosition) < Vector3.Magnitude(oldButton.AnchoredPosition - aim.AnchoredPosition);
+            return (newButton.AnchoredPosition - aim.AnchoredPosition).sqrMagnitude < (oldButton.AnchoredPosition - aim.AnchoredPosition).sqrMagnitude;
         }
     }
 }

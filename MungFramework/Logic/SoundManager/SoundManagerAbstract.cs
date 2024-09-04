@@ -12,26 +12,9 @@ namespace MungFramework.Logic.Sound
 {
     public abstract class SoundManagerAbstract : SingletonGameManagerAbstract<SoundManagerAbstract>
     {
-#if UNITY_EDITOR
-        private bool isBind
-        {
-            get
-            {
-                bool res =  !(soundDataManager != null && subGameManagerList.Contains(soundDataManager));
-                if (res == true)
-                {
-                    Debug.LogError(name + "需要挂载子管理器");
-                }
-                return res;
-            }
-        }
-#endif
-
-        [InfoBox("需要拖到子管理器中", "isBind", InfoMessageType = InfoMessageType.Error)]
         [SerializeField]
         [Required("需要拖拽挂载")]
         protected SoundDataManagerAbstract soundDataManager;
-
 
         [ReadOnly]
         [SerializeField]
@@ -50,8 +33,6 @@ namespace MungFramework.Logic.Sound
         {
             soundDataManager.SetVolumeData(volumeType, val);
         }
-
-
 
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
@@ -83,8 +64,8 @@ namespace MungFramework.Logic.Sound
             foreach (var defaultSoundSource in DefaultSoundSourceList)
             {
                 AddSoundSource(defaultSoundSource.Item1, defaultSoundSource.Item2);
-                yield return new WaitForEndOfFrame();
             }
+            yield break;
         }
 
 

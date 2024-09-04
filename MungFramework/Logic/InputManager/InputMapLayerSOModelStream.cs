@@ -1,6 +1,4 @@
 ﻿using MungFramework.Model;
-using System.Collections;
-using UnityEngine;
 
 namespace MungFramework.Logic.Input
 {

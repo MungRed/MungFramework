@@ -1,5 +1,4 @@
 using MungFramework.Extension.ComponentExtension;
-using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,68 +8,86 @@ namespace MungFramework.Ui
     public abstract class UiLayerGroupAbstract : MonoBehaviour
     {
         [SerializeField]
-        protected List<UiLayerAbstract> UiLayerList;
+        protected List<UiLayerAbstract> uiLayerList = new();
 
         //当前layer的索引
         [SerializeField]
-        protected int NowOpenedLayerIndex;
+        protected int nowLayerIndex;
 
         [SerializeField]
-        protected UiLayerAbstract NowOpenedLayer;
+        protected UiLayerAbstract nowLayer;
 
 
         [SerializeField]
-        protected UnityEvent OpenEvent, CloseEvent;
+        protected UnityEvent openEvent = new(), closeEvent = new();
 
 
 
         public virtual void LeftPage()
         {
-            if (UiLayerList.Empty())
+            if (uiLayerList.Empty())
             {
                 return;
             }
-            int index = (NowOpenedLayerIndex-1+UiLayerList.Count)%UiLayerList.Count;
-            Jump(index,true);
+            int index = (nowLayerIndex + uiLayerList.Count - 1) % uiLayerList.Count;
+            Jump(index, true);
         }
         public virtual void RightPage()
         {
-            if (UiLayerList.Empty())
+            if (uiLayerList.Empty())
             {
                 return;
             }
-            int index = (NowOpenedLayerIndex + 1 + UiLayerList.Count) % UiLayerList.Count;
-            Jump(index,false);
+            int index = (nowLayerIndex + uiLayerList.Count + 1) % uiLayerList.Count;
+            Jump(index, false);
         }
 
-        public virtual void Jump(int index,bool isleft)
+        public virtual void Jump(int index, bool isleft)
         {
-            if (index < 0 || index >= UiLayerList.Count)
+            if (index < 0 || index >= uiLayerList.Count)
             {
                 return;
             }
-            NowOpenedLayer.Close();
-            NowOpenedLayer = UiLayerList[index];
-            NowOpenedLayer.Open();
-            NowOpenedLayerIndex = index;
+
+            if (nowLayer != null)
+            {
+                nowLayer.Close();
+            }
+
+            nowLayer = uiLayerList[index];
+
+            if (nowLayer != null)
+            {
+                nowLayer.Open();
+            }
+
+            nowLayerIndex = index;
         }
 
         public virtual void Open()
         {
             gameObject.SetActive(true);
-            if (NowOpenedLayer == null)
+            if (nowLayer == null)
             {
-                NowOpenedLayer = UiLayerList[0];
-                NowOpenedLayerIndex = 0;
+                nowLayer = uiLayerList[0];
+                nowLayerIndex = 0;
             }
-            OpenEvent.Invoke();
-            NowOpenedLayer?.Open();
+            openEvent.Invoke();
+
+            if (nowLayer != null)
+            {
+                nowLayer.Open();
+            }            
         }
         public virtual void Close()
         {
-            NowOpenedLayer?.Close();
+            if (nowLayer != null)
+            {
+                nowLayer.Close();
+            }
+
             gameObject.SetActive(false);
-            CloseEvent.Invoke();
+            closeEvent.Invoke();
         }
     }
 

@@ -16,27 +16,24 @@ namespace MungFramework.Logic
         protected GameManagerEvents gameControllerEvents = new();
 
 
-        public virtual IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
+        public virtual void OnSceneLoad(GameManagerAbstract parentManager)
         {
             gameControllerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnSceneLoad)?.Invoke();
-            yield return null;
         }
 
-        public virtual IEnumerator OnGameStart(GameManagerAbstract parentManager)
+        public virtual void OnGameStart(GameManagerAbstract parentManager)
         {
             gameControllerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameStart)?.Invoke();
-            yield return null;
         }
-        public virtual IEnumerator OnGamePause(GameManagerAbstract parentManager)
+        public virtual void OnGamePause(GameManagerAbstract parentManager)
         {
             gameControllerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGamePause)?.Invoke();
-            yield return null;
         }
-        public virtual IEnumerator OnGameResume(GameManagerAbstract parentManager)
+        public virtual void OnGameResume(GameManagerAbstract parentManager)
         {
             gameControllerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameResume)?.Invoke();
-            yield return null;
         }
+
         public virtual void OnGameReload(GameManagerAbstract parentManager)
         {
             gameControllerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameReload)?.Invoke();
@@ -46,10 +43,9 @@ namespace MungFramework.Logic
             gameControllerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameReloadFinish)?.Invoke();
         }
 
-        public virtual IEnumerator OnGameQuit(GameManagerAbstract parentManager)
+        public virtual void OnGameQuit(GameManagerAbstract parentManager)
         {
             gameControllerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameQuit)?.Invoke();
-            yield return null;
         }
 
         public virtual void OnGameUpdate(GameManagerAbstract parentManager)

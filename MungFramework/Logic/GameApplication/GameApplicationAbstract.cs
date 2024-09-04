@@ -1,6 +1,5 @@
 using Sirenix.OdinInspector;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MungFramework.Logic
@@ -18,18 +17,20 @@ namespace MungFramework.Logic
             Awake,
             Start,
             Update,
-
+            Pause,//暂停状态
             Reload,//重新载入
             Quit,//退出
-
-            PauseIn,//暂停中
-            Pause,//暂停状态
-            ResumeIn,//恢复中
         }
 
         [SerializeField]
         [ReadOnly]
-        public GameStateEnum GameState;
+        private GameStateEnum gameState;
+
+        public GameStateEnum GameState
+        {
+            get => gameState;
+            protected set => gameState = value;
+        }
 
 
         #region Unity消息
@@ -41,6 +42,7 @@ namespace MungFramework.Logic
         {
             DOGameStart();
         }
+
         public virtual void Update()
         {
             if (GameState == GameStateEnum.Update)
@@ -55,6 +57,7 @@ namespace MungFramework.Logic
                 DOGameFixedUpdate();
             }
         }
+
         #endregion
 
         /// <summary>
@@ -82,7 +85,6 @@ namespace MungFramework.Logic
         public  override IEnumerator OnGameStart(GameManagerAbstract parentManager)
         {
             yield return new WaitUntil(()=>GameState == GameStateEnum.Start);
-
 
             Debug.Log("GameStart");
             yield return base.OnGameStart(parentManager);
@@ -113,14 +115,12 @@ namespace MungFramework.Logic
             //只有在游戏更新状态下才能暂停
             if (GameState == GameStateEnum.Update)
             {
-                StartCoroutine(OnGamePause(this));
+                OnGamePause(this);
             }
         }
-        public override IEnumerator OnGamePause(GameManagerAbstract parentManager)
+        public override void OnGamePause(GameManagerAbstract parentManager)
         {
-            //暂停中
-            GameState = GameStateEnum.PauseIn;
-            yield return  base.OnGamePause(parentManager);
+            base.OnGamePause(parentManager);
             Debug.Log("GamePause");
             //暂停
             GameState = GameStateEnum.Pause;
@@ -134,14 +134,12 @@ namespace MungFramework.Logic
             //只有在游戏暂停状态下才能恢复暂停
             if (GameState == GameStateEnum.Pause)
             {
-                StartCoroutine(OnGameResume(this));
+                OnGameResume(this);
             }
         }
-        public override IEnumerator OnGameResume(GameManagerAbstract parentManager)
+        public override void OnGameResume(GameManagerAbstract parentManager)
         {
-            //恢复中
-            GameState = GameStateEnum.ResumeIn;
-            yield return base.OnGameResume(parentManager);
+            base.OnGameResume(parentManager);
             Debug.Log("GameResume");
             GameState = GameStateEnum.Update;
         }
@@ -151,11 +149,12 @@ namespace MungFramework.Logic
         /// </summary>
         public virtual void DOGameReload()
         {
+            StartCoroutine(OnGameReload(this));
             //只有在游戏更新状态下才能重新载入
-            if (GameState == GameStateEnum.Update)
-            {
-                StartCoroutine(OnGameReload(this));
-            }
+            //if (GameState == GameStateEnum.Update)
+            //{
+            //    StartCoroutine(OnGameReload(this));
+            //}
         }
         public virtual new IEnumerator OnGameReload(GameManagerAbstract parentManager)
         {

@@ -1,5 +1,4 @@
-﻿
-using MungFramework.Logic.Save;
+﻿using MungFramework.Logic.Save;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

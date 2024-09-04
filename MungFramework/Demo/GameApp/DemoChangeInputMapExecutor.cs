@@ -13,9 +13,9 @@ namespace MungFramework.Demo
         [SerializeField]
         private DemoInputManager InputManager;
 
-        public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
+        public override void OnSceneLoad(GameManagerAbstract parentManager)
         {
-            yield return base.OnSceneLoad(parentManager);
+            base.OnSceneLoad(parentManager);
             InputManager = parentManager as DemoInputManager;
         }
 

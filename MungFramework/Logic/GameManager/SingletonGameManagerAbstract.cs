@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-
-namespace MungFramework.Logic
+﻿namespace MungFramework.Logic
 {
     public class SingletonGameManagerAbstract<T> : GameManagerAbstract where T: GameManagerAbstract
     {

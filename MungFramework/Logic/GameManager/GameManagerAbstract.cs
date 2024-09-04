@@ -88,7 +88,7 @@ namespace MungFramework.Logic
             }
             foreach (var subExecutors in subGameControllerList)
             {
-                yield return subExecutors.OnSceneLoad(this);
+                subExecutors.OnSceneLoad(this);
             }
             yield return null;
         }
@@ -101,35 +101,33 @@ namespace MungFramework.Logic
             }
             foreach (var subExecutors in subGameControllerList)
             {
-                yield return subExecutors.OnGameStart(this);
+                subExecutors.OnGameStart(this);
             }
             yield return null;
         }
-        public virtual IEnumerator OnGamePause(GameManagerAbstract parentManager)
+        public virtual void OnGamePause(GameManagerAbstract parentManager)
         {
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGamePause)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
-                yield return subManager.OnGamePause(this);
+                subManager.OnGamePause(this);
             }
             foreach (var subExecutors in subGameControllerList)
             {
-                yield return subExecutors.OnGamePause(this);
+                subExecutors.OnGamePause(this);
             }
-            yield return null;
         }
-        public virtual IEnumerator OnGameResume(GameManagerAbstract parentManager)
+        public virtual void OnGameResume(GameManagerAbstract parentManager)
         {
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameResume)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
-                yield return subManager.OnGameResume(this);
+                subManager.OnGameResume(this);
             }
             foreach (var subExecutors in subGameControllerList)
             {
-                yield return subExecutors.OnGameResume(this);
+                subExecutors.OnGameResume(this);
             }
-            yield return null;
         }
         public virtual void OnGameReload(GameManagerAbstract parentManager)
         {
@@ -165,7 +163,7 @@ namespace MungFramework.Logic
             }
             foreach (var subExecutors in subGameControllerList)
             {
-                yield return subExecutors.OnGameQuit(this);
+                subExecutors.OnGameQuit(this);
             }
             yield return null;
         }

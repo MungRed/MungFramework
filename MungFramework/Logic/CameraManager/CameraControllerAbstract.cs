@@ -4,7 +4,6 @@ using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
 using Sirenix.OdinInspector;
 using System.Collections;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using UnityEngine;
 
 namespace MungFramework.Logic.Camera
@@ -34,6 +33,7 @@ namespace MungFramework.Logic.Camera
         {
             return new CameraSource(follow_Bind, lookAt_Bind);
         }
+
         public override void OnGameUpdate(GameManagerAbstract parentManager)
         {
             if (follow_isBinding&&follow_Bind!=null)
@@ -48,6 +48,7 @@ namespace MungFramework.Logic.Camera
         }
 
         private TweenerCore<float,float,FloatOptions> setFovTweenCore;
+
         public void SetFov(int val, float time)
         {
             if (setFovTweenCore != null)
@@ -72,9 +73,9 @@ namespace MungFramework.Logic.Camera
                 .OnComplete(() => setFovTweenCore = null);
         }
 
-        public override IEnumerator OnGamePause(GameManagerAbstract parentManager)
+        public override void OnGamePause(GameManagerAbstract parentManager)
         {
-            yield return base.OnGamePause(parentManager);
+            base.OnGamePause(parentManager);
             if (setFovTweenCore != null)
             {
                 setFovTweenCore.Pause();
@@ -83,9 +84,10 @@ namespace MungFramework.Logic.Camera
             lookAt_Pos.DOPause();
             isPause = true;
         }
-        public override IEnumerator OnGameResume(GameManagerAbstract parentManager)
+
+        public override void OnGameResume(GameManagerAbstract parentManager)
         {
-            yield return base.OnGameResume(parentManager);
+            base.OnGameResume(parentManager);
             if (setFovTweenCore != null)
             {
                 setFovTweenCore.Play();
@@ -95,7 +97,6 @@ namespace MungFramework.Logic.Camera
             isPause = false;
         }
 
-
         public IEnumerator ChangeCameraSource(CameraSource cameraSource,float time)
         {
             var changeFollow = StartCoroutine(ChangeBindFollow(cameraSource.Follow,time));
@@ -104,8 +105,6 @@ namespace MungFramework.Logic.Camera
             yield return changeFollow;
             yield return changeLookAt;
         }
-
-
 
 
         Coroutine bindfollow;
@@ -169,9 +168,9 @@ namespace MungFramework.Logic.Camera
                     float t = nowTime / time;
                     float smoothTime = Mathf.SmoothStep(0, 1, t); // Apply smooth step function
                     follow_Pos.transform.position = Vector3.Lerp(follow_Pos.position, aim.position, smoothTime);
-                    nowTime += Time.deltaTime;
+                    nowTime += Time.fixedDeltaTime;
                 }
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
             //yield return follow_Pos.DOMove(aim.position, time).SetEase(Ease.OutCubic).WaitForCompletion();
 
@@ -188,9 +187,9 @@ namespace MungFramework.Logic.Camera
                     float t = nowTime / time;
                     float smoothT = Mathf.SmoothStep(0, 1, t); // Apply smooth step function
                     lookAt_Pos.transform.position = Vector3.Lerp(lookAt_Pos.position, aim.position, smoothT);
-                    nowTime += Time.deltaTime;
+                    nowTime += Time.fixedDeltaTime;
                 }
-                yield return new WaitForEndOfFrame();
+                yield return new WaitForFixedUpdate();
             }
             //yield return lookAt_Pos.DOMove(aim.position, time).SetEase(Ease.OutCubic).WaitForCompletion();
             lookAt_isBinding = true;

@@ -14,20 +14,38 @@ namespace MungFramework.Ui
             Up, Down, Left, Right, OK, Select, UnSelect
         }
 
+        protected RectTransform _rectTransform;
+        protected RectTransform rectTransform
+        {
+            get
+            {
+                if (_rectTransform == null)
+                {
+                    _rectTransform = GetComponent<RectTransform>();
+                }
+                return _rectTransform;
+            }
+        }
+        protected UiScrollViewAbstract uiScrollView => GetComponentInParent<UiScrollViewAbstract>();
+
+
         [SerializeField]
-        protected SerializedDictionary<UiButtonActionType, UnityEvent> UiButtonActionMap = new();
+        protected SerializedDictionary<UiButtonActionType, UnityEvent> uiButtonActionMap = new();
 
         [HorizontalGroup]
         public bool CouldUp = true, CouldDown = true, CouldLeft = true, CouldRight = true;
 
-        //是否选中
-        public bool IsSelected = false;
+        [SerializeField]
+        protected bool isSelected = false;
+        public bool IsSelected
+        {
+            get => isSelected;
+            protected set => isSelected = value;
+        }
 
         //选中特效
-        public GameObject SelectObject;
-
-        public UiScrollViewAbstract UiScrollView => GetComponentInParent<UiScrollViewAbstract>();
-
+        [SerializeField]
+        protected GameObject selectObject;
 
         [SerializeField]
         protected AudioClip checkAudio;
@@ -35,24 +53,24 @@ namespace MungFramework.Ui
         #region 事件
         public void AddAction(UiButtonActionType type, UnityAction action)
         {
-            if (!UiButtonActionMap.ContainsKey(type))
+            if (!uiButtonActionMap.ContainsKey(type))
             {
-                UiButtonActionMap.Add(type, new());
+                uiButtonActionMap.Add(type, new());
             }
-            UiButtonActionMap[type].AddListener(action);
+            uiButtonActionMap[type].AddListener(action);
         }
         public void RemoveAction(UiButtonActionType type, UnityAction action)
         {
-            if (UiButtonActionMap.ContainsKey(type))
+            if (uiButtonActionMap.ContainsKey(type))
             {
-                UiButtonActionMap[type].RemoveListener(action);
+                uiButtonActionMap[type].RemoveListener(action);
             }
         }
         public void DoAction(UiButtonActionType type)
         {
-            if (UiButtonActionMap.ContainsKey(type))
+            if (uiButtonActionMap.ContainsKey(type))
             {
-                UiButtonActionMap[type].Invoke();
+                uiButtonActionMap[type].Invoke();
             }
         }
 
@@ -65,9 +83,9 @@ namespace MungFramework.Ui
             {
                 SoundManagerAbstract.Instance.PlayAudio("effect", checkAudio,replace:true);
             }
-            if (SelectObject != null)
+            if (selectObject != null)
             {
-                SelectObject.SetActive(true);
+                selectObject.SetActive(true);
             }
         }
 
@@ -77,9 +95,9 @@ namespace MungFramework.Ui
             IsSelected = true;
             UpdateScrollView();
             DoAction(UiButtonActionType.Select);
-            if (SelectObject != null)
+            if (selectObject != null)
             {
-                SelectObject.SetActive(true);
+                selectObject.SetActive(true);
             }
         }
 
@@ -87,9 +105,9 @@ namespace MungFramework.Ui
         {
             IsSelected = false;
             DoAction(UiButtonActionType.UnSelect);
-            if (SelectObject != null)
+            if (selectObject != null)
             {
-                SelectObject.SetActive(false);
+                selectObject.SetActive(false);
             }
         }
 
@@ -119,22 +137,23 @@ namespace MungFramework.Ui
 
         protected void UpdateScrollView()
         {
-            if (UiScrollView != null)
+            if (uiScrollView != null)
             {
-                UiScrollView.UpdatePosition(this);
+                uiScrollView.UpdatePosition(this);
             }
         }
 
         [ShowInInspector]
-        public Vector2 AnchoredPosition => GetComponent<RectTransform>().MAnchoredPosition();
+        public Vector2 AnchoredPosition => rectTransform.MAnchoredPosition();
         [ShowInInspector]
-        public Vector2 Size => GetComponent<RectTransform>().MRectSize();
+        public Vector2 Size => rectTransform.MRectSize();
         [ShowInInspector]
-        public Vector2 Pivot => GetComponent<RectTransform>().MPivot();
+        public Vector2 Pivot => rectTransform.MPivot();
         [ShowInInspector]
-        public Vector2 LeftTop => GetComponent<RectTransform>().MLeftTop();
+        public Vector2 LeftTop => rectTransform.MLeftTop();
         [ShowInInspector]
-        public Vector2 RightBottom => GetComponent<RectTransform>().MRightBottom();
+        public Vector2 RightBottom => rectTransform.MRightBottom();
+
 
     }
 

@@ -9,6 +9,7 @@ namespace MungFramework.ActionTreeEditor
         public string guid;
         [HideInInspector]
         public Vector2 position;
+
         [HideInInspector]
         public ActionNode Next;
         [HideInInspector]

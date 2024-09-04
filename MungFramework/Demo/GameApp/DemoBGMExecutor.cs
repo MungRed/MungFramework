@@ -11,17 +11,17 @@ namespace MungFramework.Demo
         public DemoSoundManager SoundManager;
 
 
-        public override IEnumerator OnGamePause(GameManagerAbstract parentManager)
+        public override void OnGamePause(GameManagerAbstract parentManager)
         {
-            yield return base.OnGamePause(parentManager);
+            base.OnGamePause(parentManager);
             
-            yield return SoundManager.PauseAudio("music", transition: true);
+            SoundManager.PauseAudio("music", transition: true);
         }
-        public override IEnumerator OnGameResume(GameManagerAbstract parentManager)
+        public override void OnGameResume(GameManagerAbstract parentManager)
         {
-            yield return base.OnGameResume(parentManager);
+            base.OnGameResume(parentManager);
 
-            yield return SoundManager.ResumeAudio("music", transition: true);
+            SoundManager.ResumeAudio("music", transition: true);
         }
 
         [ContextMenu("PlayNextBgm")]
