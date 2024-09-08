@@ -1,9 +1,20 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace MungFramework.Extension.ComponentExtension
 {
     public static class RectTransformExtension
     {
+
+        public static Vector2 MPosition(this RectTransform rectTransform)
+        {
+            var canvas = rectTransform.GetComponentInParent<Canvas>().GetComponent<RectTransform>();
+            var canvasScale = canvas.localScale;
+            var position = rectTransform.position;
+            return new Vector3(position.x / canvas.localScale.x, position.y / canvas.localScale.y, position.z / canvas.localScale.z);
+        }
+
         public static Vector2 MAnchoredPosition(this RectTransform rectTransform)=> rectTransform.anchoredPosition;
 
         public static Vector2 MRectSize(this RectTransform rectTransform)=> rectTransform.rect.size;
@@ -75,6 +86,11 @@ namespace MungFramework.Extension.ComponentExtension
         {
             var oldBottom = rectTransform.MBottom();
             rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, rectTransform.anchoredPosition.y + val - oldBottom);
+        }
+
+        public static List<GameObject> GetChildExcludeSelf(this RectTransform trans)
+        {
+            return trans.GetComponentsInChildren<RectTransform>().Where(x => x != trans).Select(x => x.gameObject).ToList();
         }
     }
 }

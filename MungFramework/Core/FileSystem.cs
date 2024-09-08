@@ -11,12 +11,12 @@ namespace MungFramework.Core
         //统一使用UTF8编码
         private static readonly Encoding GlobalEncoding = Encoding.UTF8;
 
-        public static bool HasDirectory(string path)
+        public static bool HaveDirectory(string path)
         {
             return Directory.Exists(path);
         }
 
-        public static bool HasFile(string path, string filename, string format)
+        public static bool HaveFile(string path, string filename, string format)
         {
             string filepath = path + "/" + filename + "." + format;
             return File.Exists(filepath);
@@ -26,12 +26,12 @@ namespace MungFramework.Core
         {
             string filepath = path + "/" + filename + "." + format;
             Debug.Log("读取文件" + filepath);
-            if (!HasDirectory(path))
+            if (!HaveDirectory(path))
             {
                 Debug.Log("路径不存在，读取文件失败" + filepath);
                 yield break;
             }
-            if (!HasFile(path, filename, format))
+            if (!HaveFile(path, filename, format))
             {
                 Debug.Log("文件不存在，读取文件失败" + filepath);
                 yield break;
@@ -77,78 +77,93 @@ namespace MungFramework.Core
             }
         }
 
-/*        /// <summary>
-        /// 将文件读取为字符串
-        /// </summary>
-        /// <returns>Content,Success</returns>
-        public static (string, bool) ReadFile(string path, string filename, string format)
-        {
-            string filepath = path + "/" + filename + "." + format;
-            Debug.Log("读取文件" + filepath);
-
-            if (!HasDirectory(path))
-            {
-                Debug.Log("路径不存在，读取文件失败" + filepath);
-                return ("", false);
-            }
-            if (!HasFile(path,filename,format))
-            {
-                Debug.Log("文件不存在，读取文件失败" + filepath);
-                return ("", false);
-            }
-
-            try
-            {
-                using (var fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+        /*        /// <summary>
+                /// 将文件读取为字符串
+                /// </summary>
+                /// <returns>Content,Success</returns>
+                public static (string, bool) ReadFile(string path, string filename, string format)
                 {
-                    byte[] bytes = new byte[fileStream.Length];
-                    fileStream.Read(bytes, 0, bytes.Length);
-                    LockFile(bytes, LockOperate.UnLock);
-                    string content = GlobalEncoding.GetString(bytes);
-                    Debug.Log("读取文件成功" + filepath);
-                    return (content, true);
+                    string filepath = path + "/" + filename + "." + format;
+                    Debug.Log("读取文件" + filepath);
+
+                    if (!HasDirectory(path))
+                    {
+                        Debug.Log("路径不存在，读取文件失败" + filepath);
+                        return ("", false);
+                    }
+                    if (!HasFile(path,filename,format))
+                    {
+                        Debug.Log("文件不存在，读取文件失败" + filepath);
+                        return ("", false);
+                    }
+
+                    try
+                    {
+                        using (var fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+                        {
+                            byte[] bytes = new byte[fileStream.Length];
+                            fileStream.Read(bytes, 0, bytes.Length);
+                            LockFile(bytes, LockOperate.UnLock);
+                            string content = GlobalEncoding.GetString(bytes);
+                            Debug.Log("读取文件成功" + filepath);
+                            return (content, true);
+                        }
+                    }
+                    catch
+                    {
+                        Debug.Log("读取文件失败" + filepath);
+                        return ("", false);
+                    }
                 }
-            }
-            catch
+
+                /// <summary>
+                /// 将字符串写入文件，如果文件不存在会创建文件
+                /// </summary>
+                /// <returns>Success</returns>
+                public static bool WriteFile(string path, string filename, string format, string content)
+                {
+                    string filepath = path + "/" + filename + "." + format;
+                    Debug.Log("写入文件" + filepath);
+
+                    if (!Directory.Exists(path))
+                    {
+                        Debug.Log("路径不存在，写入文件失败" + filepath);
+                        return false;
+                    }
+
+
+                    try
+                    {
+                        using (var fileStream = new FileStream(filepath, FileMode.Create, FileAccess.Write))
+                        {
+                            byte[] bytes = GlobalEncoding.GetBytes(content);
+                            LockFile(bytes, LockOperate.Lock);
+                            fileStream.Write(bytes, 0, bytes.Length);
+                            Debug.Log("写入文件成功" + filepath);
+                            return true;
+                        }
+                    }
+                    catch
+                    {
+                        Debug.Log("写入文件失败" + filepath);
+                        return false;
+                    }
+                }*/
+
+        public static  void DeleteDirectory(string directoryPath)
+        {
+            //删除数据库
+            if (Directory.Exists(directoryPath))
             {
-                Debug.Log("读取文件失败" + filepath);
-                return ("", false);
+                //删除DatabasePath下的所有文件，再删除文件夹
+                string[] files = Directory.GetFiles(directoryPath);
+                foreach (string file in files)
+                {
+                    File.Delete(file);
+                }
+                Directory.Delete(directoryPath);
             }
         }
-
-        /// <summary>
-        /// 将字符串写入文件，如果文件不存在会创建文件
-        /// </summary>
-        /// <returns>Success</returns>
-        public static bool WriteFile(string path, string filename, string format, string content)
-        {
-            string filepath = path + "/" + filename + "." + format;
-            Debug.Log("写入文件" + filepath);
-
-            if (!Directory.Exists(path))
-            {
-                Debug.Log("路径不存在，写入文件失败" + filepath);
-                return false;
-            }
-
-
-            try
-            {
-                using (var fileStream = new FileStream(filepath, FileMode.Create, FileAccess.Write))
-                {
-                    byte[] bytes = GlobalEncoding.GetBytes(content);
-                    LockFile(bytes, LockOperate.Lock);
-                    fileStream.Write(bytes, 0, bytes.Length);
-                    Debug.Log("写入文件成功" + filepath);
-                    return true;
-                }
-            }
-            catch
-            {
-                Debug.Log("写入文件失败" + filepath);
-                return false;
-            }
-        }*/
 
         /// <summary>
         /// 删除文件

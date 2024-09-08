@@ -86,9 +86,9 @@ namespace MungFramework.Logic
             {
                 yield return subManager.OnSceneLoad(this);
             }
-            foreach (var subExecutors in subGameControllerList)
+            foreach (var subController in subGameControllerList)
             {
-                subExecutors.OnSceneLoad(this);
+                subController.OnSceneLoad(this);
             }
             yield return null;
         }
@@ -99,9 +99,9 @@ namespace MungFramework.Logic
             {
                 yield return subManager.OnGameStart(this);
             }
-            foreach (var subExecutors in subGameControllerList)
+            foreach (var subController in subGameControllerList)
             {
-                subExecutors.OnGameStart(this);
+                subController.OnGameStart(this);
             }
             yield return null;
         }
@@ -112,9 +112,9 @@ namespace MungFramework.Logic
             {
                 subManager.OnGamePause(this);
             }
-            foreach (var subExecutors in subGameControllerList)
+            foreach (var subController in subGameControllerList)
             {
-                subExecutors.OnGamePause(this);
+                subController.OnGamePause(this);
             }
         }
         public virtual void OnGameResume(GameManagerAbstract parentManager)
@@ -124,9 +124,9 @@ namespace MungFramework.Logic
             {
                 subManager.OnGameResume(this);
             }
-            foreach (var subExecutors in subGameControllerList)
+            foreach (var subController in subGameControllerList)
             {
-                subExecutors.OnGameResume(this);
+                subController.OnGameResume(this);
             }
         }
         public virtual void OnGameReload(GameManagerAbstract parentManager)
@@ -136,9 +136,9 @@ namespace MungFramework.Logic
             {
                 subManager.OnGameReload(this);
             }
-            foreach (var subExecutors in subGameControllerList)
+            foreach (var subController in subGameControllerList)
             {
-                subExecutors.OnGameReload(this);
+                subController.OnGameReload(this);
             }
         }
         public virtual void OnGameReloadFinish(GameManagerAbstract parentManager)
@@ -148,9 +148,9 @@ namespace MungFramework.Logic
             {
                 subManager.OnGameReloadFinish(this);
             }
-            foreach (var subExecutors in subGameControllerList)
+            foreach (var subController in subGameControllerList)
             {
-                subExecutors.OnGameReloadFinish(this);
+                subController.OnGameReloadFinish(this);
             }
         }
 
@@ -161,9 +161,9 @@ namespace MungFramework.Logic
             {
                 yield return subManager.OnGameQuit(this);
             }
-            foreach (var subExecutors in subGameControllerList)
+            foreach (var subController in subGameControllerList)
             {
-                subExecutors.OnGameQuit(this);
+                subController.OnGameQuit(this);
             }
             yield return null;
         }
@@ -171,14 +171,26 @@ namespace MungFramework.Logic
         public virtual void OnGameUpdate(GameManagerAbstract parentManager)
         {
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameUpdate)?.Invoke();
-            subGameManagerList.ForEach(m => m.OnGameUpdate(this));
-            subGameControllerList.ForEach(m => m.OnGameUpdate(this));
+            foreach (var subManager in subGameManagerList)
+            {
+                subManager.OnGameUpdate(this);
+            }
+            foreach (var subController in subGameControllerList)
+            {
+                subController.OnGameUpdate(this);
+            }
         }
         public virtual void OnGameFixedUpdate(GameManagerAbstract parentManager)
         {
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameFixedUpdate)?.Invoke();
-            subGameManagerList.ForEach(m => m.OnGameFixedUpdate(this));
-            subGameControllerList.ForEach(m => m.OnGameFixedUpdate(this));
+            foreach (var subManager in subGameManagerList)
+            {
+                subManager.OnGameFixedUpdate(this);
+            }
+            foreach (var subController in subGameControllerList)
+            {
+                subController.OnGameFixedUpdate(this);
+            }
         }
 
     }

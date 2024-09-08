@@ -22,7 +22,7 @@ namespace MungFramework.Logic.Save
         {
             return DataDictionary.ContainsKey(key);
         }
-        public bool DeleteKey(string key)
+        public bool RemoveKey(string key)
         {
             return DataDictionary.Remove(key);
         }

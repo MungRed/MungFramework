@@ -144,6 +144,8 @@ namespace MungFramework.Ui
         }
 
         [ShowInInspector]
+        public Vector2 Position => rectTransform.MPosition();
+        [ShowInInspector]
         public Vector2 AnchoredPosition => rectTransform.MAnchoredPosition();
         [ShowInInspector]
         public Vector2 Size => rectTransform.MRectSize();

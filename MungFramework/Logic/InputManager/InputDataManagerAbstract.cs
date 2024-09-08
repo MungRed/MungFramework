@@ -86,7 +86,7 @@ namespace MungFramework.Logic.Input
             foreach (var inputMapDataSO in inputMapLayerDataSOList)
             {
                 var savename = "INPUTMAP_LAYER_" + inputMapDataSO.InputMapLayerName;
-                var loadSuccess = SaveManagerAbstract.Instance.GetSystemValue(savename);
+                var loadSuccess = SaveManagerAbstract.Instance.GetSystemSaveValue(savename);
                 if (loadSuccess.hasValue == false)
                 {
                     Debug.Log("读取按键层" + savename + "不存在，新建");
@@ -107,7 +107,7 @@ namespace MungFramework.Logic.Input
             foreach (var inputMap in inputMapLayerList)
             {
                 var savename = "INPUTMAP_LAYER_" + inputMap.InputMapLayerName;
-                SaveManagerAbstract.Instance.SetSystemValue(savename, JsonUtility.ToJson(inputMap));
+                SaveManagerAbstract.Instance.SetSystemSaveValue(savename, JsonUtility.ToJson(inputMap));
             }
         }
     }

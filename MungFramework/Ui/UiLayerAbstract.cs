@@ -91,7 +91,11 @@ namespace MungFramework.Ui
             var cor = StartCoroutine(Tapping(action));
             UnityAction cancel = () =>
             {
-                StopCoroutine(cor);
+                try
+                {
+                    StopCoroutine(cor);
+                }
+                catch { }
             };
             cancel += () => InputManager.Remove_InputAction_Canceled(input, cancel);
             InputManager.Add_InputAction_Canceled(input, cancel);

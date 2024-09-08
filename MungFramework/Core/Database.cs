@@ -36,7 +36,7 @@ namespace MungFramework.Core
                 DataDictionary.Clear();
                 foreach (var keyvalue in keyvalues)
                 {
-                    DataDictionary.Add(keyvalue.Key,keyvalue.Value);
+                    DataDictionary.Add(keyvalue.Key, keyvalue.Value);
                 }
             }
         }
@@ -54,14 +54,14 @@ namespace MungFramework.Core
             Debug.Log("检查数据库是否存在" + DatabasePath);
 
             //检查路径是否存在
-            if (!FileSystem.HasDirectory(DatabasePath))
+            if (!FileSystem.HaveDirectory(DatabasePath))
             {
                 Debug.Log("路径不存在" + DatabasePath);
                 return false;
             }
 
             //检查系统文件是否存在
-            if (!FileSystem.HasFile(DatabasePath, "system", DataTableFormat))
+            if (!FileSystem.HaveFile(DatabasePath, "system", DataTableFormat))
             {
                 Debug.Log("系统文件不存在" + DatabasePath + "/system." + DataTableFormat);
                 return false;
@@ -69,17 +69,17 @@ namespace MungFramework.Core
 
             return true;
         }
+        public static bool ExistDataTable(string tableName)
+        {
+            return FileSystem.HaveFile(DatabasePath, tableName, DataTableFormat);
+        }
 
         /// <summary>
         /// 创建数据库（会删除原有数据库）
         /// </summary>
         public static IEnumerator CreateDatabase()
         {
-            //删除数据库
-            if (Directory.Exists(DatabasePath))
-            {
-                Directory.Delete(DatabasePath);
-            }
+            FileSystem.DeleteDirectory(DatabasePath);
             Directory.CreateDirectory(DatabasePath);
 
             //创建系统文件
@@ -104,7 +104,7 @@ namespace MungFramework.Core
 
             string readContent = null;
 
-            yield return FileSystem.ReadFileAsync(DatabasePath, tableName, DataTableFormat, x => { readContent = x;});
+            yield return FileSystem.ReadFileAsync(DatabasePath, tableName, DataTableFormat, x => { readContent = x; });
 
             if (readContent == null)
             {
@@ -146,7 +146,7 @@ namespace MungFramework.Core
         public static IEnumerator GetKeyValues(string tableName, UnityAction<List<KeyValuePair<string, string>>> resultAction)
         {
             DataTable dataTable = null;
-            yield return GetDataTable(tableName,x=>dataTable=x);
+            yield return GetDataTable(tableName, x => dataTable = x);
 
             if (dataTable == null)
             {
@@ -164,7 +164,7 @@ namespace MungFramework.Core
             dataTable.TableName = tableName;
             dataTable.SetKeyValues(keyValues);
 
-            yield return FileSystem.WriteFileAsync(DatabasePath, tableName, DataTableFormat, JsonUtility.ToJson(dataTable,true));
+            yield return FileSystem.WriteFileAsync(DatabasePath, tableName, DataTableFormat, JsonUtility.ToJson(dataTable, true));
         }
     }
 }

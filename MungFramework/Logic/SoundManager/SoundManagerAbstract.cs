@@ -48,17 +48,14 @@ namespace MungFramework.Logic.Sound
             //设置每个音频源的位置
             foreach (var soundSource in SoundSourceList)
             {
-                soundSource.Source.transform.position = soundSource.Follow.position + soundSource.LocalPosition;
+                soundSource.Source.transform.position = soundSource.Follow.DirectionLocalPosition(soundSource.LocalPosition);
                 soundSource.Volume = soundDataManager.GetVolumeData(soundSource.VolumeType)/100f;
             }
         }
 
-
-
         /// <summary>
         /// 初始化声音源
         /// </summary>
-        /// <returns></returns>
         public virtual IEnumerator InitSoundSource()
         {
             foreach (var defaultSoundSource in DefaultSoundSourceList)
@@ -72,8 +69,6 @@ namespace MungFramework.Logic.Sound
         /// <summary>
         /// 添加声音源
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public virtual SoundManagerAbstract AddSoundSource(string id, SoundDataManagerAbstract.VolumeTypeEnum volumeType)
         {
             //检查id是否存在

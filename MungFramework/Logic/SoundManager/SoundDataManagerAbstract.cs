@@ -62,7 +62,7 @@ namespace MungFramework.Logic.Sound
 
         public virtual void Load()
         {
-            var loadSuccess = SaveManagerAbstract.Instance.GetSystemValue("volumedata");
+            var loadSuccess = SaveManagerAbstract.Instance.GetSystemSaveValue("volumedata");
             if (loadSuccess.hasValue == false)
             {
                 volumeData = new()
@@ -81,7 +81,7 @@ namespace MungFramework.Logic.Sound
 
         public virtual void  Save()
         {
-            SaveManagerAbstract.Instance.SetSystemValue("volumedata", JsonUtility.ToJson(volumeData));
+            SaveManagerAbstract.Instance.SetSystemSaveValue("volumedata", JsonUtility.ToJson(volumeData));
         }
     }
 }

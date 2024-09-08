@@ -51,7 +51,9 @@ namespace MungFramework.Logic.Input
         LEFT_PAGE, RIGTH_PAGE,
         UP_ROLL, DOWN_ROLL,
 
-        MENU,ACTION,
+        MENU,
+        MAP,
+        ACTION,
 
         ATTACK,
         SKILL,

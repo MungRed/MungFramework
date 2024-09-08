@@ -34,7 +34,7 @@ namespace MungFramework.Logic.Camera
             return new CameraSource(follow_Bind, lookAt_Bind);
         }
 
-        public override void OnGameUpdate(GameManagerAbstract parentManager)
+        public void Update()
         {
             if (follow_isBinding&&follow_Bind!=null)
             {
@@ -158,9 +158,10 @@ namespace MungFramework.Logic.Camera
         private IEnumerator MoveFollow(Transform aim, float time)
         {
             float nowTime = 0;
-/*            float smoothTime = 0.2f; // Adjust the smooth time as needed
-            Vector3 velocity = Vector3.zero;*/
+            /*            float smoothTime = 0.2f; // Adjust the smooth time as needed
+                        Vector3 velocity = Vector3.zero;*/
 
+            var wait = new WaitForFixedUpdate();
             while (nowTime < time)
             {
                 if (!isPause)
@@ -170,7 +171,7 @@ namespace MungFramework.Logic.Camera
                     follow_Pos.transform.position = Vector3.Lerp(follow_Pos.position, aim.position, smoothTime);
                     nowTime += Time.fixedDeltaTime;
                 }
-                yield return new WaitForFixedUpdate();
+                yield return wait;
             }
             //yield return follow_Pos.DOMove(aim.position, time).SetEase(Ease.OutCubic).WaitForCompletion();
 
@@ -180,6 +181,7 @@ namespace MungFramework.Logic.Camera
         private IEnumerator MoveLookAt(Transform aim, float time)
         {
             float nowTime = 0;
+            var wait = new WaitForFixedUpdate();
             while (nowTime < time)
             {
                 if (!isPause)
@@ -189,7 +191,7 @@ namespace MungFramework.Logic.Camera
                     lookAt_Pos.transform.position = Vector3.Lerp(lookAt_Pos.position, aim.position, smoothT);
                     nowTime += Time.fixedDeltaTime;
                 }
-                yield return new WaitForFixedUpdate();
+                yield return wait;
             }
             //yield return lookAt_Pos.DOMove(aim.position, time).SetEase(Ease.OutCubic).WaitForCompletion();
             lookAt_isBinding = true;

@@ -72,9 +72,14 @@ namespace MungFramework.Logic
         {
             Debug.Log("SceneLoad");
             GameState = GameStateEnum.Awake;
-            yield return base.OnSceneLoad(parentManager);
+            yield return OnSceneLoadExtra(parentManager);
             GameState = GameStateEnum.Start;
         }
+        public virtual IEnumerator OnSceneLoadExtra(GameManagerAbstract parentManager)
+        {
+            yield return base.OnSceneLoad(parentManager);
+        }
+
         /// <summary>
         /// 游戏开始时调用
         /// </summary>
@@ -85,10 +90,13 @@ namespace MungFramework.Logic
         public  override IEnumerator OnGameStart(GameManagerAbstract parentManager)
         {
             yield return new WaitUntil(()=>GameState == GameStateEnum.Start);
-
             Debug.Log("GameStart");
-            yield return base.OnGameStart(parentManager);
+            yield return OnGameStartExtra(parentManager);
             GameState = GameStateEnum.Update;
+        }
+        public virtual IEnumerator OnGameStartExtra(GameManagerAbstract parentManager)
+        {
+            yield return base.OnGameStart(parentManager);
         }
 
         /// <summary>
@@ -160,15 +168,26 @@ namespace MungFramework.Logic
         {
             Debug.Log("GameReload");
             GameState = GameStateEnum.Reload;
-            base.OnGameReload(parentManager);
+            yield return OnGameReloadExtra(parentManager);
             yield return OnGameReloadFinish(parentManager);
         }
+        public virtual IEnumerator OnGameReloadExtra(GameManagerAbstract parentManager)
+        {
+            base.OnGameReload(parentManager);
+            yield break;
+        }
+
         public virtual new IEnumerator OnGameReloadFinish(GameManagerAbstract parentManager)
         {
-            base.OnGameReloadFinish(parentManager);
+            yield return OnGameReloadFinishExtra(parentManager);
             GameState = GameStateEnum.Update;
             Debug.Log("GameReloadFinish");
             yield return null;
+        }
+        public virtual IEnumerator OnGameReloadFinishExtra(GameManagerAbstract parentManager)
+        {
+            base.OnGameReloadFinish(parentManager);
+            yield break;
         }
         public virtual void DOGameQuit()
         {
