@@ -38,7 +38,10 @@ namespace MungFramework.Ui
 
         public virtual void OnInput(InputValueEnum inputType)
         {
-            //Debug.Log(inputType);
+            if (gameObject.activeSelf == false)
+            {
+                return;
+            }
             LayerControll(inputType);
         }
 
@@ -70,6 +73,9 @@ namespace MungFramework.Ui
                 case InputValueEnum.CANCEL:
                     Cancel();
                     break;
+                case InputValueEnum.SPECIALACTION:
+                    SpecialAction();
+                    break;
                 case InputValueEnum.LEFT_PAGE:
                     LeftPage();
                     break;
@@ -81,6 +87,7 @@ namespace MungFramework.Ui
                     break;
                 case InputValueEnum.DOWN_ROLL:
                     DownRoll();
+
                     break;
             }
         }
@@ -105,7 +112,15 @@ namespace MungFramework.Ui
             yield return new WaitForSeconds(0.5f);
             while (true)
             {
-                handle.Invoke();
+                if (InputManager.IsTopInputAcceptor(this))
+                {
+                    handle.Invoke();
+                }
+                else
+                {
+                    yield break;
+                }
+
                 yield return new WaitForSeconds(0.1f);
             }
         }
@@ -281,6 +296,7 @@ namespace MungFramework.Ui
 
             nowSelectButton.OK();
         }
+
         public virtual void Cancel()
         {
             if (couldKeyToClose)
@@ -292,6 +308,14 @@ namespace MungFramework.Ui
                 }
                 Close();
             }
+        }
+        public virtual void SpecialAction()
+        {
+            if (nowSelectButton == null || nowSelectButton.gameObject.activeSelf == false)
+            {
+                return;
+            }
+            nowSelectButton.SpecialAction();
         }
         public virtual void LeftPage()
         {

@@ -10,36 +10,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ed7b12d871f872f4f8d26cc7995c96c4, type: 3}
-  m_Name: INPUTMAP_LAYER_Battle
+  m_Name: INPUTMAP_LAYER_Ui
   m_EditorClassIdentifier: 
-  Id: INPUTMAP_LAYER_Battle
-  InputMapLayerName: "\u6218\u6597"
+  Id: INPUTMAP_LAYER_Ui
+  InputMapLayerName: Ui
   InputMapList:
   - InputKey: 47
-    InputValue: 60
+    InputValue: 20
   - InputKey: 61
-    InputValue: 1
+    InputValue: 20
   - InputKey: 48
-    InputValue: 63
+    InputValue: 21
   - InputKey: 62
-    InputValue: 63
-  - InputKey: 37
-    InputValue: 61
-  - InputKey: 63
-    InputValue: 61
-  - InputKey: 38
-    InputValue: 62
-  - InputKey: 64
-    InputValue: 62
+    InputValue: 21
   - InputKey: 31
-    InputValue: 64
+    InputValue: 23
   - InputKey: 65
-    InputValue: 64
-  - InputKey: 40
-    InputValue: 65
-  - InputKey: 68
-    InputValue: 65
+    InputValue: 23
   - InputKey: 33
-    InputValue: 66
+    InputValue: 24
   - InputKey: 66
-    InputValue: 66
+    InputValue: 24
+  - InputKey: 39
+    InputValue: 25
+  - InputKey: 67
+    InputValue: 25
+  - InputKey: 40
+    InputValue: 26
+  - InputKey: 68
+    InputValue: 26
+  - InputKey: 37
+    InputValue: 22
+  - InputKey: 63
+    InputValue: 22

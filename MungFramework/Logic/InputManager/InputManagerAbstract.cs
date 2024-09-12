@@ -42,26 +42,29 @@ namespace MungFramework.Logic.Input
     /// </summary>
     public enum InputValueEnum
     {
-        NONE,
-        ANYKEY,
+        NONE  = 0,
+        ANYKEY = 1,
 
-        LEFT, UP, DOWN, RIGHT,
+        LEFT = 10, UP=11, DOWN=12, RIGHT=13,
 
-        OK, CANCEL,
-        LEFT_PAGE, RIGTH_PAGE,
-        UP_ROLL, DOWN_ROLL,
+        //UI
+        OK=20, CANCEL=21, SPECIALACTION = 22,
+        LEFT_PAGE=23, RIGTH_PAGE=24,
+        UP_ROLL=25, DOWN_ROLL=26,
 
-        MENU,
-        MAP,
-        ACTION,
+        //Option
+        MENU=40,
+        MAP=41,
+        ACTION=42,
 
-        ATTACK,
-        SKILL,
-        MAGICK,
-        DEFENSE,
-        OVERDRIVE, 
-        EXTRA,
-        DEPLOY,
+        //Battle
+        ATTACK=60,
+        SKILL=61,
+        MAGICK=62,
+        DEFENSE=63,
+        OVERDRIVE=64, 
+        EXTRA=65,
+        DEPLOY=66,
     }
 
     /// <summary>
@@ -102,6 +105,10 @@ namespace MungFramework.Logic.Input
         /// <param name="acceptor"></param>
         public void Push_InputAcceptor(IInputAcceptor acceptor)
         {
+            if (inputAcceptorStack.Count > 0 && inputAcceptorStack[0] == acceptor)
+            {
+                return;
+            }
             inputAcceptorStack.Insert(0, acceptor);
         }
 
@@ -112,6 +119,14 @@ namespace MungFramework.Logic.Input
         public void Pop_InputAcceptor(IInputAcceptor acceptor)
         {
             inputAcceptorStack.Remove(acceptor);
+        }
+        public  bool  IsTopInputAcceptor(IInputAcceptor acceptor)
+        {
+            if (inputAcceptorStack.Count > 0 && inputAcceptorStack[0] == acceptor)
+            {
+                return true;
+            }
+            return false;
         }
 
 

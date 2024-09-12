@@ -15,6 +15,8 @@ namespace MungFramework.Core
         public class DataTable
         {
             public string TableName;
+            public string TableTime;
+
             [SerializeField]
             public SerializedDictionary<string, string> DataDictionary;
 
@@ -84,9 +86,14 @@ namespace MungFramework.Core
 
             //创建系统文件
             string systemTableName = "system";
-            DataTable dataTable = new DataTable();
-            dataTable.TableName = systemTableName;
 
+            DataTable dataTable = new DataTable()
+            {
+                TableName = systemTableName,
+                TableTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            };
+
+            //异步写入文件
             yield return FileSystem.WriteFileAsync(DatabasePath, systemTableName, DataTableFormat, JsonUtility.ToJson(dataTable));
         }
 
@@ -143,7 +150,7 @@ namespace MungFramework.Core
         /// <summary>
         /// 获得数据表的键值对
         /// </summary>
-        public static IEnumerator GetKeyValues(string tableName, UnityAction<List<KeyValuePair<string, string>>> resultAction)
+        public static IEnumerator GetKeyValues(string tableName, UnityAction<List<KeyValuePair<string, string>>,string> resultAction)
         {
             DataTable dataTable = null;
             yield return GetDataTable(tableName, x => dataTable = x);
@@ -152,7 +159,7 @@ namespace MungFramework.Core
             {
                 yield break;
             }
-            resultAction.Invoke(dataTable.GetKeyValues());
+            resultAction.Invoke(dataTable.GetKeyValues(),dataTable.TableTime);
         }
 
         /// <summary>
@@ -160,10 +167,12 @@ namespace MungFramework.Core
         /// </summary>
         public static IEnumerator SetKeyValues(string tableName, List<KeyValuePair<string, string>> keyValues)
         {
-            DataTable dataTable = new();
-            dataTable.TableName = tableName;
+            DataTable dataTable = new()
+            {
+                TableName = tableName,
+                TableTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            };
             dataTable.SetKeyValues(keyValues);
-
             yield return FileSystem.WriteFileAsync(DatabasePath, tableName, DataTableFormat, JsonUtility.ToJson(dataTable, true));
         }
     }

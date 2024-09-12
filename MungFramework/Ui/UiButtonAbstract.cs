@@ -11,7 +11,7 @@ namespace MungFramework.Ui
     {
         public enum UiButtonActionType
         {
-            Up, Down, Left, Right, OK, Select, UnSelect
+            Up, Down, Left, Right, OK, Select, UnSelect,SpecialAction
         }
 
         protected RectTransform _rectTransform;
@@ -131,6 +131,11 @@ namespace MungFramework.Ui
         public virtual void Right()
         {
             DoAction(UiButtonActionType.Right);
+        }
+
+        public virtual void SpecialAction()
+        {
+            DoAction(UiButtonActionType.SpecialAction);
         }
         #endregion
 

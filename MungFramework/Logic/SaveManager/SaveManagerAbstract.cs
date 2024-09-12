@@ -17,21 +17,22 @@ namespace MungFramework.Logic.Save
         protected SaveFile SystemSaveFile; //系统存档文件
         [SerializeField]
         protected SaveFile CurrentSaveFile;//当前存档文件
+        [SerializeField]
+        protected string gameSceneName;
 
+        //存档数上限
+        public static int SaveFileCount => 10;
 
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
             yield return base.OnSceneLoad(parentManager);
-
             //初始化数据库
             //如果初始化数据库失败抛出异常提示
             yield return InitDatabase();
-
             //加载存档文件
             //加载存档文件时默认数据库初始化成功，即存在系统存档文件
             yield return LoadSaves();
         }
-
         /// <summary>
         /// 初始化数据库
         /// </summary>
@@ -46,7 +47,6 @@ namespace MungFramework.Logic.Save
                 yield return Database.CreateDatabase();
             }
         }
-
         /// <summary>
         /// 加载存档文件
         /// 加载存档文件后，系统文件和当前存档文件都不为null
@@ -57,7 +57,6 @@ namespace MungFramework.Logic.Save
 
             yield return LoadPlayerSaveFiles();
         }
-
         /// <summary>
         /// 加载系统存档文件
         /// </summary>
@@ -69,7 +68,6 @@ namespace MungFramework.Logic.Save
             if (saveFile == null)
             {
                 //TODO : 如果有存档备份，可以尝试加载备份
-
                 Debug.LogError("系统存档文件加载失败,重置存档");
 
                 yield return Database.CreateDatabase();
@@ -81,7 +79,6 @@ namespace MungFramework.Logic.Save
                 SystemSaveFile = saveFile;
             }
         }
-
         /// <summary>
         /// 加载玩家存档文件
         /// </summary>
@@ -122,10 +119,6 @@ namespace MungFramework.Logic.Save
             }
         }
 
-
-
-
-
         /// <summary>
         /// 在存档之前调用
         /// </summary>
@@ -138,34 +131,57 @@ namespace MungFramework.Logic.Save
             }
         }
 
+
+
+
         /// <summary>
         /// 自动保存
         /// 保存至save0
         /// </summary>
         public virtual IEnumerator AutoSave()
         {
-            yield return OnSave();
-
-            SaveFile saveFile = new SaveFile();
-            saveFile.SaveName = "save0";
-            saveFile.SetKeyValues(CurrentSaveFile.GetKeyValues());
-
-            yield return SaveIn(saveFile);
+            yield return SaveInByIndex(0);
         }
 
         /// <summary>
-        /// 重新载入某个存档
+        /// 是否存在某个存档
         /// </summary>
-        public virtual void ReloadSave(int saveIndex)
+        public virtual bool ExistSaveFile(string saveName)
+        {
+            return Database.ExistDataTable(saveName);
+        }
+
+        /// <summary>
+        /// 载入某个存档同时进入游戏场景
+        /// </summary>
+        public virtual IEnumerator LoadSaveAndToGameScene(int saveIndex)
         {
             var saveName = "save" + saveIndex;
-            if (!Database.ExistDataTable(saveName))
+            if (!ExistSaveFile(saveName))
             {
                 Debug.LogError("目标存档文件不存在，不能Reload存档:" + saveName);
-                return;
+                yield break;
             }
-            SetSystemSaveValue("NowSaveFileName", saveName);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            yield return SetSystemSaveValueIEnumerator("NowSaveFileName", saveName);
+            SceneManager.LoadScene(gameSceneName);
+        }
+
+        /// <summary>
+        /// 载入某个存档同时不进入游戏场景，用于标题界面的异步加载场景
+        /// </summary>
+        public virtual IEnumerator LoadSaveButNotToGameScene(int saveIndex,UnityAction loadSuccess)
+        {
+            var saveName = "save" + saveIndex;
+            if (!ExistSaveFile(saveName))
+            {
+                Debug.LogError("目标存档文件不存在，不能Reload存档:" + saveName);
+                yield break;
+            }
+            yield return SetSystemSaveValueIEnumerator("NowSaveFileName", saveName);
+            if (loadSuccess != null)
+            {
+                loadSuccess.Invoke();
+            }
         }
 
 
@@ -181,11 +197,25 @@ namespace MungFramework.Logic.Save
             }
 
             CurrentSaveFile.SaveName = "save" + saveIndex;
+            SetSystemSaveValue("NowSaveFileName", CurrentSaveFile.SaveName);
 
             yield return SaveIn(CurrentSaveFile);
+        }
 
-            //更新当前存档
-            SetSystemSaveValue("NowSaveFileName", CurrentSaveFile.SaveName);
+        /// <summary>
+        /// 储存一个空存档
+        /// </summary>
+        public virtual IEnumerator SaveEmptyInByIndex(int saveIndex)
+        {
+            SaveFile saveFile = new SaveFile() { 
+                SaveName = "save" + saveIndex,
+            };
+            yield return SaveIn(saveFile);
+        }
+
+        public void DeleteSaveFileByIndex(int saveIndex)
+        {
+            Database.RemoveDataTable("save" + saveIndex);
         }
 
         /// <summary>
@@ -200,7 +230,7 @@ namespace MungFramework.Logic.Save
         public virtual IEnumerator GetAllSaveFile(Dictionary<int,SaveFile> saveFileList)
         {
             saveFileList.Clear();
-            for (int i = 1; i <= 10; i++)
+            for (int i = 0; i <= SaveFileCount; i++)
             {
                 SaveFile saveFile = null;
                 yield return LoadSaveFile("save" + i, x => saveFile = x);
@@ -210,7 +240,14 @@ namespace MungFramework.Logic.Save
                 }
             }
         }
-
+        public virtual string GetNowSaveName()
+        {
+            return CurrentSaveFile.SaveName;
+        }
+        public virtual IEnumerator GetSaveFile(int saveIndex,UnityAction<SaveFile> resultAction)
+        {
+            yield return LoadSaveFile("save" + saveIndex, resultAction);
+        }
 
         /// <summary>
         /// 加载存档文件
@@ -218,12 +255,16 @@ namespace MungFramework.Logic.Save
         protected virtual IEnumerator LoadSaveFile(string saveName, UnityAction<SaveFile> resultAction)
         {
             List<KeyValuePair<string, string>> saveData = null;
-            yield return Database.GetKeyValues(saveName, x => saveData = x);
+            string saveTime = "";
+            yield return Database.GetKeyValues(saveName, (x, y) => { saveData = x; saveTime = y; });
 
             if (saveData != null)
             {
-                SaveFile res = new SaveFile();
-                res.SaveName = saveName;
+                SaveFile res = new SaveFile()
+                {
+                    SaveName = saveName,
+                    SaveTime = saveTime
+                };
                 res.SetKeyValues(saveData);
                 resultAction.Invoke(res);
             }
@@ -244,6 +285,12 @@ namespace MungFramework.Logic.Save
             SystemSaveFile.SetValue(key, val);
             //保存系统存档
             StartCoroutine(SaveIn(SystemSaveFile));
+        }
+        public virtual IEnumerator SetSystemSaveValueIEnumerator(string key, string val)
+        {
+            SystemSaveFile.SetValue(key, val);
+            //保存系统存档
+            yield return SaveIn(SystemSaveFile);
         }
 
         /// <summary>

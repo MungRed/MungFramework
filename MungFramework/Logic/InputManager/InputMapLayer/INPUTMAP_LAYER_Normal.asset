@@ -16,14 +16,14 @@ MonoBehaviour:
   InputMapLayerName: "\u5E38\u89C4"
   InputMapList:
   - InputKey: 11
-    InputValue: 12
+    InputValue: 40
   - InputKey: 69
-    InputValue: 12
-  - InputKey: 21
-    InputValue: 13
+    InputValue: 40
+  - InputKey: 53
+    InputValue: 41
   - InputKey: 70
-    InputValue: 13
+    InputValue: 41
   - InputKey: 47
-    InputValue: 14
+    InputValue: 42
   - InputKey: 61
-    InputValue: 14
+    InputValue: 42

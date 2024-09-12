@@ -12,6 +12,8 @@ namespace MungFramework.Logic.Save
     {
         [SerializeField]
         public string SaveName;
+        [SerializeField]
+        public string SaveTime;
 
         [SerializeField]
         public SerializedDictionary<string, string> DataDictionary = new();

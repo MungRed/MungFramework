@@ -9,7 +9,12 @@ namespace MungFramework.Extension.ComponentExtension
 
         public static Vector2 MPosition(this RectTransform rectTransform)
         {
-            var canvas = rectTransform.GetComponentInParent<Canvas>().GetComponent<RectTransform>();
+            var canvas = rectTransform.GetComponentInParent<Canvas>()?.GetComponent<RectTransform>();
+            if (canvas == null)
+            {
+                return rectTransform.position;
+            }
+
             var canvasScale = canvas.localScale;
             var position = rectTransform.position;
             return new Vector3(position.x / canvas.localScale.x, position.y / canvas.localScale.y, position.z / canvas.localScale.z);
