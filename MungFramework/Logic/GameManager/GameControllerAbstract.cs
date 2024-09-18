@@ -1,11 +1,10 @@
 ﻿using Sirenix.OdinInspector;
-using System.Collections;
 using UnityEngine;
 
 namespace MungFramework.Logic
 {
     /// <summary>
-    /// 游戏执行器，只能被游戏管理器调用
+    /// 游戏控制器，游戏管理器树形结构的根节点，只能被游戏管理器调用
     /// </summary>
     public abstract class GameControllerAbstract : MonoBehaviour
     {

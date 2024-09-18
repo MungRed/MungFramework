@@ -78,9 +78,11 @@ namespace MungFramework.Logic
         protected List<GameControllerAbstract> subGameControllerList;
 
 
-
+        //public static int count = 0;
         public virtual IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
+            //count++;
+            //Debug.LogWarning(name+" "+count+" "+Time.frameCount);
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnSceneLoad)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
@@ -90,21 +92,27 @@ namespace MungFramework.Logic
             {
                 subController.OnSceneLoad(this);
             }
-            yield return null;
         }
-        public virtual IEnumerator OnGameStart(GameManagerAbstract parentManager)
+
+        public virtual void OnGameStart(GameManagerAbstract parentManager)
         {
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameStart)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
-                yield return subManager.OnGameStart(this);
+                subManager.OnGameStart(this);
             }
             foreach (var subController in subGameControllerList)
             {
                 subController.OnGameStart(this);
             }
+            StartCoroutine(OnGameStartIEnumerator(parentManager));
+        }
+        public virtual IEnumerator OnGameStartIEnumerator(GameManagerAbstract parentManager)
+        {
             yield return null;
         }
+
+
         public virtual void OnGamePause(GameManagerAbstract parentManager)
         {
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGamePause)?.Invoke();
@@ -129,6 +137,8 @@ namespace MungFramework.Logic
                 subController.OnGameResume(this);
             }
         }
+
+
         public virtual void OnGameReload(GameManagerAbstract parentManager)
         {
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameReload)?.Invoke();
@@ -141,6 +151,8 @@ namespace MungFramework.Logic
                 subController.OnGameReload(this);
             }
         }
+
+
         public virtual void OnGameReloadFinish(GameManagerAbstract parentManager)
         {
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameReloadFinish)?.Invoke();

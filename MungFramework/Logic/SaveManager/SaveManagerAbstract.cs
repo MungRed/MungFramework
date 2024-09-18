@@ -12,7 +12,7 @@ namespace MungFramework.Logic.Save
     {
         [SerializeField]
         [ReadOnly]
-        protected List<SavableGameManagerAbstract> SavableManagerList;
+        protected List<SavableDataGameManagerAbstract> SavableManagerList;
         [SerializeField]
         protected SaveFile SystemSaveFile; //系统存档文件
         [SerializeField]
@@ -122,12 +122,12 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 在存档之前调用
         /// </summary>
-        protected virtual IEnumerator OnSave()
+        protected virtual void OnSave()
         {
             //通知所有SavableManager存档
             foreach (var savableManager in SavableManagerList)
             {
-                yield return savableManager.Save();
+                savableManager.Save();
             }
         }
 
@@ -193,7 +193,7 @@ namespace MungFramework.Logic.Save
             //是否在存档之前调用
             if (onSave)
             {
-                yield return OnSave();
+                OnSave();
             }
 
             CurrentSaveFile.SaveName = "save" + saveIndex;
@@ -318,7 +318,7 @@ namespace MungFramework.Logic.Save
         }
 
 
-        public virtual void AddManager(SavableGameManagerAbstract savableManager)
+        public virtual void AddManager(SavableDataGameManagerAbstract savableManager)
         {
             if (!SavableManagerList.Contains(savableManager))
             {

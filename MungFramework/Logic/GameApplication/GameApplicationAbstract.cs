@@ -25,7 +25,6 @@ namespace MungFramework.Logic
         [SerializeField]
         [ReadOnly]
         private GameStateEnum gameState;
-
         public GameStateEnum GameState
         {
             get => gameState;
@@ -38,6 +37,7 @@ namespace MungFramework.Logic
         {
             DOSceneLoad();
         }
+
         public virtual void Start()
         {
             DOGameStart();
@@ -87,7 +87,8 @@ namespace MungFramework.Logic
         {
             StartCoroutine(OnGameStart(this));
         }
-        public  override IEnumerator OnGameStart(GameManagerAbstract parentManager)
+
+        public new IEnumerator OnGameStart(GameManagerAbstract parentManager)
         {
             yield return new WaitUntil(()=>GameState == GameStateEnum.Start);
             Debug.Log("GameStart");
@@ -96,7 +97,8 @@ namespace MungFramework.Logic
         }
         public virtual IEnumerator OnGameStartExtra(GameManagerAbstract parentManager)
         {
-            yield return base.OnGameStart(parentManager);
+            base.OnGameStart(parentManager);
+            yield return null;
         }
 
         /// <summary>
