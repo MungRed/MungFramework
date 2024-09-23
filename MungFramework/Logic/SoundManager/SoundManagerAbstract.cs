@@ -85,7 +85,7 @@ namespace MungFramework.Logic.Sound
             //×¢²áÉùÒôÔ´
             SoundSource soundSource = new()
             {
-                id = id,
+                Id = id,
                 Follow = transform,
                 LocalPosition = Vector3.zero,
 
@@ -319,7 +319,7 @@ namespace MungFramework.Logic.Sound
 
         protected virtual SoundSource GetSoundSource(string id)
         {
-            return SoundSourceList.Find(x => x.id == id);
+            return SoundSourceList.Find(x => x.Id == id);
         }
 
     }

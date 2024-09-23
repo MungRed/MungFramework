@@ -1,5 +1,5 @@
 ﻿using MungFramework.Logic.Save;
-using System.Collections;
+using UnityEngine;
 
 namespace MungFramework.Logic
 {
@@ -20,14 +20,27 @@ namespace MungFramework.Logic
                 return _saveManager;
             }
         }
+#if UNITY_EDITOR
+        [SerializeField]
+        private bool notLoadOnStart;
+#endif
 
         public override void  OnSceneLoad(GameManagerAbstract parentManager)
         {
             base.OnSceneLoad(parentManager);
             //把自身添加到存档管理器中
             saveManager.AddManager(this);
+#if UNITY_EDITOR
+            //调试代码，在开始时不加载数据，用于测试
+            if (notLoadOnStart == false)
+            {
+                //加载数据
+                Load();
+            }
+#else
             //加载数据
             Load();
+#endif
         }
 
 

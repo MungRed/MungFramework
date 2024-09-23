@@ -3,23 +3,19 @@ using System;
 
 namespace MungFramework.Logic.FSM
 {
-
     /// <summary>
     /// 有限状态机状态接口
     /// </summary>
     public interface IFSMState<StateEnum,Parameter> where StateEnum : Enum where Parameter : IFSMParameter
     {
-
         /// <summary>
         /// 进入状态
         /// </summary>
         public bool OnStateEnter(StateEnum lastState, Parameter parameter);
-
         /// <summary>
         /// 离开状态
         /// </summary>
         public bool OnStateExit(StateEnum nextState, Parameter parameter);
-
         /// <summary>
         /// 帧更新,返回下一状态
         /// </summary>

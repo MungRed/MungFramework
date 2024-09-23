@@ -2,6 +2,10 @@ using UnityEngine;
 
 namespace MungFramework.Logic.Sound
 {
+    /// <summary>
+    /// 自动音频源
+    /// 在启动时自动添加音频源，在关闭时自动移除音频源
+    /// </summary>
     public class AutoSoundSourceEntity : Entity.Entity
     {
         [SerializeField]

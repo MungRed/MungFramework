@@ -36,13 +36,17 @@ namespace MungFramework.Logic.FSM
         /// </summary>
         public void FSMUpdate()
         {
+            //获取状态实例
             IFSMState<StateEnum, Parameter> state = FSMGetStateInstance(FSMNowState);
+            //如果状态实例为空，返回
             if (state == null)
             {
                 return;
             }
 
+            //状态帧更新，并获取下一状态
             StateEnum nextState = state.OnStateUpdate(FSMParameter);
+            //如果下一状态不等于当前状态，改变状态
             if (!nextState.Equals(FSMNowState))
             {
                 FSMChangeState(nextState);
@@ -54,13 +58,17 @@ namespace MungFramework.Logic.FSM
         /// </summary>
         public void FSMFixedUpdate()
         {
+            //获取状态实例
             IFSMState<StateEnum, Parameter> state = FSMGetStateInstance(FSMNowState);
+            //如果状态实例为空，返回
             if (state == null)
             {
                 return;
             }
 
+            //状态固定帧更新，并获取下一状态
             StateEnum nextState = state.OnStateFixedUpdate(FSMParameter);
+            //如果下一状态不等于当前状态，改变状态
             if (!nextState.Equals(FSMNowState))
             {
                 FSMChangeState(nextState);
@@ -71,13 +79,17 @@ namespace MungFramework.Logic.FSM
         /// </summary>
         public void FSMInput(InputValueEnum inputValue)
         {
+            //获取状态实例
             IFSMState<StateEnum, Parameter> state = FSMGetStateInstance(FSMNowState);
+            //如果状态实例为空，返回
             if (state == null)
             {
                 return;
             }
 
+            //状态按键输入，并获取下一状态
             StateEnum nextState = state.OnStateInput(inputValue,FSMParameter);
+            //如果下一状态不等于当前状态，改变状态
             if (!nextState.Equals(FSMNowState))
             {
                 FSMChangeState(nextState);
@@ -90,29 +102,26 @@ namespace MungFramework.Logic.FSM
         public void FSMChangeState(StateEnum nextState)
         {
             //当前状态实例
-            IFSMState<StateEnum, Parameter> state = FSMGetStateInstance(FSMNowState);
-
-            if (state != null)
+            IFSMState<StateEnum, Parameter> nowStateInstance = FSMGetStateInstance(FSMNowState);
+            //下一状态实例
+            IFSMState<StateEnum, Parameter> nextStateInstance = FSMGetStateInstance(nextState);
+            if (nowStateInstance != null)
             {
                 //是否离开状态成功
                 //如果离开状态失败，不进入下一状态
-                if (state.OnStateExit(nextState, FSMParameter) == false)
+                if (nowStateInstance.OnStateExit(nextState, FSMParameter) == false)
                 {
                     return;
                 }
             }
-
-            //下一状态实例
-            state = FSMGetStateInstance(nextState);
-            if (state != null)
+            if(nextStateInstance != null)
             {
                 //是否进入状态成功
-                if (state.OnStateEnter(FSMNowState, FSMParameter) == true)
+                if (nextStateInstance.OnStateEnter(FSMNowState, FSMParameter) == true)
                 {
                     FSMNowState = nextState;
                 }
             }
-
         }
     }
 }

@@ -67,12 +67,10 @@ namespace MungFramework.Logic.Input
             InputMapItemList.Add(new(InputKeyEnum.GP_RIGHT_TRIGGER, InputValueEnum.DOWN_ROLL));
         }*/
 
+
         /// <summary>
         /// 给某个值绑定按键
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public bool AddBind(InputKeyEnum key, InputValueEnum value)
         {
             if (InputMapList.Find(x => x.InputKey==key) != null)
@@ -88,9 +86,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 改变值的按键
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public bool ChangeBind(InputKeyEnum oldkey,InputKeyEnum newkey,InputValueEnum value)
         {
             var oldBind = InputMapList.Find(x => x.InputKey==oldkey&&x.InputValue == value);
@@ -106,9 +101,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 是否有某个按键的绑定
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public bool HasBind(InputKeyEnum key, InputValueEnum value)
         {
             return InputMapList.Find(x => x.InputKey == key && x.InputValue == value) != null;

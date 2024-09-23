@@ -102,7 +102,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 将输入接收器推入栈
         /// </summary>
-        /// <param name="acceptor"></param>
         public void Push_InputAcceptor(IInputAcceptor acceptor)
         {
             if (inputAcceptorStack.Count > 0 && inputAcceptorStack[0] == acceptor)
@@ -115,7 +114,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 将输入接收器弹出栈
         /// </summary>
-        /// <param name="acceptor"></param>
         public void Pop_InputAcceptor(IInputAcceptor acceptor)
         {
             inputAcceptorStack.Remove(acceptor);
@@ -202,9 +200,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 改变按键绑定
         /// </summary>
-        /// <param name="oldkey"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public virtual IEnumerator ChangeKeyBind(string inputMapName,InputKeyEnum oldkey, InputValueEnum value)
         {
             var inputMap = inputDataManager.GetInputMap(inputMapName);
@@ -333,8 +328,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 为某个输入添加按下事件
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="action"></param>
         public virtual void Add_InputAction_Performed(InputValueEnum type, UnityAction action)
         {
             if (!InputActionListener_Performed.ContainsKey(type))
@@ -346,8 +339,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 移除某个输入的按下事件
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="action"></param>
         public virtual void Remove_InputAction_Performed(InputValueEnum type, UnityAction action)
         {
             if (InputActionListener_Performed.ContainsKey(type))
@@ -359,8 +350,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 为某个输入添加取消事件
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="action"></param>
         public  virtual void Add_InputAction_Canceled(InputValueEnum type, UnityAction action)
         {
             if (!InputActionListener_Canceled.ContainsKey(type))
@@ -384,8 +373,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 添加任意键按下的事件
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="action"></param>
         public virtual void Add_InputAction_AnyKeyDown(UnityAction<InputKeyEnum> action)
         {
             InputActionListener_AnyKeyDown.AddListener(action);
@@ -393,8 +380,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 移除任意键按下的事件
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="action"></param>
         public  virtual void Remove_InputAction_AnyKeyDown(UnityAction<InputKeyEnum> action)
         {
             InputActionListener_AnyKeyDown.RemoveListener(action);
@@ -406,7 +391,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 按下事件
         /// </summary>
-        /// <param name="inputkey"></param>
         protected virtual void InputAction_Performed(InputKeyEnum inputkey)
         {
             // Debug.Log(inputkey);
@@ -433,7 +417,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 取消事件
         /// </summary>
-        /// <param name="inputkey"></param>
         protected virtual void InputAction_Canceled(InputKeyEnum inputkey)
         {
             //根据按键的key获取输入值
@@ -448,7 +431,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 任意键按下，但包括InputkeyEnum中的任意键
         /// </summary>
-        /// <param name="inputKey"></param>
         protected virtual void InputAction_AnyKeyDown(InputKeyEnum inputKey)
         {
             //Debug.Log("anykeydown " + inputKey);
@@ -460,7 +442,6 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 默认震动
         /// </summary>
-        /// <param name="time"></param>
         public virtual void DefaultMoter(float time)
         {
             if (InputDevice != InputDeviceEnum.手柄)

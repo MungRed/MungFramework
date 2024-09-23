@@ -47,14 +47,14 @@ namespace MungFramework.Logic
         {
             if (GameState == GameStateEnum.Update)
             {
-                DOGameUpdate();
+                OnGameUpdate(this);
             }
         }
         public virtual void FixedUpdate()
         {
             if (GameState == GameStateEnum.Update)
             {
-                DOGameFixedUpdate();
+                OnGameFixedUpdate(this);
             }
         }
 
@@ -102,22 +102,6 @@ namespace MungFramework.Logic
         }
 
         /// <summary>
-        /// 每一帧的调用
-        /// </summary>
-        public virtual void DOGameUpdate()
-        {
-            OnGameUpdate(this);
-        }
-
-        /// <summary>
-        /// 每一固定帧的调用
-        /// </summary>
-        public virtual void DOGameFixedUpdate()
-        {
-            OnGameFixedUpdate(this);
-        }
-
-        /// <summary>
         /// 游戏暂停
         /// </summary>
         public virtual void DOGamePause()
@@ -160,12 +144,8 @@ namespace MungFramework.Logic
         public virtual void DOGameReload()
         {
             StartCoroutine(OnGameReload(this));
-            //只有在游戏更新状态下才能重新载入
-            //if (GameState == GameStateEnum.Update)
-            //{
-            //    StartCoroutine(OnGameReload(this));
-            //}
         }
+
         public virtual new IEnumerator OnGameReload(GameManagerAbstract parentManager)
         {
             Debug.Log("GameReload");

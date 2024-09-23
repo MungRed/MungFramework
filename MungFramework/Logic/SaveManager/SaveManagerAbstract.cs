@@ -213,6 +213,9 @@ namespace MungFramework.Logic.Save
             yield return SaveIn(saveFile);
         }
 
+        /// <summary>
+        /// 根据索引删除存档文件
+        /// </summary>
         public void DeleteSaveFileByIndex(int saveIndex)
         {
             Database.RemoveDataTable("save" + saveIndex);
@@ -227,6 +230,9 @@ namespace MungFramework.Logic.Save
         }
 
 
+        /// <summary>
+        /// 获取所有存档文件
+        /// </summary>
         public virtual IEnumerator GetAllSaveFile(Dictionary<int,SaveFile> saveFileList)
         {
             saveFileList.Clear();
@@ -240,10 +246,18 @@ namespace MungFramework.Logic.Save
                 }
             }
         }
+
+        /// <summary>
+        /// 获得当前存档名
+        /// </summary>
         public virtual string GetNowSaveName()
         {
             return CurrentSaveFile.SaveName;
         }
+
+        /// <summary>
+        /// 根据索引获取存档文件
+        /// </summary>
         public virtual IEnumerator GetSaveFile(int saveIndex,UnityAction<SaveFile> resultAction)
         {
             yield return LoadSaveFile("save" + saveIndex, resultAction);
@@ -270,6 +284,9 @@ namespace MungFramework.Logic.Save
             }
         }
 
+        /// <summary>
+        /// 清空系统存档
+        /// </summary>
         protected virtual void ClearSystemSave()
         {
             SystemSaveFile.SaveName = "system";
@@ -286,6 +303,10 @@ namespace MungFramework.Logic.Save
             //保存系统存档
             StartCoroutine(SaveIn(SystemSaveFile));
         }
+
+        /// <summary>
+        /// 异步设置系统存档值
+        /// </summary>
         public virtual IEnumerator SetSystemSaveValueIEnumerator(string key, string val)
         {
             SystemSaveFile.SetValue(key, val);

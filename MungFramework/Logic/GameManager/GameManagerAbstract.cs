@@ -7,7 +7,7 @@ using UnityEngine;
 namespace MungFramework.Logic
 {
     /// <summary>
-    /// 游戏管理器，能调用子管理器和子执行器
+    /// 游戏管理器，能调用子管理器和子控制器
     /// </summary>
     public abstract class GameManagerAbstract : MonoBehaviour
     {
@@ -78,11 +78,8 @@ namespace MungFramework.Logic
         protected List<GameControllerAbstract> subGameControllerList;
 
 
-        //public static int count = 0;
         public virtual IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
-            //count++;
-            //Debug.LogWarning(name+" "+count+" "+Time.frameCount);
             gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnSceneLoad)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
