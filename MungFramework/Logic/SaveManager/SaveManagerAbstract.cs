@@ -231,20 +231,17 @@ namespace MungFramework.Logic.Save
 
 
         /// <summary>
-        /// 获取所有存档文件
+        /// 获取所有存档文件，0号存档为自动存档
         /// </summary>
         public virtual IEnumerator GetAllSaveFile(Dictionary<int,SaveFile> saveFileList)
         {
-            saveFileList.Clear();
+            saveFileList.Clear();;
             for (int i = 0; i <= SaveFileCount; i++)
             {
-                SaveFile saveFile = null;
-                yield return LoadSaveFile("save" + i, x => saveFile = x);
-                if (saveFile != null)
-                {
-                    saveFileList.Add(i, saveFile);
-                }
+                int t = i;
+                StartCoroutine(LoadSaveFile("save" + i, x => saveFileList.Add(t, x)));
             }
+            yield return new WaitUntil(()=> saveFileList.Count >= SaveFileCount + 1);
         }
 
         /// <summary>
@@ -281,6 +278,10 @@ namespace MungFramework.Logic.Save
                 };
                 res.SetKeyValues(saveData);
                 resultAction.Invoke(res);
+            }
+            else
+            {
+                resultAction.Invoke(null);
             }
         }
 

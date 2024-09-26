@@ -6,7 +6,6 @@ namespace MungFramework.ModelData
     public abstract class ModelData
     {
 
-
     }
 
     public static class ModelDataCloneStatic
