@@ -93,10 +93,10 @@ namespace MungFramework.Logic.Bag.ItemBag
 
         private void InsertItem(BagItem item)
         {
-            itemList.Insert(0, item);
-            for (int i = 1; i < itemList.Count; i++)
+            itemList.Add(item);
+            for (int i = itemList.Count - 1; i >= 1; i--)
             {
-                if (itemList[i - 1].ItemId.CompareTo(itemList[i].ItemId) > 0)
+                if (itemList[i].ItemId.CompareTo(itemList[i - 1].ItemId) < 0)
                 {
                     var temp = itemList[i];
                     itemList[i] = itemList[i - 1];

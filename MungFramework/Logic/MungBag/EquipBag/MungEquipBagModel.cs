@@ -23,10 +23,7 @@ namespace MungFramework.Logic.Bag.EquipBag
         {
             return itemList.AsReadOnly();
         }
-        public IEnumerable<BagItem> GetItemByOwner(string ownerId)
-        {
-            return GetItemList().Where(x => x.OwnerId == ownerId);
-        }
+
 
 
         /// <summary>
@@ -51,6 +48,22 @@ namespace MungFramework.Logic.Bag.EquipBag
         public BagItem GetItem(string equipId, string uuid)
         {
             return itemList.Find(x => x.EquipId == equipId && x.UUID == uuid);
+        }
+
+        /// <summary>
+        /// 根据拥有者获得道具背包数据
+        /// </summary>
+        public IEnumerable<BagItem> GetItemByOwner(string ownerId)
+        {
+            return itemList.Where(x => x.OwnerId == ownerId);
+        }
+
+        /// <summary>
+        /// 根据uuid获得道具背包数据
+        /// </summary>
+        public BagItem GetItemByUUID(string uuid)
+        {
+            return itemList.Find(x => x.UUID == uuid);
         }
 
         /// <summary>
@@ -108,16 +121,26 @@ namespace MungFramework.Logic.Bag.EquipBag
 
         private void InsertItem(BagItem item)
         {
-            itemList.Insert(0, item);
-            for (int i = 1; i < itemList.Count; i++)
+            itemList.Add(item);
+            for (int i = itemList.Count - 1; i >= 1; i--)
             {
-                if (itemList[i-1].EquipId.CompareTo(itemList[i].EquipId) > 0)
+                if (itemList[i].EquipId.CompareTo(itemList[i - 1].EquipId) < 0)
                 {
                     var temp = itemList[i];
                     itemList[i] = itemList[i - 1];
                     itemList[i - 1] = temp;
                 }
             }
+            //itemList.Insert(0, item);
+            //for (int i = 1; i < itemList.Count; i++)
+            //{
+            //    if (itemList[i-1].EquipId.CompareTo(itemList[i].EquipId) > 0)
+            //    {
+            //        var temp = itemList[i];
+            //        itemList[i] = itemList[i - 1];
+            //        itemList[i - 1] = temp;
+            //    }
+            //}
         }
 
         [Button("SortItemList")]

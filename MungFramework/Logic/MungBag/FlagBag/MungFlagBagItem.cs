@@ -1,7 +1,10 @@
 ﻿using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 namespace MungFramework.Logic.Bag.FlagBag
 {
+
+    [Serializable]
     public class MungFlagBagItem : MungFramework.ModelData.ModelData
     {
         [SerializeField]

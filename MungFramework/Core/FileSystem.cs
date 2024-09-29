@@ -205,7 +205,12 @@ namespace MungFramework.Core
         }
         private static void LockFile(byte[] bytes, LockOperate op)
         {
-            /*byte index = 1;
+            bool useLock = false;
+            if (!useLock)
+            {
+                return;
+            }
+            byte index = 1;
             switch (op)
             {
                 case LockOperate.Lock:
@@ -232,7 +237,7 @@ namespace MungFramework.Core
                         }
                     }
                     break;
-            }*/
+            }
         }
     }
 }

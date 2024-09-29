@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace MungFramework.Logic.Bag.FlagBag
 {
+    [Serializable]
     public class MungFlagBagModel : MungFramework.Model.Model
     {
         [SerializeField]
@@ -95,14 +96,14 @@ namespace MungFramework.Logic.Bag.FlagBag
 
         private void InsertFlag(MungFlagBagItem flag)
         {
-            flagList.Insert(0, flag);
-            for (int i = 0; i < flagList.Count; i++)
+            flagList.Add(flag);
+            for (int i = flagList.Count - 1; i >= 1; i--)
             {
-                if (flagList[i - 1].FlagName.CompareTo(flagList[i].FlagName) > 0)
+                if (flagList[i].FlagName.CompareTo(flagList[i - 1].FlagName) < 0)
                 {
-                    var temp = flagList[i - 1];
-                    flagList[i - 1] = flagList[i];
-                    flagList[i] = temp;
+                    var temp = flagList[i];
+                    flagList[i] = flagList[i - 1];
+                    flagList[i - 1] = temp;
                 }
             }
         }
