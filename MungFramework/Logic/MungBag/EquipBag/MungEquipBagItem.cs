@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-namespace MungFramework.Logic.Bag.EquipBag
+namespace MungFramework.Logic.MungBag.EquipBag
 {
     /// <summary>
     /// 装备背包项
@@ -12,17 +12,17 @@ namespace MungFramework.Logic.Bag.EquipBag
     {
         [SerializeField]
         [ReadOnly]
-        private string uuid;
+        private string guid;
         [SerializeField]
         [ReadOnly]
         private string equipId;
         [SerializeField]
         private string ownerId;
 
-        public string UUID
+        public string Guid
         {
-            get => uuid;
-            set => uuid = value;
+            get => guid;
+            set => guid = value;
         }
         public string EquipId
         {

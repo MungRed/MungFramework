@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
 
-namespace MungFramework.Logic.Bag.ItemBag
+namespace MungFramework.Logic.MungBag.ItemBag
 {
     /// <summary>
     /// 道具背包
@@ -75,7 +75,7 @@ namespace MungFramework.Logic.Bag.ItemBag
         /// <summary>
         /// 减少道具数量，返回是否成功
         /// </summary>
-        public bool ReduceItem(string itemId, int itemCount)
+        public bool RemoveItem(string itemId, int itemCount)
         {
             var find = FindItem(itemId);
             if (find != null)

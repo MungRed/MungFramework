@@ -1,7 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
-namespace MungFramework.Logic.Bag.FlagBag
+namespace MungFramework.Logic.MungBag.FlagBag
 {
 
     [Serializable]

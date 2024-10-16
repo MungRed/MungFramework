@@ -74,6 +74,24 @@ namespace MungFramework.Logic.FSM
                 FSMChangeState(nextState);
             }
         }
+        public void FSMLateUpdate()
+        {
+            //获取状态实例
+            IFSMState<StateEnum, Parameter> state = FSMGetStateInstance(FSMNowState);
+            //如果状态实例为空，返回
+            if (state == null)
+            {
+                return;
+            }
+
+            //延迟帧更新，并获取下一状态
+            StateEnum nextState = state.OnStateLateUpdate(FSMParameter);
+            //如果下一状态不等于当前状态，改变状态
+            if (!nextState.Equals(FSMNowState))
+            {
+                FSMChangeState(nextState);
+            }
+        }
         /// <summary>
         /// 按键输入
         /// </summary>

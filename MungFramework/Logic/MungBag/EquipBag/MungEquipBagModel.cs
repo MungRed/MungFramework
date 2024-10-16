@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 
-namespace MungFramework.Logic.Bag.EquipBag
+namespace MungFramework.Logic.MungBag.EquipBag
 {
     /// <summary>
     /// 装备背包模型
@@ -25,7 +25,6 @@ namespace MungFramework.Logic.Bag.EquipBag
         }
 
 
-
         /// <summary>
         /// 向背包中添加一个道具
         /// </summary>
@@ -34,7 +33,7 @@ namespace MungFramework.Logic.Bag.EquipBag
         {
             BagItem item = new()
             {
-                UUID = Guid.NewGuid().ToString(),
+                Guid = Guid.NewGuid().ToString(),
                 EquipId = itemId,
                 OwnerId = ""
             };
@@ -45,10 +44,11 @@ namespace MungFramework.Logic.Bag.EquipBag
         /// <summary>
         /// 获得道具
         /// </summary>
-        public BagItem GetItem(string equipId, string uuid)
+        public BagItem GetItem(string equipId, string guid)
         {
-            return itemList.Find(x => x.EquipId == equipId && x.UUID == uuid);
+            return itemList.Find(x => x.EquipId == equipId && x.Guid == guid);
         }
+
 
         /// <summary>
         /// 根据拥有者获得道具背包数据
@@ -58,29 +58,30 @@ namespace MungFramework.Logic.Bag.EquipBag
             return itemList.Where(x => x.OwnerId == ownerId);
         }
 
+
         /// <summary>
-        /// 根据uuid获得道具背包数据
+        /// 根据guid获得道具背包数据
         /// </summary>
-        public BagItem GetItemByUUID(string uuid)
+        public BagItem GetItemByGuid(string guid)
         {
-            return itemList.Find(x => x.UUID == uuid);
+            return itemList.Find(x => x.Guid == guid);
         }
 
         /// <summary>
         /// 删除道具，返回是否成功
         /// </summary>
-        public bool RemoveItem(string equipId, string uuid)
+        public bool RemoveItem(string equipId, string guid)
         {
-            return itemList.RemoveAll(x => x.EquipId == equipId && x.UUID == uuid) > 0;
+            return itemList.RemoveAll(x => x.EquipId == equipId && x.Guid == guid) > 0;
         }
 
 
         /// <summary>
         /// 改变道具的拥有者
         /// </summary>
-        public bool ChangeOwner(string equipId, string uuid, string ownerId)
+        public bool ChangeOwner(string equipId, string guid, string ownerId)
         {
-            var item = itemList.Find(x => x.EquipId == equipId && x.UUID == uuid);
+            var item = itemList.Find(x => x.EquipId == equipId && x.Guid == guid);
             if (item != null)
             {
                 item.OwnerId = ownerId;
@@ -92,9 +93,9 @@ namespace MungFramework.Logic.Bag.EquipBag
         /// <summary>
         /// 获得道具的拥有者
         /// </summary>
-        public string GetOwner(string equipId, string uuid)
+        public string GetOwner(string equipId, string guid)
         {
-            var item = itemList.Find(x => x.EquipId == equipId && x.UUID == uuid);
+            var item = itemList.Find(x => x.EquipId == equipId && x.Guid == guid);
             if (item != null)
             {
                 return item.OwnerId;
@@ -122,25 +123,6 @@ namespace MungFramework.Logic.Bag.EquipBag
         private void InsertItem(BagItem item)
         {
             itemList.Add(item);
-            for (int i = itemList.Count - 1; i >= 1; i--)
-            {
-                if (itemList[i].EquipId.CompareTo(itemList[i - 1].EquipId) < 0)
-                {
-                    var temp = itemList[i];
-                    itemList[i] = itemList[i - 1];
-                    itemList[i - 1] = temp;
-                }
-            }
-            //itemList.Insert(0, item);
-            //for (int i = 1; i < itemList.Count; i++)
-            //{
-            //    if (itemList[i-1].EquipId.CompareTo(itemList[i].EquipId) > 0)
-            //    {
-            //        var temp = itemList[i];
-            //        itemList[i] = itemList[i - 1];
-            //        itemList[i - 1] = temp;
-            //    }
-            //}
         }
 
         [Button("SortItemList")]

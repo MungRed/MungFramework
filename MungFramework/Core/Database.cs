@@ -43,17 +43,16 @@ namespace MungFramework.Core
             }
         }
 
-        private static string DatabasePath => Application.dataPath + "/data";
-        private static string DataTableFormat => "sav";
+        public static string DatabasePath => Application.dataPath + "/data";
+        public static string DataTableFormat => "sav";
 
 
         /// <summary>
         /// 是否存在数据库
         /// </summary>
-        /// <returns></returns>
         public static bool ExistDatabase()
         {
-            Debug.Log("检查数据库是否存在" + DatabasePath);
+            //Debug.Log("检查数据库是否存在" + DatabasePath);
 
             //检查路径是否存在
             if (!FileSystem.HaveDirectory(DatabasePath))
@@ -71,6 +70,10 @@ namespace MungFramework.Core
 
             return true;
         }
+
+        /// <summary>
+        /// 是否存在数据表
+        /// </summary>
         public static bool ExistDataTable(string tableName)
         {
             return FileSystem.HaveFile(DatabasePath, tableName, DataTableFormat);
@@ -105,7 +108,7 @@ namespace MungFramework.Core
             //检查数据库是否存在
             if (!ExistDatabase())
             {
-                Debug.Log("数据库不存在， 获取数据表失败" + tableName);
+                Debug.LogError("数据库不存在， 获取数据表失败" + tableName);
                 yield break;
             }
 
@@ -127,7 +130,7 @@ namespace MungFramework.Core
             }
             catch (Exception e)
             {
-                Debug.Log("解析数据表失败" + tableName + e.Message);
+                Debug.LogError("解析数据表失败" + tableName + e.Message);
                 yield break;
             }
         }
@@ -139,7 +142,7 @@ namespace MungFramework.Core
         {
             if (!ExistDatabase())
             {
-                Debug.Log("数据库不存在， 删除数据表失败" + tableName);
+                Debug.LogError("数据库不存在， 删除数据表失败" + tableName);
                 return false;
             }
 
@@ -175,5 +178,8 @@ namespace MungFramework.Core
             dataTable.SetKeyValues(keyValues);
             yield return FileSystem.WriteFileAsync(DatabasePath, tableName, DataTableFormat, JsonUtility.ToJson(dataTable, true));
         }
+
+
+
     }
 }

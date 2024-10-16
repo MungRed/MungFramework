@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace MungFramework.Logic.Bag.ItemBag
+namespace MungFramework.Logic.MungBag.ItemBag
 {
     /// <summary>
     /// 道具背包项

@@ -1,7 +1,6 @@
 using MungFramework.Logic;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace MungFramework.Extension.CoroutineExtension
 {

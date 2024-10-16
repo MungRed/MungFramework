@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
 
-namespace MungFramework.Logic.Bag.FlagBag
+namespace MungFramework.Logic.MungBag.FlagBag
 {
     [Serializable]
     public class MungFlagBagModel : MungFramework.Model.Model
@@ -90,10 +90,6 @@ namespace MungFramework.Logic.Bag.FlagBag
             }
             return 0;
         }
-
-
-
-
         private void InsertFlag(MungFlagBagItem flag)
         {
             flagList.Add(flag);

@@ -1,5 +1,4 @@
-﻿using MungFramework.Extension.CoroutineExtension;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,7 +10,7 @@ namespace MungFramework.Logic.TimeCounter
         private static Dictionary<TimeCounter, Coroutine> timeCounterDic = new();
 
 
-        public static TimeCounter StartTimeCounter(float totalTime, float stepTime, UnityAction stepAction, UnityAction completeAction)
+        public static TimeCounter StartTimeCounter(float totalTime, float stepTime, UnityAction<float, float> stepAction, UnityAction completeAction)
         {
             TimeCounter TimeCounter = new(totalTime, stepTime, stepAction, completeAction);         
             timeCounterDic.Add(TimeCounter, GameApplicationAbstract.Instance.StartCoroutine(TimeCount(TimeCounter)));

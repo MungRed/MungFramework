@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace MungFramework.Logic.Bag.PairBag
+namespace MungFramework.Logic.MungBag.PairBag
 {
     [Serializable]
     public class MungPairBagItem : MungFramework.ModelData.ModelData

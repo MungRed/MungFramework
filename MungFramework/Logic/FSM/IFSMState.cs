@@ -24,6 +24,11 @@ namespace MungFramework.Logic.FSM
         /// 固定帧更新,返回下一状态
         /// </summary>
         public StateEnum OnStateFixedUpdate(Parameter parameter);
+
+        /// <summary>
+        /// 延迟更新,返回下一状态
+        /// </summary>
+        public StateEnum OnStateLateUpdate(Parameter parameter);
         /// <summary>
         /// 按键输入,返回下一状态
         /// </summary>

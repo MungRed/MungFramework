@@ -3,10 +3,15 @@
     /// <summary>
     /// 从输入模型到输出模型的流
     /// </summary>
-    /// <typeparam name="TInputModel"></typeparam>
-    /// <typeparam name="TOutputModel"></typeparam>
-    public abstract class ModelModelStream<TInputModel, TOutputModel> where TInputModel : Model where TOutputModel : Model
+    /// <typeparam name="T_InputModel"></typeparam>
+    /// <typeparam name="T_OutputModel"></typeparam>
+    public abstract class ModelModelStream<T_InputModel, T_OutputModel> where T_InputModel : Model where T_OutputModel : Model
     {
+        public abstract T_OutputModel Stream(T_InputModel inputModel);
+    }
 
+    public abstract class ModelModelStream<T_InputModel, T_OutputModel, T_Parameter> where T_InputModel : Model where T_OutputModel : Model
+    {
+        public abstract T_OutputModel Stream(T_InputModel inputModel, T_Parameter parameter);
     }
 }

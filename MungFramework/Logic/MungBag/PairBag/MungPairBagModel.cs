@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
 
-namespace MungFramework.Logic.Bag.PairBag
+namespace MungFramework.Logic.MungBag.PairBag
 {
     [Serializable]
     public class MungPairBagModel<BagItem> where BagItem : MungPairBagItem, new()
@@ -35,6 +35,7 @@ namespace MungFramework.Logic.Bag.PairBag
                 return item;
             }
         }
+
         public BagItem GetItem(string key)
         {
             return FindItem(key);
@@ -44,8 +45,6 @@ namespace MungFramework.Logic.Bag.PairBag
         {
             return FindItem(key) != null;
         }
-
-
 
         private void InsertItem(BagItem item)
         {
@@ -60,6 +59,7 @@ namespace MungFramework.Logic.Bag.PairBag
                 }
             }
         }
+
         private BagItem FindItem(string key)
         {
             //二分查找
