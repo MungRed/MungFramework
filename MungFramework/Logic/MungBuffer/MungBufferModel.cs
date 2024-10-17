@@ -1,6 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -26,6 +27,10 @@ namespace MungFramework.Logic.MungBuffer
             {
                 buffer.Add(key, value);
             }
+        }
+        public IEnumerable<KeyValuePair<T_Key, T_Value>> GetAllBuffer()
+        {
+            return buffer;
         }
 
         public (bool hasValue,T_Value value) GetBuffer(T_Key key)

@@ -12,27 +12,37 @@ namespace MungFramework.Logic.MungBag.EquipBag
     {
         [SerializeField]
         [ReadOnly]
-        private string guid;
-        [SerializeField]
-        [ReadOnly]
         private string equipId;
         [SerializeField]
-        private string ownerId;
+        [ReadOnly]
+        private string euipGuid;
 
-        public string Guid
-        {
-            get => guid;
-            set => guid = value;
-        }
+        [SerializeField]
+        private string ownerId;
+        [SerializeField]
+        private string ownerGuid;
+
+
         public string EquipId
         {
             get => equipId;
             set => equipId = value;
         }
+        public string EquipGuid
+        {
+            get => euipGuid;
+            set => euipGuid = value;
+        }
+
         public string OwnerId
         {
             get => ownerId;
             set => ownerId = value;
+        }
+        public string OwnerGuid
+        {
+            get => ownerGuid;
+            set => ownerGuid = value;
         }
     }
 }

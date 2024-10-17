@@ -7,18 +7,18 @@ using UnityEngine;
 namespace MungFramework.Logic.MungBag.PairBag
 {
     [Serializable]
-    public class MungPairBagModel<BagItem> where BagItem : MungPairBagItem, new()
+    public class MungPairBagModel<T_BagItem> where T_BagItem : MungPairBagItem, new()
     {
         [SerializeField]
-        private List<BagItem> itemList = new();
+        private List<T_BagItem> itemList = new();
 
-        public ReadOnlyCollection<BagItem> GetItemList()
+        public ReadOnlyCollection<T_BagItem> GetItemList()
         {
             return itemList.AsReadOnly();
         }
 
-        [Button("AddItem")]
-        public BagItem AddItem(string key)
+        [Button]
+        public T_BagItem AddItem(string key)
         {
             var find = FindItem(key);
             if (find != null)
@@ -27,7 +27,7 @@ namespace MungFramework.Logic.MungBag.PairBag
             }
             else
             {
-                BagItem item = new()
+                T_BagItem item = new()
                 {
                     Key = key
                 };
@@ -36,7 +36,7 @@ namespace MungFramework.Logic.MungBag.PairBag
             }
         }
 
-        public BagItem GetItem(string key)
+        public T_BagItem GetItem(string key)
         {
             return FindItem(key);
         }
@@ -46,7 +46,7 @@ namespace MungFramework.Logic.MungBag.PairBag
             return FindItem(key) != null;
         }
 
-        private void InsertItem(BagItem item)
+        private void InsertItem(T_BagItem item)
         {
             itemList.Add(item);
             for (int i = itemList.Count - 1; i >= 1; i--)
@@ -60,7 +60,7 @@ namespace MungFramework.Logic.MungBag.PairBag
             }
         }
 
-        private BagItem FindItem(string key)
+        private T_BagItem FindItem(string key)
         {
             //二分查找
             int left = 0;
@@ -85,7 +85,7 @@ namespace MungFramework.Logic.MungBag.PairBag
             return null;
         }
 
-        [Button("SortItemList")]
+        [Button]
         private void SortItemList()
         {
             itemList.Sort((a, b) => string.Compare(a.Key, b.Key));

@@ -15,7 +15,7 @@ namespace MungFramework.Ui
     /// </summary>
     public abstract class UiButtonAbstract : UiEntityAbstract
     {
-        public enum UiButtonActionType
+        public enum UiButtonActionTypeEnum
         {
             Up, Down, Left, Right, 
             OK, 
@@ -26,7 +26,7 @@ namespace MungFramework.Ui
             MouseExit,
         }
         [Flags]
-        public enum UiButtonMoveDirection
+        public enum UiButtonMoveDirectionEnum
         {
             None = 0,
             All = Up | Down | Left | Right,
@@ -69,15 +69,15 @@ namespace MungFramework.Ui
 
 
         [SerializeField]
-        protected UiButtonMoveDirection _moveDirection = UiButtonMoveDirection.All;
+        protected UiButtonMoveDirectionEnum _moveDirection = UiButtonMoveDirectionEnum.All;
 
-        public bool CouldUp => (_moveDirection & UiButtonMoveDirection.Up) == UiButtonMoveDirection.Up;
-        public bool CouldDown => (_moveDirection & UiButtonMoveDirection.Down) == UiButtonMoveDirection.Down;
-        public bool CouldLeft => (_moveDirection & UiButtonMoveDirection.Left) == UiButtonMoveDirection.Left;
-        public bool CouldRight => (_moveDirection & UiButtonMoveDirection.Right) == UiButtonMoveDirection.Right;
+        public bool CouldUp => (_moveDirection & UiButtonMoveDirectionEnum.Up) == UiButtonMoveDirectionEnum.Up;
+        public bool CouldDown => (_moveDirection & UiButtonMoveDirectionEnum.Down) == UiButtonMoveDirectionEnum.Down;
+        public bool CouldLeft => (_moveDirection & UiButtonMoveDirectionEnum.Left) == UiButtonMoveDirectionEnum.Left;
+        public bool CouldRight => (_moveDirection & UiButtonMoveDirectionEnum.Right) == UiButtonMoveDirectionEnum.Right;
 
         [SerializeField]
-        protected SerializedDictionary<UiButtonActionType, UnityEvent> uiButtonActionMap = new();
+        protected SerializedDictionary<UiButtonActionTypeEnum, UnityEvent> uiButtonActionMap = new();
 
 
         [SerializeField]
@@ -129,7 +129,7 @@ namespace MungFramework.Ui
         }
 
         #region ÊÂ¼þ
-        public void AddAction(UiButtonActionType type, UnityAction action)
+        public void AddAction(UiButtonActionTypeEnum type, UnityAction action)
         {
             if (!uiButtonActionMap.ContainsKey(type))
             {
@@ -137,14 +137,14 @@ namespace MungFramework.Ui
             }
             uiButtonActionMap[type].AddListener(action);
         }
-        public void RemoveAction(UiButtonActionType type, UnityAction action)
+        public void RemoveAction(UiButtonActionTypeEnum type, UnityAction action)
         {
             if (uiButtonActionMap.ContainsKey(type))
             {
                 uiButtonActionMap[type].RemoveListener(action);
             }
         }
-        public void DoAction(UiButtonActionType type)
+        public void DoAction(UiButtonActionTypeEnum type)
         {
             if (uiButtonActionMap.ContainsKey(type))
             {
@@ -156,8 +156,8 @@ namespace MungFramework.Ui
         {
             IsSelected = true;
             UpdateScrollView();
-            DoAction(UiButtonActionType.Select);
-            if (checkAudio != null)
+            DoAction(UiButtonActionTypeEnum.Select);
+            if (checkAudio != null&&playAudio)
             {
                 SoundManagerAbstract.Instance.PlayAudio("effect", checkAudio,replace:true);
             }
@@ -175,7 +175,7 @@ namespace MungFramework.Ui
         public virtual void OnUnSelect()
         {
             IsSelected = false;
-            DoAction(UiButtonActionType.UnSelect);
+            DoAction(UiButtonActionTypeEnum.UnSelect);
             if (selectObject != null)
             {
                 selectObject.SetActive(false);
@@ -188,7 +188,7 @@ namespace MungFramework.Ui
 
         public virtual void OnOK()
         {
-            DoAction(UiButtonActionType.OK);
+            DoAction(UiButtonActionTypeEnum.OK);
             if (UiLayer != null)
             {
                 UiLayer.OnButtonOK(this);
@@ -196,23 +196,23 @@ namespace MungFramework.Ui
         }
         public virtual void OnUp()
         {
-            DoAction(UiButtonActionType.Up);
+            DoAction(UiButtonActionTypeEnum.Up);
         }
         public virtual void OnDown()
         {
-            DoAction(UiButtonActionType.Down);
+            DoAction(UiButtonActionTypeEnum.Down);
         }
         public virtual void OnLeft()
         {
-            DoAction(UiButtonActionType.Left);
+            DoAction(UiButtonActionTypeEnum.Left);
         }
         public virtual void OnRight()
         {
-            DoAction(UiButtonActionType.Right);
+            DoAction(UiButtonActionTypeEnum.Right);
         }
         public virtual void OnSpecialAction()
         {
-            DoAction(UiButtonActionType.SpecialAction);
+            DoAction(UiButtonActionTypeEnum.SpecialAction);
             if (UiLayer != null)
             {
                 UiLayer.OnButtonSpecialAction(this);
@@ -220,7 +220,7 @@ namespace MungFramework.Ui
         }
         public virtual void MOnMouseEnter()
         {
-            DoAction(UiButtonActionType.MouseEnter);
+            DoAction(UiButtonActionTypeEnum.MouseEnter);
             if (UiLayer != null)
             {
                 UiLayer.JumpButton(this);
@@ -228,7 +228,7 @@ namespace MungFramework.Ui
         }
         public virtual void MOnMouseExit()
         {
-            DoAction(UiButtonActionType.MouseExit);
+            DoAction(UiButtonActionTypeEnum.MouseExit);
         }
         #endregion
 

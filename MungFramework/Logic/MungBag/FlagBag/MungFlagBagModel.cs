@@ -18,7 +18,7 @@ namespace MungFramework.Logic.MungBag.FlagBag
             return flagList.AsReadOnly();
         }
 
-        [Button("AddFlag")]
+        [Button]
         public void AddFlag(string flagName, int flagValue)
         {
             var find = FindFlag(flagName);
@@ -128,7 +128,7 @@ namespace MungFramework.Logic.MungBag.FlagBag
             return null;
         }
 
-        [Button("SortFlagList")]
+        [Button]
         private void SortFlagList()
         {
             flagList.Sort((x, y) => x.FlagName.CompareTo(y.FlagName));

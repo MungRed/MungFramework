@@ -6,13 +6,13 @@ namespace MungFramework.Logic.FSM
     /// <summary>
     /// 有限状态机管理器接口
     /// </summary>
-    public interface  IFSMManager<StateEnum, Parameter> where StateEnum : Enum where Parameter : IFSMParameter
+    public interface  IFSMManager<T_StateEnum, T_Parameter> where T_StateEnum : Enum where T_Parameter : IFSMParameter
     {
-        public IFSMManager<StateEnum, Parameter> FSManager
+        public IFSMManager<T_StateEnum, T_Parameter> FSManager
         {
             get;
         }
-        public Parameter FSMParameter
+        public T_Parameter FSMParameter
         {
             get;
         }
@@ -20,7 +20,7 @@ namespace MungFramework.Logic.FSM
         /// <summary>
         /// 当前状态
         /// </summary>
-        public StateEnum FSMNowState
+        public T_StateEnum FSMNowState
         {
             set; get;
         }
@@ -29,7 +29,7 @@ namespace MungFramework.Logic.FSM
         /// 获取每个状态对应的实例
         /// 约束：每个状态只能有一个实例
         /// </summary>
-        public IFSMState<StateEnum, Parameter> FSMGetStateInstance(StateEnum state);
+        public IFSMState<T_StateEnum, T_Parameter> FSMGetStateInstance(T_StateEnum state);
 
         /// <summary>
         /// 帧更新
@@ -37,7 +37,7 @@ namespace MungFramework.Logic.FSM
         public void FSMUpdate()
         {
             //获取状态实例
-            IFSMState<StateEnum, Parameter> state = FSMGetStateInstance(FSMNowState);
+            IFSMState<T_StateEnum, T_Parameter> state = FSMGetStateInstance(FSMNowState);
             //如果状态实例为空，返回
             if (state == null)
             {
@@ -45,7 +45,7 @@ namespace MungFramework.Logic.FSM
             }
 
             //状态帧更新，并获取下一状态
-            StateEnum nextState = state.OnStateUpdate(FSMParameter);
+            T_StateEnum nextState = state.OnStateUpdate(FSMParameter);
             //如果下一状态不等于当前状态，改变状态
             if (!nextState.Equals(FSMNowState))
             {
@@ -59,7 +59,7 @@ namespace MungFramework.Logic.FSM
         public void FSMFixedUpdate()
         {
             //获取状态实例
-            IFSMState<StateEnum, Parameter> state = FSMGetStateInstance(FSMNowState);
+            IFSMState<T_StateEnum, T_Parameter> state = FSMGetStateInstance(FSMNowState);
             //如果状态实例为空，返回
             if (state == null)
             {
@@ -67,7 +67,7 @@ namespace MungFramework.Logic.FSM
             }
 
             //状态固定帧更新，并获取下一状态
-            StateEnum nextState = state.OnStateFixedUpdate(FSMParameter);
+            T_StateEnum nextState = state.OnStateFixedUpdate(FSMParameter);
             //如果下一状态不等于当前状态，改变状态
             if (!nextState.Equals(FSMNowState))
             {
@@ -77,7 +77,7 @@ namespace MungFramework.Logic.FSM
         public void FSMLateUpdate()
         {
             //获取状态实例
-            IFSMState<StateEnum, Parameter> state = FSMGetStateInstance(FSMNowState);
+            IFSMState<T_StateEnum, T_Parameter> state = FSMGetStateInstance(FSMNowState);
             //如果状态实例为空，返回
             if (state == null)
             {
@@ -85,7 +85,7 @@ namespace MungFramework.Logic.FSM
             }
 
             //延迟帧更新，并获取下一状态
-            StateEnum nextState = state.OnStateLateUpdate(FSMParameter);
+            T_StateEnum nextState = state.OnStateLateUpdate(FSMParameter);
             //如果下一状态不等于当前状态，改变状态
             if (!nextState.Equals(FSMNowState))
             {
@@ -98,7 +98,7 @@ namespace MungFramework.Logic.FSM
         public void FSMInput(InputValueEnum inputValue)
         {
             //获取状态实例
-            IFSMState<StateEnum, Parameter> state = FSMGetStateInstance(FSMNowState);
+            IFSMState<T_StateEnum, T_Parameter> state = FSMGetStateInstance(FSMNowState);
             //如果状态实例为空，返回
             if (state == null)
             {
@@ -106,7 +106,7 @@ namespace MungFramework.Logic.FSM
             }
 
             //状态按键输入，并获取下一状态
-            StateEnum nextState = state.OnStateInput(inputValue,FSMParameter);
+            T_StateEnum nextState = state.OnStateInput(inputValue,FSMParameter);
             //如果下一状态不等于当前状态，改变状态
             if (!nextState.Equals(FSMNowState))
             {
@@ -117,12 +117,12 @@ namespace MungFramework.Logic.FSM
         /// <summary>
         /// 改变状态
         /// </summary>
-        public void FSMChangeState(StateEnum nextState)
+        public void FSMChangeState(T_StateEnum nextState)
         {
             //当前状态实例
-            IFSMState<StateEnum, Parameter> nowStateInstance = FSMGetStateInstance(FSMNowState);
+            IFSMState<T_StateEnum, T_Parameter> nowStateInstance = FSMGetStateInstance(FSMNowState);
             //下一状态实例
-            IFSMState<StateEnum, Parameter> nextStateInstance = FSMGetStateInstance(nextState);
+            IFSMState<T_StateEnum, T_Parameter> nextStateInstance = FSMGetStateInstance(nextState);
             if (nowStateInstance != null)
             {
                 //是否离开状态成功

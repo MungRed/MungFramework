@@ -199,19 +199,21 @@ namespace MungFramework.Ui
                     yield return new WaitForSeconds(0.1f);
                 }
             }
-
-            //开始连续敲击
-            var cor = StartCoroutine(Tapping(action));
-            UnityAction cancel = () =>
+            if (gameObject.activeSelf)
             {
-                try
+                //开始连续敲击
+                var cor = StartCoroutine(Tapping(action));
+                UnityAction cancel = () =>
                 {
-                    StopCoroutine(cor);
-                }
-                catch { }
-            };
-            cancel += () => InputManager.Remove_InputAction_Canceled(input, cancel);
-            InputManager.Add_InputAction_Canceled(input, cancel);
+                    try
+                    {
+                        StopCoroutine(cor);
+                    }
+                    catch { }
+                };
+                cancel += () => InputManager.Remove_InputAction_Canceled(input, cancel);
+                InputManager.Add_InputAction_Canceled(input, cancel);
+            }
         }
         #endregion
         #region OpenAndClose

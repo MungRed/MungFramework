@@ -11,22 +11,50 @@ namespace MungFramework.Logic.MungBag.ItemBag
     /// 背包中储存拥有的道具以及数量
     /// </summary>
     [Serializable]
-    public class MungItemBagModel<BagItem> : MungFramework.Model.Model where BagItem : MungItemBagItem,new()
+    public class MungItemBagModel<T_BagItem> : MungFramework.Model.Model where T_BagItem : MungItemBagItem,new()
     {
         [SerializeField]
-        private List<BagItem> itemList = new();
+        private List<T_BagItem> itemList = new();
 
 
-        public ReadOnlyCollection<BagItem> GetItemList()
+        public ReadOnlyCollection<T_BagItem> GetItemList()
         {
             return itemList.AsReadOnly();
+        }
+
+        public bool HaveItem(string itemId)
+        {
+            return FindItem(itemId) != null;
+        }
+
+        /// <summary>
+        /// 更新道具数量
+        /// </summary>
+        public T_BagItem UpdateItemCount(string itemId, int itemCount)
+        {
+            var find = FindItem(itemId);
+            if (find != null)
+            {
+                find.ItemCount = itemCount;
+                return find;
+            }
+            else
+            {
+                T_BagItem item = new()
+                {
+                    ItemId = itemId,
+                    ItemCount = itemCount
+                };
+                InsertItem(item);
+                return item;
+            }
         }
 
         /// <summary>
         /// 向背包中添加一个道具
         /// </summary>
-        [Button("AddItem")]
-        public BagItem AddItem(string itemId, int itemCount)
+        [Button]
+        public T_BagItem AddItem(string itemId, int itemCount)
         {
             var find = FindItem(itemId);
             if (find != null)
@@ -36,7 +64,7 @@ namespace MungFramework.Logic.MungBag.ItemBag
             }
             else
             {
-                BagItem item = new()
+                T_BagItem item = new()
                 {
                     ItemId = itemId,
                     ItemCount = itemCount
@@ -91,7 +119,7 @@ namespace MungFramework.Logic.MungBag.ItemBag
         }
 
 
-        private void InsertItem(BagItem item)
+        private void InsertItem(T_BagItem item)
         {
             itemList.Add(item);
             for (int i = itemList.Count - 1; i >= 1; i--)
@@ -104,7 +132,7 @@ namespace MungFramework.Logic.MungBag.ItemBag
                 }
             }
         }
-        private BagItem FindItem(string itemId)
+        private T_BagItem FindItem(string itemId)
         {
             //二分查找
             int left = 0;
@@ -129,7 +157,7 @@ namespace MungFramework.Logic.MungBag.ItemBag
             return null;
         }
 
-        [Button("SortItemList")]
+        [Button]
         private void SortItemList()
         {
             itemList.Sort((a, b) => string.Compare(a.ItemId, b.ItemId));
