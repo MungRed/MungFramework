@@ -31,6 +31,11 @@ namespace MungFramework.Logic.MungBag.EquipBag
         [Button]
         public T_BagItem AddItem(string itemId)
         {
+            if (itemId == null)
+            {
+                return null;
+            }
+
             T_BagItem item = new()
             {
                 EquipId = itemId,
@@ -48,6 +53,10 @@ namespace MungFramework.Logic.MungBag.EquipBag
         /// </summary>
         public T_BagItem GetItem(string equipId, string euipGuid)
         {
+            if (equipId == null)
+            {
+                return null;
+            }
             return itemList.Find(x => x.EquipId == equipId && x.EquipGuid == euipGuid);
         }
 
@@ -69,6 +78,10 @@ namespace MungFramework.Logic.MungBag.EquipBag
         /// </summary>
         public bool RemoveItem(string equipId, string equipGuid)
         {
+            if (equipId == null)
+            {
+                return false;
+            }
             return itemList.RemoveAll(x => x.EquipId == equipId && x.EquipGuid == equipGuid) > 0;
         }
 
@@ -77,6 +90,10 @@ namespace MungFramework.Logic.MungBag.EquipBag
         /// </summary>
         public bool ChangeOwner(string equipId, string equipGuid, string ownerId,string ownerGuid = "")
         {
+            if (equipId == null)
+            {
+                return false;
+            }
             var item = itemList.Find(x => x.EquipId == equipId && x.EquipGuid == equipGuid);
             if (item != null)
             {
@@ -92,6 +109,10 @@ namespace MungFramework.Logic.MungBag.EquipBag
         /// </summary>
         public (string ownerId,string ownerGuid) GetOwner(string equipId, string guid)
         {
+            if (equipId == null)
+            {
+                return ("", "");
+            }
             var item = itemList.Find(x => x.EquipId == equipId && x.EquipGuid == guid);
             if (item != null)
             {
@@ -103,23 +124,40 @@ namespace MungFramework.Logic.MungBag.EquipBag
         /// <summary>
         /// 获得道具数量
         /// </summary>
-        public int GetItemCount(string itemId)
+        public int GetItemCount(string equipId)
         {
-            return itemList.Count(x => x.EquipId == itemId);
+            if (equipId == null)
+            {
+                return 0;
+            }
+            return itemList.Count(x => x.EquipId == equipId);
         }
 
         /// <summary>
         /// 判断某个道具是否有指定数量个
         /// </summary>
-        public bool CheckItemCount(string itemId, int itemCount)
+        public bool CheckItemCount(string equipId, int itemCount)
         {
-            return itemList.Count(x => x.EquipId == itemId) >= itemCount;
+            if (equipId == null)
+            {
+                return false;
+            }
+            return itemList.Count(x => x.EquipId == equipId) >= itemCount;
         }
 
 
         private void InsertItem(T_BagItem item)
         {
             itemList.Add(item);
+            for (int i = itemList.Count - 1; i >= 1; i--)
+            {
+                if (itemList[i].EquipId.CompareTo(itemList[i - 1].EquipId) < 0)
+                {
+                    var temp = itemList[i];
+                    itemList[i] = itemList[i - 1];
+                    itemList[i - 1] = temp;
+                }
+            }
         }
 
         [Button]

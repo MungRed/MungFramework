@@ -20,7 +20,7 @@ namespace MungFramework.Ui
 
         //按钮距离边界的距离
         [SerializeField]
-        protected float upLimit,downLimit,leftLimit,rightLimit;
+        protected float upLimit, downLimit, leftLimit, rightLimit;
 
         public virtual void SetContentZero()
         {
@@ -31,7 +31,7 @@ namespace MungFramework.Ui
         public virtual void UpdatePosition(RectTransform rectTransform)
         {
             Vector2 contentPosition = content.MCanvasPosition(Canvas);
-            Vector2 viewPortLeftTop = viewport.MCanvasPosition_LeftTop(Canvas)+ new Vector2(leftLimit, -upLimit);//实际视图的左上角坐标
+            Vector2 viewPortLeftTop = viewport.MCanvasPosition_LeftTop(Canvas) + new Vector2(leftLimit, -upLimit);//实际视图的左上角坐标
             Vector2 viewPortRightBottom = viewport.MCanvasPosition_RightBottom(Canvas) + new Vector2(-rightLimit, downLimit);//实际视图的右下角坐标
 
             Vector2 btnLeftTop = rectTransform.MCanvasPosition_LeftTop(Canvas);//按钮的左上角坐标
@@ -73,28 +73,26 @@ namespace MungFramework.Ui
             contentPosition += new Vector2(deltax, deltay);
 
             content.DOKill();
-            content.DOCanvasPosition(Canvas,contentPosition, 0.15f).SetEase(Ease.OutCirc);
+            content.DOCanvasPosition(Canvas, contentPosition, 0.15f).SetEase(Ease.OutCirc);
         }
 
 
 
+#if UNITY_EDITOR
 
         [ShowInInspector]
         private Vector2 viewportPosition => viewport == null ? Vector2.zero : viewport.MCanvasPosition(Canvas);
-
         [ShowInInspector]
         private Vector2 viewportLeftTop => viewport == null ? Vector2.zero : viewport.MCanvasPosition_LeftTop(Canvas);
-
         [ShowInInspector]
         private Vector2 viewportRightBottom => viewport == null ? Vector2.zero : viewport.MCanvasPosition_RightBottom(Canvas);
-
         [ShowInInspector]
         private Vector2 contentPosition => content == null ? Vector2.zero : content.MCanvasPosition(Canvas);
-
         [ShowInInspector]
         private Vector2 contentLeftTop => content == null ? Vector2.zero : content.MCanvasPosition_LeftTop(Canvas);
-
         [ShowInInspector]
         private Vector2 contentRightBottom => content == null ? Vector2.zero : content.MCanvasPosition_RightBottom(Canvas);
+
+#endif
     }
 }

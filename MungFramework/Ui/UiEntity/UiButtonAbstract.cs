@@ -90,8 +90,6 @@ namespace MungFramework.Ui
             protected set => isSelected = value;
         }
         
-
-        //选中特效
         [SerializeField]
         protected GameObject selectObject;
 
@@ -102,7 +100,7 @@ namespace MungFramework.Ui
 
         protected virtual void Update()
         {
-            if (InputManagerAbstract.Instance.UseMouse&&UiLayer != null && UiLayer.IsTop)
+            if (InputManagerAbstract.Instance.UseMouse&&UiLayer != null && UiLayer.isTop)
             {
                 CheckMouse();
             }

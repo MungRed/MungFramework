@@ -20,6 +20,11 @@ namespace MungFramework.Logic.MungBag.PairBag
         [Button]
         public T_BagItem AddItem(string key)
         {
+            if (key == null)
+            {
+                return null;
+            }
+
             var find = FindItem(key);
             if (find != null)
             {
@@ -38,11 +43,19 @@ namespace MungFramework.Logic.MungBag.PairBag
 
         public T_BagItem GetItem(string key)
         {
+            if (key == null)
+            {
+                return null;
+            }
             return FindItem(key);
         }
 
         public bool HaveItem(string key)
         {
+            if (key == null)
+            {
+                return false;
+            }
             return FindItem(key) != null;
         }
 

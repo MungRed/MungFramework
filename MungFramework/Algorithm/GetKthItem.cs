@@ -11,10 +11,8 @@ namespace MungFramework.Algorithm
             {
                 throw new ArgumentException("Invalid input");
             }
-
             return QuickSelect(list, 0, list.Count - 1, k, cmp);
         }
-
         private static T QuickSelect<T>(List<T> list, int left, int right, int k, Func<T, T, bool> cmp)
         {
             if (left == right)
@@ -37,7 +35,6 @@ namespace MungFramework.Algorithm
                 return QuickSelect(list, pivotIndex + 1, right, k, cmp);
             }
         }
-
         private static int Partition<T>(List<T> list, int left, int right, Func<T, T, bool> cmp)
         {
             T pivot = list[right];
@@ -55,7 +52,6 @@ namespace MungFramework.Algorithm
             Swap(list, i, right);
             return i;
         }
-
         private static void Swap<T>(List<T> list, int i, int j)
         {
             T temp = list[i];

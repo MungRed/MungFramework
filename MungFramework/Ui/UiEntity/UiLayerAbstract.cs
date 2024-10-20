@@ -77,10 +77,9 @@ namespace MungFramework.Ui
         protected int RollJumpCount;
         #endregion
 
-        [SerializeField]
-        protected bool isOpen;
 
-        public bool IsTop => InputManager.IsTopInputAcceptor(this);
+        public bool isOpen;
+        public bool isTop => InputManager.IsTopInputAcceptor(this);
 
         protected virtual void FixedUpdate()
         {
@@ -188,7 +187,7 @@ namespace MungFramework.Ui
                 yield return new WaitForSeconds(0.5f);
                 while (true)
                 {
-                    if (IsTop)
+                    if (isTop)
                     {
                         handle.Invoke();
                     }
@@ -267,6 +266,7 @@ namespace MungFramework.Ui
             OnLayerClose();
         }
         #endregion
+
         #region Direction
         protected virtual void Up()
         {
@@ -353,6 +353,7 @@ namespace MungFramework.Ui
             }
         }
         #endregion
+
         #region Controll
         protected virtual void OK()
         {
@@ -465,12 +466,21 @@ namespace MungFramework.Ui
         }
         #endregion
         #region AddButton
-        public void AddButton(UiButtonAbstract button)
+        public void AddButton(UiButtonAbstract button,UiButtonAbstract preButton=null)
         {
             if (!buttonList.Contains(button))
             {
                 buttonList.Add(button);
                 button.UiLayer = this;
+
+                //如果前一个按钮不为空
+                if (preButton != null)
+                {
+                    //在按钮节点中排在前一个按钮的后面
+                    button.transform.SetParent(preButton.transform.parent);
+                    var parentIndex = preButton.transform.GetSiblingIndex();
+                    button.transform.SetSiblingIndex(parentIndex + 1);
+                }
             }
         }
         public void RemoveButton(UiButtonAbstract button)
@@ -575,49 +585,7 @@ namespace MungFramework.Ui
             return true;
         }
 
-        /// <summary>
-        /// 当某个按钮移除时，获取下一个按钮
-        /// </summary>
-        protected UiButtonAbstract GetNextButtonOnButtonRemove(IEnumerable<UiButtonAbstract> buttons, UiButtonAbstract aim)
-        {
-            if (aim.CouldLeft)
-            {
-                //获取左边的最近的按钮
-                var button = GetNearstButton(GetLeftButtons(buttons, aim), aim);
-                if (button != null)
-                {
-                    return button;
-                }
-            }
-            if (aim.CouldRight)
-            {
-                //获取右边的最近的按钮
-                var button = GetNearstButton(GetRightButtons(buttons, aim), aim);
-                if (button != null)
-                {
-                    return button;
-                }
-            }
-            if (aim.CouldUp)
-            {
-                //获取上边的最近的按钮
-                var button = GetNearstButton(GetUpButtons(buttons, aim), aim);
-                if (button != null)
-                {
-                    return button;
-                }
-            }
-            if (aim.CouldDown)
-            {
-                //获取下边的最近的按钮
-                var button = GetNearstButton(GetDownButtons(buttons, aim), aim);
-                if (button != null)
-                {
-                    return button;
-                }
-            }
-            return null;
-        }
+
         #endregion
         #region 获取上下左右方向的按钮
         protected static IEnumerable<UiButtonAbstract> GetUpButtons(IEnumerable<UiButtonAbstract> buttons, UiButtonAbstract aim)
@@ -775,6 +743,49 @@ namespace MungFramework.Ui
         }
         #endregion
         #region 获取最近的按钮
+        /// <summary>
+        /// 当某个按钮移除时，获取下一个按钮
+        /// </summary>
+        protected static UiButtonAbstract GetNextButtonOnButtonRemove(IEnumerable<UiButtonAbstract> buttons, UiButtonAbstract aim)
+        {
+            if (aim.CouldLeft)
+            {
+                //获取左边的最近的按钮
+                var button = GetNearstButton(GetLeftButtons(buttons, aim), aim);
+                if (button != null)
+                {
+                    return button;
+                }
+            }
+            if (aim.CouldRight)
+            {
+                //获取右边的最近的按钮
+                var button = GetNearstButton(GetRightButtons(buttons, aim), aim);
+                if (button != null)
+                {
+                    return button;
+                }
+            }
+            if (aim.CouldUp)
+            {
+                //获取上边的最近的按钮
+                var button = GetNearstButton(GetUpButtons(buttons, aim), aim);
+                if (button != null)
+                {
+                    return button;
+                }
+            }
+            if (aim.CouldDown)
+            {
+                //获取下边的最近的按钮
+                var button = GetNearstButton(GetDownButtons(buttons, aim), aim);
+                if (button != null)
+                {
+                    return button;
+                }
+            }
+            return null;
+        }
         protected static UiButtonAbstract GetNearstButton(IEnumerable<UiButtonAbstract> buttons, UiButtonAbstract aim)
         {
             if (buttons.Count() == 0)

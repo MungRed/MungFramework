@@ -32,6 +32,11 @@ namespace MungFramework.Logic.MungBag.ItemBag
         /// </summary>
         public T_BagItem UpdateItemCount(string itemId, int itemCount)
         {
+            if (itemId == null)
+            {
+                return null;
+            }
+
             var find = FindItem(itemId);
             if (find != null)
             {
@@ -56,6 +61,11 @@ namespace MungFramework.Logic.MungBag.ItemBag
         [Button]
         public T_BagItem AddItem(string itemId, int itemCount)
         {
+            if (itemId == null)
+            {
+                return null;
+            }
+
             var find = FindItem(itemId);
             if (find != null)
             {
@@ -79,6 +89,11 @@ namespace MungFramework.Logic.MungBag.ItemBag
         /// </summary>
         public int GetItemCount(string itemId)
         {
+            if (itemId == null)
+            {
+                return 0;
+            }
+
             var find = FindItem(itemId);
             if (find != null)
             {
@@ -92,6 +107,11 @@ namespace MungFramework.Logic.MungBag.ItemBag
         /// </summary>
         public bool CheckItemCount(string itemId, int itemCount)
         {
+            if (itemId == null)
+            {
+                return false;
+            }
+
             var find = FindItem(itemId);
             if (find != null)
             {
@@ -105,6 +125,11 @@ namespace MungFramework.Logic.MungBag.ItemBag
         /// </summary>
         public bool RemoveItem(string itemId, int itemCount)
         {
+            if (itemId == null)
+            {
+                return false;
+            }
+
             var find = FindItem(itemId);
             if (find != null)
             {

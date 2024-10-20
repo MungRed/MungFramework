@@ -13,17 +13,17 @@ namespace MungFramework.Entity
         /// </summary>
         private EventCenterModel entityEventCenterModel = new();
 
-        public void AddAction(string eventType, UnityAction action) => entityEventCenterModel.AddAction(eventType, action);
-        public void AddAction<T>(string eventType, UnityAction<T> action) => entityEventCenterModel.AddAction(eventType, action);
-        public void AddFunc<R>(string eventType, Func<R> func) => entityEventCenterModel.AddFunc(eventType, func);
-        public void AddFunc<T, R>(string eventType, Func<T, R> func) => entityEventCenterModel.AddFunc(eventType, func);
+        public void AddListener_Action(string eventType, UnityAction action) => entityEventCenterModel.AddListener_Action(eventType, action);
+        public void AddListener_Action<T>(string eventType, UnityAction<T> action) => entityEventCenterModel.AddListener_Action(eventType, action);
+        public void AddListener_Func<R>(string eventType, Func<R> func) => entityEventCenterModel.AddListener_Func(eventType, func);
+        public void AddListener_Func<T, R>(string eventType, Func<T, R> func) => entityEventCenterModel.AddListener_Func(eventType, func);
         public void CallAction(string eventType) => entityEventCenterModel.CallAction(eventType);
         public void CallAction<T>(string eventType, T parameter) => entityEventCenterModel.CallAction(eventType, parameter);
         public List<R> CallFunc<R>(string eventType) => entityEventCenterModel.CallFunc<R>(eventType);
         public List<R> CallFunc<T, R>(string eventType, T parameter) => entityEventCenterModel.CallFunc<T, R>(eventType, parameter);
-        public void RemoveAction(string eventType, UnityAction action) => entityEventCenterModel.RemoveAction(eventType, action);
-        public void RemoveAction<T>(string eventType, UnityAction<T> action) => entityEventCenterModel.RemoveAction(eventType, action);
-        public void RemoveFunc<R>(string eventType, Func<R> func) => entityEventCenterModel.RemoveFunc(eventType, func);
-        public void RemoveFunc<T, R>(string eventType, Func<T, R> func) => entityEventCenterModel.RemoveFunc(eventType, func);
+        public void RemoveListener_Action(string eventType, UnityAction action) => entityEventCenterModel.RemoveListener_Action(eventType, action);
+        public void RemoveListener_Action<T>(string eventType, UnityAction<T> action) => entityEventCenterModel.RemoveListener_Action(eventType, action);
+        public void RemoveListener_Func<R>(string eventType, Func<R> func) => entityEventCenterModel.RemoveListener_Func(eventType, func);
+        public void RemoveListener_Func<T, R>(string eventType, Func<T, R> func) => entityEventCenterModel.RemoveListener_Func(eventType, func);
     }
 }

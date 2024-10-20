@@ -19,9 +19,13 @@ MonoBehaviour:
     InputValue: 20
   - InputKey: 61
     InputValue: 20
+  - InputKey: 71
+    InputValue: 20
   - InputKey: 48
     InputValue: 21
   - InputKey: 62
+    InputValue: 21
+  - InputKey: 72
     InputValue: 21
   - InputKey: 31
     InputValue: 23

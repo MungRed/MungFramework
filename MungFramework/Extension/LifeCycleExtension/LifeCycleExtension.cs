@@ -12,7 +12,10 @@ namespace MungFramework.Extension.LifeCycleExtension
             IEnumerator lateUpdate(UnityAction action)
             {
                 yield return new WaitForEndOfFrame();
-                action?.Invoke();
+                if (action != null)
+                {
+                    action.Invoke();
+                }
             }
             GameApplicationAbstract.Instance.StartCoroutine(lateUpdate(action));
         }

@@ -6,20 +6,20 @@ namespace MungFramework.Logic.EventCenter
 {
     public interface IEventCenter
     {
-        public void AddAction(string eventType, UnityAction action);
-        public void RemoveAction(string eventType, UnityAction action);
+        public void AddListener_Action(string eventType, UnityAction action);
+        public void RemoveListener_Action(string eventType, UnityAction action);
         public void CallAction(string eventType); 
 
-        public void AddAction<T>(string eventType, UnityAction<T> action);
-        public void RemoveAction<T>(string eventType, UnityAction<T> action);
+        public void AddListener_Action<T>(string eventType, UnityAction<T> action);
+        public void RemoveListener_Action<T>(string eventType, UnityAction<T> action);
         public void CallAction<T>(string eventType, T parameter);
 
-        public void AddFunc<R>(string eventType, Func<R> func);
-        public void RemoveFunc<R>(string eventType, Func<R> func);
+        public void AddListener_Func<R>(string eventType, Func<R> func);
+        public void RemoveListener_Func<R>(string eventType, Func<R> func);
         public List<R> CallFunc<R>(string eventType);
 
-        public void AddFunc<T, R>(string eventType, Func<T, R> func);
-        public void RemoveFunc<T, R>(string eventType, Func<T, R> func);
+        public void AddListener_Func<T, R>(string eventType, Func<T, R> func);
+        public void RemoveListener_Func<T, R>(string eventType, Func<T, R> func);
         public List<R> CallFunc<T, R>(string eventType, T parameter);
 
     }

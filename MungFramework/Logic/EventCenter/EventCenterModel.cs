@@ -4,6 +4,9 @@ using UnityEngine.Events;
 
 namespace MungFramework.Logic.EventCenter
 {
+    /// <summary>
+    /// 事件中心模型，可以组合到任何需要的类中，可以代替UnityEvent，实现事件的监听和调用
+    /// </summary>
     public class EventCenterModel : MungFramework.Model.Model, IEventCenter
     {
         private Dictionary<string, UnityEvent> eventDictionary_NoParameter = new();
@@ -11,7 +14,7 @@ namespace MungFramework.Logic.EventCenter
         private Dictionary<string, Dictionary<Type, HashSet<object>>> eventDictionary_HaveParameter = new();
         private Dictionary<string, Dictionary<(Type, Type), HashSet<object>>> eventDictionary_HaveParameterHaveReturn = new();
 
-        public void AddAction(string eventType, UnityAction action)
+        public void AddListener_Action(string eventType, UnityAction action)
         {
             if (!eventDictionary_NoParameter.ContainsKey(eventType))
             {
@@ -19,15 +22,13 @@ namespace MungFramework.Logic.EventCenter
             }
             eventDictionary_NoParameter[eventType].AddListener(action);
         }
-
-        public void RemoveAction(string eventType, UnityAction action)
+        public void RemoveListener_Action(string eventType, UnityAction action)
         {
             if (eventDictionary_NoParameter.ContainsKey(eventType))
             {
                 eventDictionary_NoParameter[eventType].RemoveListener(action);
             }
         }
-
         public void CallAction(string eventType)
         {
             if (eventDictionary_NoParameter.ContainsKey(eventType))
@@ -36,7 +37,8 @@ namespace MungFramework.Logic.EventCenter
             }
         }
 
-        public void AddAction<T>(string eventType, UnityAction<T> action)
+
+        public void AddListener_Action<T>(string eventType, UnityAction<T> action)
         {
             Type parameterType = typeof(T);
             if (!eventDictionary_HaveParameter.ContainsKey(eventType))
@@ -49,7 +51,7 @@ namespace MungFramework.Logic.EventCenter
             }
             eventDictionary_HaveParameter[eventType][parameterType].Add(action);
         }
-        public void RemoveAction<T>(string eventType, UnityAction<T> action)
+        public void RemoveListener_Action<T>(string eventType, UnityAction<T> action)
         {
             Type parameterType = typeof(T);
             if (eventDictionary_HaveParameter.ContainsKey(eventType) && eventDictionary_HaveParameter[eventType].ContainsKey(parameterType))
@@ -57,7 +59,6 @@ namespace MungFramework.Logic.EventCenter
                 eventDictionary_HaveParameter[eventType][parameterType].Remove(action);
             }
         }
-
         public void CallAction<T>(string eventType, T parameter)
         {
             Type parameterType = typeof(T);
@@ -71,7 +72,7 @@ namespace MungFramework.Logic.EventCenter
         }
 
 
-        public void AddFunc<R>(string eventType, Func<R> func)
+        public void AddListener_Func<R>(string eventType, Func<R> func)
         {
             Type returnType = typeof(R);
             if (!eventDictionary_NoParameterHaveReturn.ContainsKey(eventType))
@@ -84,8 +85,7 @@ namespace MungFramework.Logic.EventCenter
             }
             eventDictionary_NoParameterHaveReturn[eventType][returnType].Add(func);
         }
-
-        public void RemoveFunc<R>(string eventType, Func<R> func)
+        public void RemoveListener_Func<R>(string eventType, Func<R> func)
         {
             Type returnType = typeof(R);
             if (eventDictionary_NoParameterHaveReturn.ContainsKey(eventType) && eventDictionary_NoParameterHaveReturn[eventType].ContainsKey(returnType))
@@ -93,7 +93,6 @@ namespace MungFramework.Logic.EventCenter
                 eventDictionary_NoParameterHaveReturn[eventType][returnType].Remove(func);
             }
         }
-
         public List<R> CallFunc<R>(string eventType)
         {
             Type returnType = typeof(R);
@@ -111,7 +110,8 @@ namespace MungFramework.Logic.EventCenter
             }
             return result;
         }
-        public void AddFunc<T, R>(string eventType, Func<T, R> func)
+
+        public void AddListener_Func<T, R>(string eventType, Func<T, R> func)
         {
             Type parameterType = typeof(T);
             Type returnType = typeof(R);
@@ -126,7 +126,7 @@ namespace MungFramework.Logic.EventCenter
             }
             eventDictionary_HaveParameterHaveReturn[eventType][type].Add(func);
         }
-        public void RemoveFunc<T, R>(string eventType, Func<T, R> func)
+        public void RemoveListener_Func<T, R>(string eventType, Func<T, R> func)
         {
             Type parameterType = typeof(T);
             Type returnType = typeof(R);
@@ -136,7 +136,6 @@ namespace MungFramework.Logic.EventCenter
                 eventDictionary_HaveParameterHaveReturn[eventType][type].Remove(func);
             }
         }
-
         public List<R> CallFunc<T, R>(string eventType, T parameter)
         {
             Type parameterType = typeof(T);

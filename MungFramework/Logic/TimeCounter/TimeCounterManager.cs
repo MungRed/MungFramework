@@ -9,7 +9,6 @@ namespace MungFramework.Logic.TimeCounter
     {
         private static Dictionary<TimeCounter, Coroutine> timeCounterDic = new();
 
-
         public static TimeCounter StartTimeCounter(float totalTime, float stepTime, UnityAction<float, float> stepAction, UnityAction completeAction)
         {
             TimeCounter TimeCounter = new(totalTime, stepTime, stepAction, completeAction);         

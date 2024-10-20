@@ -414,6 +414,10 @@ namespace MungFramework.Logic.Input
         /// </summary>
         protected virtual void InputAction_Performed(InputKeyEnum inputkey)
         {
+            if (inputkey.ToString().Contains("MOUSE") && !UseMouse)
+            {
+                return;
+            }
             // Debug.Log(inputkey);
             //如果不是任意键，就触发一次任意键按下的事件
             if (inputkey != InputKeyEnum.ANYKEY)
@@ -447,6 +451,10 @@ namespace MungFramework.Logic.Input
         /// </summary>
         protected virtual void InputAction_Canceled(InputKeyEnum inputkey)
         {
+            if (inputkey.ToString().Contains("MOUSE") && !UseMouse)
+            {
+                return;
+            }
             //根据按键的key获取输入值
             foreach (var inputvalue in inputDataManager.GetInputValues(inputkey))
             {

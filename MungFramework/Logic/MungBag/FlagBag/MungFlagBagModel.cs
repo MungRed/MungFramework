@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace MungFramework.Logic.MungBag.FlagBag
 {
@@ -21,6 +22,11 @@ namespace MungFramework.Logic.MungBag.FlagBag
         [Button]
         public void AddFlag(string flagName, int flagValue)
         {
+            if (flagName == null)
+            {
+                return;
+            }
+
             var find = FindFlag(flagName);
             if (find != null)
             {
@@ -40,6 +46,11 @@ namespace MungFramework.Logic.MungBag.FlagBag
 
         public void ChangeFlagValue(string flagName, int flagValue)
         {
+            if (flagName == null)
+            {
+                return;
+            }
+
             var find = FindFlag(flagName);
             if (find != null)
             {
@@ -54,6 +65,11 @@ namespace MungFramework.Logic.MungBag.FlagBag
 
         public void DeltaFlagValue(string flagName, int deltaValue)
         {
+            if (flagName == null)
+            {
+                return;
+            }
+
             var find = FindFlag(flagName);
             if (find != null)
             {
@@ -68,21 +84,37 @@ namespace MungFramework.Logic.MungBag.FlagBag
 
         public bool RemoveFlag(string flagName)
         {
+            if (flagName == null)
+            {
+                return false;
+            }
             return flagList.RemoveAll(x => x.FlagName == flagName) > 0;
         }
 
         public MungFlagBagItem GetFlag(string flagName)
         {
+            if (flagName == null)
+            {
+                return null;
+            }
             return FindFlag(flagName);
         }
         public bool HaveFalg(string flagName)
         {
+            if (flagName == null)
+            {
+                return false;
+            }
             var find = FindFlag(flagName);
             return find != null;
         }
 
         public int GetFlagValue(string flagName)
         {
+            if (flagName == null)
+            {
+                return 0;
+            }
             var find = FindFlag(flagName);
             if (find != null)
             {
