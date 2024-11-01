@@ -2,7 +2,6 @@ using DG.Tweening;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MungFramework.Extension.ComponentExtension
 {
@@ -19,7 +18,7 @@ namespace MungFramework.Extension.ComponentExtension
         /// 相对于Canvas的坐标，也就是相对于1920*1080的坐标
         /// 无论屏幕分辨率多少，都是相对于1920*1080的坐标
         /// </summary>
-        public static Vector2 MCanvasPosition(this RectTransform rectTransform,RectTransform canvas)
+        public static Vector2 MCanvasPosition(this RectTransform rectTransform, RectTransform canvas)
         {
             if (canvas == null)
             {
@@ -33,7 +32,7 @@ namespace MungFramework.Extension.ComponentExtension
         /// <summary>
         /// 通过相对于Canvas的坐标来设置RectTransform的坐标
         /// </summary>
-        public static void MCanvasPosition_Set(this RectTransform rectTransform, RectTransform canvas,Vector2 val)
+        public static void MCanvasPosition_Set(this RectTransform rectTransform, RectTransform canvas, Vector2 val)
         {
             if (canvas == null)
             {
@@ -263,6 +262,10 @@ namespace MungFramework.Extension.ComponentExtension
 
         public static List<GameObject> GetChildExcludeSelf(this RectTransform trans)
         {
+            if (trans == null)
+            {
+                return new();
+            }
             return trans.GetComponentsInChildren<RectTransform>().Where(x => x != trans).Select(x => x.gameObject).ToList();
         }
     }

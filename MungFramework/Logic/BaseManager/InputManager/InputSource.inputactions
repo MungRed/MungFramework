@@ -24,15 +24,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "ANYKEY",
-                    "type": "Button",
-                    "id": "e89a8837-3707-4493-bb92-32744b588f34",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "ESC",
                     "type": "Button",
                     "id": "ca096a56-72ca-467b-96ab-73d70caab4e9",
@@ -998,17 +989,6 @@
                     "processors": "",
                     "groups": "InputSource",
                     "action": "NUM0",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "24d6edd4-81e2-4ce4-a7cf-851218f430f7",
-                    "path": "<Keyboard>/anyKey",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "InputSource",
-                    "action": "ANYKEY",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

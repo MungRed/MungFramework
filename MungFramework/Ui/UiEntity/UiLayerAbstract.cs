@@ -1,7 +1,6 @@
 using MungFramework.Algorithm;
 using MungFramework.Extension.ComponentExtension;
 using MungFramework.Extension.LifeCycleExtension;
-using MungFramework.Extension.MathExtension;
 using MungFramework.Logic.Input;
 using Sirenix.OdinInspector;
 using System;
@@ -48,13 +47,6 @@ namespace MungFramework.Ui
             }
         }
 
-        public UiEventModel LayerEvent = new();
-
-        [SerializeField]
-        protected UnityEvent openEvent = new();
-        [SerializeField]
-        protected UnityEvent closeEvent = new();
-
         [SerializeField]
         protected List<UiButtonAbstract> buttonList = new(); //按钮列表
         [SerializeField]
@@ -66,17 +58,16 @@ namespace MungFramework.Ui
 
         #region Jump
         [SerializeField]
-        protected bool LeftRightJump = false;
+        private bool LeftRightJump = false;
         [SerializeField]
         [ShowIf("LeftRightJump")]
-        protected int LeftRightJumpCount;
+        private int LeftRightJumpCount;
         [SerializeField]
-        protected bool RollJump = false;
+        private bool RollJump = false;
         [SerializeField]
         [ShowIf("RollJump")]
-        protected int RollJumpCount;
+        private int RollJumpCount;
         #endregion
-
 
         public bool isOpen;
         public bool isTop => InputManager.IsTopInputAcceptor(this);
@@ -88,7 +79,7 @@ namespace MungFramework.Ui
                 if (nowSelectButton != null)
                 {
                     selectPoint.gameObject.SetActive(true);
-                    selectPoint.LerpRectTransform(nowSelectButton.RectTransform, StaticData.FixedDeltaTimeLerpValue_Bigger);
+                    selectPoint.LerpRectTransform(nowSelectButton.RectTransform, StaticData.FixedDeltaTimeLerpValue_Faster);
                 }
                 else
                 {
@@ -165,7 +156,6 @@ namespace MungFramework.Ui
                     {
                         UpRoll();
                     }
-
                     break;
                 case InputValueEnum.DOWN_ROLL:
                     if (RollJump)
@@ -220,7 +210,7 @@ namespace MungFramework.Ui
         {
             //获取所有的按钮
             buttonList = GetComponentsInChildren<UiButtonAbstract>().ToList();
-            if (buttonList.Count == 0&& selectPoint != null)
+            if (buttonList.Count == 0 && selectPoint != null)
             {
                 selectPoint.gameObject.SetActive(false);
             }
@@ -238,22 +228,26 @@ namespace MungFramework.Ui
                 nowSelectButton.OnSelect(false);
             }
 
+            void openHelp()
+            {
+                isOpen = true;
+                if (nowSelectButton != null && selectPoint != null)
+                {
+                    selectPoint.LerpRectTransform(nowSelectButton.RectTransform, 1);
+                }
+            }
 
             //等渲染结束再设置isOpen
-            LifeCycleExtension.LateUpdateHelp(() => isOpen = true);
+            LifeCycleExtension.LateUpdateHelp(openHelp);
 
             gameObject.SetActive(true);
             InputManager.Push_InputAcceptor(this);
-            OnLayerOpen();
+            CallActionHelp(ON_LAYER_OPEN);
         }
-
         public virtual void Close()
         {
             //如果当前有选中的按钮，取消选中
-            if (nowSelectButton != null)
-            {
-                nowSelectButton.OnUnSelect();
-            }
+            nowSelectButton?.OnUnSelect();
 
             //清空按钮列表
             buttonList.Clear();
@@ -263,13 +257,14 @@ namespace MungFramework.Ui
             gameObject.SetActive(false);
             isOpen = false;
             StopAllCoroutines();
-            OnLayerClose();
+            CallActionHelp(ON_LAYER_CLOSE);
         }
         #endregion
-
         #region Direction
-        protected virtual void Up()
+        public virtual void Up()
         {
+            CallActionHelp(ON_LAYER_UP);
+
             if (SelectFirstButton())
             {
                 return;
@@ -289,8 +284,9 @@ namespace MungFramework.Ui
                 JumpButton(nextButton);
             }
         }
-        protected virtual void Down()
+        public virtual void Down()
         {
+            CallActionHelp(ON_LAYER_DOWN);
             if (SelectFirstButton())
             {
                 return;
@@ -310,8 +306,9 @@ namespace MungFramework.Ui
                 JumpButton(nextButton);
             }
         }
-        protected virtual void Left()
+        public virtual void Left()
         {
+            CallActionHelp(ON_LAYER_LEFT);
             if (SelectFirstButton())
             {
                 return;
@@ -331,8 +328,9 @@ namespace MungFramework.Ui
                 JumpButton(nextButton);
             }
         }
-        protected virtual void Right()
+        public virtual void Right()
         {
+            CallActionHelp(ON_LAYER_RIGHT);
             if (SelectFirstButton())
             {
                 return;
@@ -353,23 +351,21 @@ namespace MungFramework.Ui
             }
         }
         #endregion
-
         #region Controll
         protected virtual void OK()
         {
-            if (nowSelectButton == null || nowSelectButton.gameObject.activeSelf == false)
+            CallActionHelp(ON_LAYER_OK);
+            if (nowSelectButton != null && !nowSelectButton.gameObject.activeSelf == false)
             {
-                return;
+                nowSelectButton.OnOK();
             }
-            nowSelectButton.OnOK();
         }
 
         protected virtual void Cancel()
         {
+            CallActionHelp(ON_LAYER_CANCEL);
             if (couldKeyToClose)
             {
-                //如果在某个Group下，就关闭Group，通过Group来关闭
-                //否则直接关闭
                 if (UiLayerGroup != null)
                 {
                     UiLayerGroup.Close();
@@ -382,31 +378,29 @@ namespace MungFramework.Ui
         }
         protected virtual void SpecialAction()
         {
-            if (nowSelectButton == null || nowSelectButton.gameObject.activeSelf == false)
+            CallActionHelp(ON_LAYER_SPECIAL_ACTION);
+            if (nowSelectButton != null && nowSelectButton.gameObject.activeSelf != false)
             {
-                return;
-            }
-            nowSelectButton.OnSpecialAction();
-        }
-        protected virtual void LeftPage()
-        {
-            if (UiLayerGroup != null)
-            {
-                UiLayerGroup.LeftPage();
+                nowSelectButton.OnSpecialAction();
             }
         }
-        protected virtual void RightPage()
+        public virtual void LeftPage()
         {
-            if (UiLayerGroup != null)
-            {
-                UiLayerGroup.RightPage();
-            }
+            CallActionHelp(ON_LAYER_LEFT_PAGE);
+            UiLayerGroup?.LeftPage();
+        }
+        public virtual void RightPage()
+        {
+            CallActionHelp(ON_LAYER_RIGHT_PAGE);
+            UiLayerGroup?.RightPage();
         }
         protected virtual void UpRoll()
         {
+            CallActionHelp(ON_LAYER_UP_ROLL);
         }
         protected virtual void DownRoll()
         {
+            CallActionHelp(ON_LAYER_DOWN_ROLL);
         }
 
         /// <summary>
@@ -442,11 +436,10 @@ namespace MungFramework.Ui
                 JumpButton(nextButton);
             }
         }
-
         /// <summary>
         /// 跳转到某个Button
         /// </summary>
-        public void JumpButton(UiButtonAbstract nextButton)
+        protected virtual void JumpButton(UiButtonAbstract nextButton)
         {
             if (nowSelectButton != null)
             {
@@ -466,7 +459,7 @@ namespace MungFramework.Ui
         }
         #endregion
         #region AddButton
-        public void AddButton(UiButtonAbstract button,UiButtonAbstract preButton=null)
+        public void AddButton(UiButtonAbstract button, UiButtonAbstract preButton = null)
         {
             if (!buttonList.Contains(button))
             {
@@ -497,46 +490,15 @@ namespace MungFramework.Ui
         }
         #endregion
         #region Event
-        public void AddOpenEventListener(UnityAction action) => openEvent.AddListener(action);
-        public void AddCloseEventListener(UnityAction action) => closeEvent.AddListener(action);
-        public void RemoveOpenEventListener(UnityAction action) => openEvent.RemoveListener(action);
-        public void RemoveCloseEventListener(UnityAction action) => closeEvent.RemoveListener(action);
-
-        public virtual void OnButtonSelect(UiButtonAbstract uiButton)
+        public void CallActionHelp(string actionType)
         {
-            LayerEvent.Call_OnButtonSelect(uiButton);
-            UiLayerGroup?.OnButtonSelect(uiButton);
-        }
-        public virtual void OnButtonUnSelect(UiButtonAbstract uiButton)
-        {
-            LayerEvent.Call_OnButtonUnSelect(uiButton);
-            UiLayerGroup?.OnButtonUnSelect(uiButton);
-        }
-        public virtual void OnButtonOK(UiButtonAbstract uiButton)
-        {
-            LayerEvent.Call_OnButtonOK(uiButton);
-            UiLayerGroup?.OnButtonOK(uiButton);
-        }
-        public virtual void OnButtonSpecialAction(UiButtonAbstract uiButton)
-        {
-            LayerEvent.Call_OnButtonSpecialAction(uiButton);
-            UiLayerGroup?.OnButtonSpecialAction(uiButton);
-        }
-        protected virtual void OnLayerOpen()
-        {
-            openEvent.Invoke();
-            LayerEvent.Call_OnLayerOpen(this);
-            UiLayerGroup?.OnLayerOpen(this);
-        }
-        protected virtual void OnLayerClose()
-        {
-            closeEvent.Invoke();
-            LayerEvent.Call_OnLayerClose(this);
-            UiLayerGroup?.OnLayerClose(this);
+            CallAction(actionType);
+            CallAction_UiLayer(actionType, this);
+            UiLayerGroup?.CallAction(actionType);
+            UiLayerGroup?.CallAction_UiLayer(actionType, this);
         }
         #endregion
-
-        #region 选中
+        #region Select
         /// <summary>
         /// 选中第一个按钮
         /// </summary>
@@ -834,7 +796,7 @@ namespace MungFramework.Ui
                 return defaultButton();
             }
             var buttonList = buttons.ToList();
-            return GetKthItemStatic.GetKthItem(buttonList, k, (a, b) => isNearThanOld(a, b, aim));
+            return GetKthItem.GetKth(buttonList, k, (a, b) => isNearThanOld(a, b, aim));
 
         }
         #endregion

@@ -31,11 +31,11 @@ namespace MungFramework.Logic.MungBuffer
             return buffer;
         }
 
-        public (bool hasValue,T_Value value) GetBuffer(T_Key key)
+        public (bool hasValue, T_Value value) GetBuffer(T_Key key)
         {
             if (buffer.ContainsKey(key))
             {
-                return (true,buffer[key]);
+                return (true, buffer[key]);
             }
             return (false, default);
         }

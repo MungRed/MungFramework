@@ -2,14 +2,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace MungFramework.Ui
 {
     /// <summary>
-    /// LayerGroupToggle抽象类
-    /// 附属于LayerGroup
-    /// 当切换页面的时候会执行Toggle相应的动作
+    /// UiLayerGroup的标题
+    /// 切换页面时会相应切换标题
     /// </summary>
     public class UiLayerGroupTittleAbstract : UiEntityAbstract
     {
@@ -29,8 +27,6 @@ namespace MungFramework.Ui
         protected List<TittleButton> tittleButtonList;
         [SerializeField]
         protected TittleButton nowSelectTittleButton;
-        [SerializeField]
-        protected UnityEvent onLayerChange;
 
 
         protected virtual void FixedUpdate()
@@ -40,9 +36,9 @@ namespace MungFramework.Ui
                 if (nowSelectTittleButton != null && nowSelectTittleButton.Button != null)
                 {
                     selectPoint.gameObject.SetActive(true);
-                    selectPoint.position = Vector3.Lerp(selectPoint.position, nowSelectTittleButton.Button.position, 
+                    selectPoint.position = Vector3.Lerp(selectPoint.position, nowSelectTittleButton.Button.position,
                         StaticData.FixedDeltaTimeLerpValue_Bigger);
-                    selectPoint.sizeDelta = Vector2.Lerp(selectPoint.sizeDelta,nowSelectTittleButton.Button.sizeDelta,
+                    selectPoint.sizeDelta = Vector2.Lerp(selectPoint.sizeDelta, nowSelectTittleButton.Button.sizeDelta,
                         StaticData.FixedDeltaTimeLerpValue_Bigger);
                 }
                 else
@@ -93,7 +89,7 @@ namespace MungFramework.Ui
             if (scrollView != null)
             {
                 LifeCycleExtension.LateUpdateHelp(action);
-            }      
+            }
         }
     }
 }

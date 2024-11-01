@@ -91,7 +91,7 @@ namespace MungFramework.Logic
                 subController.OnSceneLoad(this);
             }
         }
-        public virtual void RegisterEventOnSceneLoad()
+        protected virtual void RegisterEventOnSceneLoad()
         {
         }
 

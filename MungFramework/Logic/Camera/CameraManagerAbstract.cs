@@ -1,6 +1,5 @@
 ﻿using Sirenix.OdinInspector;
 using System.Collections;
-using System.Linq;
 using UnityEngine;
 
 namespace MungFramework.Logic.Camera
@@ -17,15 +16,15 @@ namespace MungFramework.Logic.Camera
         /// <summary>
         /// 输入摄像机的相对向量，返回世界向量
         /// </summary>
-        public Vector3 CameraToWorld(Vector3 input)=>AimCameraController.CameraToWorld(input);
+        public Vector3 CameraToWorld(Vector3 input) => AimCameraController.CameraToWorld(input);
         /// <summary>
         /// 输入基于世界的向量，返回基于摄像机的向量
         /// </summary>
-        public Vector3 WolrdToCamera(Vector3 input)=> AimCameraController.WolrdToCamera(input);
+        public Vector3 WolrdToCamera(Vector3 input) => AimCameraController.WolrdToCamera(input);
         /// <summary>
         /// 判断坐标是否在摄像机视野内
         /// </summary>
-        public bool IsInView(Vector3 worldPos)=> AimCameraController.IsInView(worldPos);
+        public bool IsInView(Vector3 worldPos) => AimCameraController.IsInView(worldPos);
 
 
         public void SetFov(int val, float time) => CameraController.SetFov(val, time);

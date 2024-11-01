@@ -3,8 +3,6 @@ using MungFramework.Logic.Input;
 using MungFramework.Logic.Sound;
 using System;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Rendering;
 
 namespace MungFramework.Ui
 {
@@ -15,29 +13,19 @@ namespace MungFramework.Ui
     /// </summary>
     public abstract class UiButtonAbstract : UiEntityAbstract
     {
-        public enum UiButtonActionTypeEnum
-        {
-            Up, Down, Left, Right, 
-            OK, 
-            Select, UnSelect,
-            SpecialAction,
-
-            MouseEnter,
-            MouseExit,
-        }
         [Flags]
-        public enum UiButtonMoveDirectionEnum
+        private enum UiButtonMoveDirectionEnum
         {
             None = 0,
             All = Up | Down | Left | Right,
 
-            Up = 1<<0, 
-            Down = 1<<1, 
-            Left = 1<<2, 
-            Right = 1<<3,
+            Up = 1 << 0,
+            Down = 1 << 1,
+            Left = 1 << 2,
+            Right = 1 << 3,
         }
 
-        protected UiScrollViewAbstract _uiScrollView;
+        private UiScrollViewAbstract _uiScrollView;
         public UiScrollViewAbstract UiScrollView
         {
             get
@@ -50,7 +38,7 @@ namespace MungFramework.Ui
             }
         }
 
-        protected UiLayerAbstract _uiLayer;
+        private UiLayerAbstract _uiLayer;
         public UiLayerAbstract UiLayer
         {
             get
@@ -67,179 +55,203 @@ namespace MungFramework.Ui
             }
         }
 
-
+        #region MoveDirection
         [SerializeField]
-        protected UiButtonMoveDirectionEnum _moveDirection = UiButtonMoveDirectionEnum.All;
-
-        public bool CouldUp => (_moveDirection & UiButtonMoveDirectionEnum.Up) == UiButtonMoveDirectionEnum.Up;
-        public bool CouldDown => (_moveDirection & UiButtonMoveDirectionEnum.Down) == UiButtonMoveDirectionEnum.Down;
-        public bool CouldLeft => (_moveDirection & UiButtonMoveDirectionEnum.Left) == UiButtonMoveDirectionEnum.Left;
-        public bool CouldRight => (_moveDirection & UiButtonMoveDirectionEnum.Right) == UiButtonMoveDirectionEnum.Right;
-
+        private UiButtonMoveDirectionEnum moveDirection = UiButtonMoveDirectionEnum.All;
+        public bool CouldUp
+        {
+            get
+            {
+                return (moveDirection & UiButtonMoveDirectionEnum.Up) == UiButtonMoveDirectionEnum.Up;
+            }
+            set
+            {
+                if (value)
+                {
+                    moveDirection |= UiButtonMoveDirectionEnum.Up;
+                }
+                else
+                {
+                    moveDirection &= ~UiButtonMoveDirectionEnum.Up;
+                }
+            }
+        }
+        public bool CouldDown
+        {
+            get
+            {
+                return (moveDirection & UiButtonMoveDirectionEnum.Down) == UiButtonMoveDirectionEnum.Down;
+            }
+            set
+            {
+                if (value)
+                {
+                    moveDirection |= UiButtonMoveDirectionEnum.Down;
+                }
+                else
+                {
+                    moveDirection &= ~UiButtonMoveDirectionEnum.Down;
+                }
+            }
+        }
+        public bool CouldLeft
+        {
+            get
+            {
+                return (moveDirection & UiButtonMoveDirectionEnum.Left) == UiButtonMoveDirectionEnum.Left;
+            }
+            set
+            {
+                if (value)
+                {
+                    moveDirection |= UiButtonMoveDirectionEnum.Left;
+                }
+                else
+                {
+                    moveDirection &= ~UiButtonMoveDirectionEnum.Left;
+                }
+            }
+        }
+        public bool CouldRight
+        {
+            get
+            {
+                return (moveDirection & UiButtonMoveDirectionEnum.Right) == UiButtonMoveDirectionEnum.Right;
+            }
+            set
+            {
+                if (value)
+                {
+                    moveDirection |= UiButtonMoveDirectionEnum.Right;
+                }
+                else
+                {
+                    moveDirection &= ~UiButtonMoveDirectionEnum.Right;
+                }
+            }
+        }
+        #endregion
+        #region Select
         [SerializeField]
-        protected SerializedDictionary<UiButtonActionTypeEnum, UnityEvent> uiButtonActionMap = new();
-
-
+        private bool couldMouseSelect = true;
         [SerializeField]
-        protected bool couldMouseSelect = true;
-        [SerializeField]
-        protected bool isSelected = false;
+        private bool isSelected = false;
         public bool IsSelected
         {
             get => isSelected;
-            protected set => isSelected = value;
+            private set => isSelected = value;
         }
-        
+
         [SerializeField]
         protected GameObject selectObject;
-
         [SerializeField]
         protected AudioClip checkAudio;
 
-        private bool mouseIn;
+        protected bool mouseIn;
+        #endregion
 
         protected virtual void Update()
         {
-            if (InputManagerAbstract.Instance.UseMouse&&UiLayer != null && UiLayer.isTop)
+            if (couldMouseSelect && InputManagerAbstract.Instance.UseMouse && UiLayer != null && UiLayer.isTop)
             {
-                CheckMouse();
+                if (MouseIn)
+                {
+                    if (mouseIn == false)
+                    {
+                        mouseIn = true;
+                        MOnMouseEnter();
+                    }
+                }
+                else
+                {
+                    if (mouseIn == true)
+                    {
+                        mouseIn = false;
+                        MOnMouseExit();
+                    }
+                }
             }
         }
 
-        protected virtual void CheckMouse()
-        {
-            if (MouseIn)
-            {
-                if (mouseIn == false)
-                {
-                    mouseIn = true;
-                    MOnMouseEnter();
-                }
-            }
-            else
-            {
-                if (mouseIn == true)
-                {
-                    mouseIn = false;
-                    MOnMouseExit();
-                }
-            }
-        }
 
         #region 事件
-        public void AddAction(UiButtonActionTypeEnum type, UnityAction action)
+        public void CallActionHelp(string actionType)
         {
-            if (!uiButtonActionMap.ContainsKey(type))
-            {
-                uiButtonActionMap.Add(type, new());
-            }
-            uiButtonActionMap[type].AddListener(action);
-        }
-        public void RemoveAction(UiButtonActionTypeEnum type, UnityAction action)
-        {
-            if (uiButtonActionMap.ContainsKey(type))
-            {
-                uiButtonActionMap[type].RemoveListener(action);
-            }
-        }
-        public void DoAction(UiButtonActionTypeEnum type)
-        {
-            if (uiButtonActionMap.ContainsKey(type))
-            {
-                uiButtonActionMap[type].Invoke();
-            }
+            CallAction(actionType);
+            CallAction_UiButton(actionType, this);
+            UiLayer?.CallAction(actionType);
+            UiLayer?.CallAction_UiButton(actionType, this);
+            UiLayer?.UiLayerGroup?.CallAction(actionType);
+            UiLayer?.UiLayerGroup?.CallAction_UiButton(actionType, this);
         }
 
         public virtual void OnSelect(bool playAudio = true)
         {
             IsSelected = true;
+            if (checkAudio != null && playAudio)
+            {
+                SoundManagerAbstract.Instance.PlayAudio("effect", checkAudio, replace: true);
+            }
+            SetSelectObjectActive(true);
             UpdateScrollView();
-            DoAction(UiButtonActionTypeEnum.Select);
-            if (checkAudio != null&&playAudio)
-            {
-                SoundManagerAbstract.Instance.PlayAudio("effect", checkAudio,replace:true);
-            }
-
-            if (selectObject != null)
-            {
-                selectObject.SetActive(true);
-            }
-            if (UiLayer != null)
-            {
-                UiLayer.OnButtonSelect(this);
-            }
+            CallActionHelp(ON_BUTTON_SELECT);
         }
 
         public virtual void OnUnSelect()
         {
             IsSelected = false;
-            DoAction(UiButtonActionTypeEnum.UnSelect);
-            if (selectObject != null)
-            {
-                selectObject.SetActive(false);
-            }
-            if (UiLayer != null)
-            {
-                UiLayer.OnButtonUnSelect(this);
-            }
+            SetSelectObjectActive(false);
+            CallActionHelp(ON_BUTTON_UNSELECT);
         }
 
         public virtual void OnOK()
         {
-            DoAction(UiButtonActionTypeEnum.OK);
-            if (UiLayer != null)
-            {
-                UiLayer.OnButtonOK(this);
-            }
+            CallActionHelp(ON_BUTTON_OK);
         }
         public virtual void OnUp()
         {
-            DoAction(UiButtonActionTypeEnum.Up);
+            CallActionHelp(ON_BUTTON_UP);
         }
         public virtual void OnDown()
         {
-            DoAction(UiButtonActionTypeEnum.Down);
+            CallActionHelp(ON_BUTTON_DOWN);
         }
         public virtual void OnLeft()
         {
-            DoAction(UiButtonActionTypeEnum.Left);
+            CallActionHelp(ON_BUTTON_LEFT);
         }
         public virtual void OnRight()
         {
-            DoAction(UiButtonActionTypeEnum.Right);
+            CallActionHelp(ON_BUTTON_RIGHT);
         }
         public virtual void OnSpecialAction()
         {
-            DoAction(UiButtonActionTypeEnum.SpecialAction);
-            if (UiLayer != null)
-            {
-                UiLayer.OnButtonSpecialAction(this);
-            }
+            CallActionHelp(ON_BUTTON_SPECIAL_ACTION);
         }
         public virtual void MOnMouseEnter()
         {
-            DoAction(UiButtonActionTypeEnum.MouseEnter);
-            if (UiLayer != null)
-            {
-                UiLayer.JumpButton(this);
-            }
+            CallActionHelp(ON_BUTTON_MOUSE_ENTER);
         }
         public virtual void MOnMouseExit()
         {
-            DoAction(UiButtonActionTypeEnum.MouseExit);
+            CallActionHelp(ON_BUTTON_MOUSE_EXIT);
         }
         #endregion
 
-        /// <summary>
-        /// 更新滚动视图
-        /// </summary>
+
+        protected virtual void SetSelectObjectActive(bool active)
+        {
+            if (selectObject != null)
+            {
+                selectObject.SetActive(active);
+            }
+        }
         protected virtual void UpdateScrollView()
         {
             void action()
             {
-                UiScrollView.UpdatePosition(RectTransform);
+                UiScrollView?.UpdatePosition(RectTransform);
             }
-
             if (UiScrollView != null)
             {
                 LifeCycleExtension.LateUpdateHelp(action);

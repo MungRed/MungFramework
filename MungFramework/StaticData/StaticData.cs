@@ -24,6 +24,13 @@ namespace MungFramework
                 return Mathf.Clamp01(8f * Time.deltaTime);
             }
         }
+        public static float FixedDeltaTimeLerpValue_Faster
+        {
+            get
+            {
+                return Mathf.Clamp01(20 * Time.fixedDeltaTime);
+            }
+        }
         public static float FixedDeltaTimeLerpValue_Bigger
         {
             get

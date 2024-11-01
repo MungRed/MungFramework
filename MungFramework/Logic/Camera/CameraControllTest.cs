@@ -12,16 +12,16 @@ namespace MungFramework.Logic.Camera
 
 
 
-        [Button("ChangeBind1",ButtonSizes.Medium)]
+        [Button("ChangeBind1", ButtonSizes.Medium)]
         public void ChangeBind1()
         {
-            StartCoroutine(CameraManagerAbstract.Instance.ChangeCameraSource(CameraSource1,time));
+            StartCoroutine(CameraManagerAbstract.Instance.ChangeCameraSource(CameraSource1, time));
         }
 
         [Button("ChangeBind2", ButtonSizes.Medium)]
         public void ChanageBind2()
         {
-            StartCoroutine(CameraManagerAbstract.Instance.ChangeCameraSource(CameraSource2,time));
+            StartCoroutine(CameraManagerAbstract.Instance.ChangeCameraSource(CameraSource2, time));
         }
 
         [Button("Pause", ButtonSizes.Medium)]
@@ -37,7 +37,7 @@ namespace MungFramework.Logic.Camera
         }
 
     }
-    
+
 
 
 }

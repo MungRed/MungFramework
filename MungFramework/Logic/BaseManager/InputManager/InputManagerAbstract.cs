@@ -46,7 +46,6 @@ namespace MungFramework.Logic.Input
     public enum InputValueEnum
     {
         NONE  = 0,
-        ANYKEY = 1,
 
         LEFT = 10, UP=11, DOWN=12, RIGHT=13,
 
@@ -418,30 +417,39 @@ namespace MungFramework.Logic.Input
             {
                 return;
             }
-            // Debug.Log(inputkey);
-            //如果不是任意键，就触发一次任意键按下的事件
-            if (inputkey != InputKeyEnum.ANYKEY)
+            Debug.Log(inputkey);
+            //触发一次任意键按下的事件
+            InputAction_AnyKeyDown(inputkey);
+
+            IInputAcceptor inputAcceptor = null;
+
+            if (inputAcceptorStack.Count > 0)
             {
-                InputAction_AnyKeyDown(inputkey);
+                if (inputAcceptorStack[0] != null)
+                {
+                    inputAcceptor = inputAcceptorStack[0];
+                }
+                else
+                {
+                    inputAcceptorStack.RemoveAt(0);
+                }
             }
 
+            HashSet<InputValueEnum> set = new();
             //根据按键的key获取输入值
-            foreach (var inputvalue in inputDataManager.GetInputValues(inputkey))
+            foreach (var inputValue in inputDataManager.GetInputValues(inputkey))
             {
-                if (InputActionListener_Performed.ContainsKey(inputvalue))
+                if (inputValue != InputValueEnum.NONE)
                 {
-                    InputActionListener_Performed[inputvalue].Invoke();
-                }
+                    if (set.Add(inputValue))
+                    {
+                        Debug.Log(inputkey + ":" + inputValue);
+                        if (InputActionListener_Performed.ContainsKey(inputValue))
+                        {
+                            InputActionListener_Performed[inputValue].Invoke();
+                        }
 
-                if (inputAcceptorStack.Count > 0)
-                {
-                    if (inputAcceptorStack[0] != null)
-                    {
-                        inputAcceptorStack[0].OnInput(inputvalue);
-                    }
-                    else
-                    {
-                        inputAcceptorStack.RemoveAt(0);
+                        inputAcceptor?.OnInput(inputValue);
                     }
                 }
             }

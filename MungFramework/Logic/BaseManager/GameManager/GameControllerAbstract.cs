@@ -20,8 +20,9 @@ namespace MungFramework.Logic
             RegisterEventOnSceneLoad();
             gameControllerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnSceneLoad)?.Invoke();
         }
-        public virtual void RegisterEventOnSceneLoad()
+        protected virtual void RegisterEventOnSceneLoad()
         {
+
         }
 
         public virtual void OnGameStart(GameManagerAbstract parentManager)

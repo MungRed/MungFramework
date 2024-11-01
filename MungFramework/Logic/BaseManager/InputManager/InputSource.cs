@@ -46,15 +46,6 @@ public partial class @InputSource: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""ANYKEY"",
-                    ""type"": ""Button"",
-                    ""id"": ""e89a8837-3707-4493-bb92-32744b588f34"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""ESC"",
                     ""type"": ""Button"",
                     ""id"": ""ca096a56-72ca-467b-96ab-73d70caab4e9"",
@@ -1025,17 +1016,6 @@ public partial class @InputSource: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""24d6edd4-81e2-4ce4-a7cf-851218f430f7"",
-                    ""path"": ""<Keyboard>/anyKey"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""InputSource"",
-                    ""action"": ""ANYKEY"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""833dc128-5a24-4c68-a147-1e8d0e0a3c02"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
@@ -1747,7 +1727,6 @@ public partial class @InputSource: IInputActionCollection2, IDisposable
         m_Controll = asset.FindActionMap("Controll", throwIfNotFound: true);
         m_Controll_MoveAxis = m_Controll.FindAction("MoveAxis", throwIfNotFound: true);
         m_Controll_ViewAxis = m_Controll.FindAction("ViewAxis", throwIfNotFound: true);
-        m_Controll_ANYKEY = m_Controll.FindAction("ANYKEY", throwIfNotFound: true);
         m_Controll_ESC = m_Controll.FindAction("ESC", throwIfNotFound: true);
         m_Controll_TAB = m_Controll.FindAction("TAB", throwIfNotFound: true);
         m_Controll_CAPS = m_Controll.FindAction("CAPS", throwIfNotFound: true);
@@ -1883,7 +1862,6 @@ public partial class @InputSource: IInputActionCollection2, IDisposable
     private List<IControllActions> m_ControllActionsCallbackInterfaces = new List<IControllActions>();
     private readonly InputAction m_Controll_MoveAxis;
     private readonly InputAction m_Controll_ViewAxis;
-    private readonly InputAction m_Controll_ANYKEY;
     private readonly InputAction m_Controll_ESC;
     private readonly InputAction m_Controll_TAB;
     private readonly InputAction m_Controll_CAPS;
@@ -1962,7 +1940,6 @@ public partial class @InputSource: IInputActionCollection2, IDisposable
         public ControllActions(@InputSource wrapper) { m_Wrapper = wrapper; }
         public InputAction @MoveAxis => m_Wrapper.m_Controll_MoveAxis;
         public InputAction @ViewAxis => m_Wrapper.m_Controll_ViewAxis;
-        public InputAction @ANYKEY => m_Wrapper.m_Controll_ANYKEY;
         public InputAction @ESC => m_Wrapper.m_Controll_ESC;
         public InputAction @TAB => m_Wrapper.m_Controll_TAB;
         public InputAction @CAPS => m_Wrapper.m_Controll_CAPS;
@@ -2050,9 +2027,6 @@ public partial class @InputSource: IInputActionCollection2, IDisposable
             @ViewAxis.started += instance.OnViewAxis;
             @ViewAxis.performed += instance.OnViewAxis;
             @ViewAxis.canceled += instance.OnViewAxis;
-            @ANYKEY.started += instance.OnANYKEY;
-            @ANYKEY.performed += instance.OnANYKEY;
-            @ANYKEY.canceled += instance.OnANYKEY;
             @ESC.started += instance.OnESC;
             @ESC.performed += instance.OnESC;
             @ESC.canceled += instance.OnESC;
@@ -2279,9 +2253,6 @@ public partial class @InputSource: IInputActionCollection2, IDisposable
             @ViewAxis.started -= instance.OnViewAxis;
             @ViewAxis.performed -= instance.OnViewAxis;
             @ViewAxis.canceled -= instance.OnViewAxis;
-            @ANYKEY.started -= instance.OnANYKEY;
-            @ANYKEY.performed -= instance.OnANYKEY;
-            @ANYKEY.canceled -= instance.OnANYKEY;
             @ESC.started -= instance.OnESC;
             @ESC.performed -= instance.OnESC;
             @ESC.canceled -= instance.OnESC;
@@ -2528,7 +2499,6 @@ public partial class @InputSource: IInputActionCollection2, IDisposable
     {
         void OnMoveAxis(InputAction.CallbackContext context);
         void OnViewAxis(InputAction.CallbackContext context);
-        void OnANYKEY(InputAction.CallbackContext context);
         void OnESC(InputAction.CallbackContext context);
         void OnTAB(InputAction.CallbackContext context);
         void OnCAPS(InputAction.CallbackContext context);

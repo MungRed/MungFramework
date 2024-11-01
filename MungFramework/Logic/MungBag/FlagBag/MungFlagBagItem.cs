@@ -3,7 +3,10 @@ using System;
 using UnityEngine;
 namespace MungFramework.Logic.MungBag.FlagBag
 {
-
+    /// <summary>
+    /// flag背包项
+    /// 记录flag名字和值以及上次修改的时间
+    /// </summary>
     [Serializable]
     public class MungFlagBagItem : MungFramework.ModelData.ModelData
     {

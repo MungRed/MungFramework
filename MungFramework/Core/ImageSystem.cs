@@ -7,22 +7,22 @@ namespace MungFramework.Core
 {
     public static class ImageSystem
     {
-        public static  string ImageSavePath => Database.DatabasePath + "/image";
+        public static string ImageSavePath => Database.DatabasePath + "/image";
         public static string ImageFormat => "jpg";
 
 
         #region 屏幕截图
-        public static IEnumerator ScreenShot(UnityAction<Texture2D> textureResult,int width = 400)
+        public static IEnumerator ScreenShot(UnityAction<Texture2D> textureResult, int width = 400)
         {
             yield return new WaitForEndOfFrame();
 
             var texture = ScreenCapture.CaptureScreenshotAsTexture();
 
-            float quality = width/(float)texture.width;
+            float quality = width / (float)texture.width;
 
             // 缩放图片到指定宽
-            int newWidth = (int)(texture.width*quality);
-            int newHeight = (int)(texture.height*quality);
+            int newWidth = (int)(texture.width * quality);
+            int newHeight = (int)(texture.height * quality);
 
             Texture2D resizedImage = ResizeTexture(texture, newWidth, newHeight);
             textureResult.Invoke(resizedImage);
@@ -33,7 +33,7 @@ namespace MungFramework.Core
 
             var texture = ScreenCapture.CaptureScreenshotAsTexture();
 
-            float quality =  width/(float)texture.width ;
+            float quality = width / (float)texture.width;
 
             // 缩放图片到指定宽
             int newWidth = (int)(texture.width * quality);

@@ -99,7 +99,7 @@ namespace MungFramework.Core
 
             string filePath = path + "/" + filename + "." + format;
             //Debug.Log("读取文件" + filePath);
-            if (!HaveDirectory(path)|| !HaveFile(path, filename, format))
+            if (!HaveDirectory(path) || !HaveFile(path, filename, format))
             {
                 Debug.LogError("路径或文件不存在，读取文件失败" + filePath);
                 resultAction.Invoke(null);
@@ -121,7 +121,7 @@ namespace MungFramework.Core
             LockFile(bytes, LockOperate.UnLock);
             return GlobalEncoding.GetString(bytes);
         }
-        public static IEnumerator ReadFileAsync(string path, string filename, string format,UnityEngine.Events.UnityAction<string> resultAction)
+        public static IEnumerator ReadFileAsync(string path, string filename, string format, UnityEngine.Events.UnityAction<string> resultAction)
         {
             async Task<string> readFileAsync(string filePath)
             {
@@ -136,7 +136,7 @@ namespace MungFramework.Core
 
             string filePath = path + "/" + filename + "." + format;
             //Debug.Log("读取文件" + filePath);
-            if (!HaveDirectory(path)|| !HaveFile(path, filename, format))
+            if (!HaveDirectory(path) || !HaveFile(path, filename, format))
             {
                 //Debug.LogError("路径或文件不存在，读取文件失败" + filePath);
                 resultAction.Invoke(null);
@@ -198,7 +198,7 @@ namespace MungFramework.Core
         /// <summary>
         /// 删除文件夹
         /// </summary>
-        public static  void DeleteDirectory(string directoryPath)
+        public static void DeleteDirectory(string directoryPath)
         {
             if (Directory.Exists(directoryPath))
             {
@@ -218,7 +218,7 @@ namespace MungFramework.Core
         {
             string filepath = path + "/" + filename + "." + format;
 
-            if (!Directory.Exists(path)|| !File.Exists(filepath))
+            if (!Directory.Exists(path) || !File.Exists(filepath))
             {
                 Debug.LogError("路径或文件不存在，删除文件失败" + filepath);
                 return false;

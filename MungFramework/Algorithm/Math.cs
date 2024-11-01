@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace MungFramework.Extension.MathExtension
+namespace MungFramework.Algorithm
 {
-    public static class MathExtension
+    public static class Math
     {
         /// <summary>
         /// 将int值变换delta，且在left和right之间循环
@@ -22,11 +22,23 @@ namespace MungFramework.Extension.MathExtension
             }
 
             int range = right - left + 1;
-            num = ((num - left)%range + delta % range + range) % range + left;
+            num = ((num - left) % range + delta % range + range) % range + left;
+        }
+        public static void Swap<T>(ref T a, ref T b) where T : struct
+        {
+            T temp = a;
+            a = b;
+            b = temp;
+        }
+        public static void Swap<T>(T a, T b) where T : class
+        {
+            T temp = a;
+            a = b;
+            b = temp;
         }
         public static int Round(this float num)
         {
-            return (int)Math.Round(num);
+            return (int)System.Math.Round(num);
         }
     }
 }

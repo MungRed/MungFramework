@@ -12,7 +12,7 @@ namespace MungFramework.Extension.ComponentExtension
         }
         public static List<GameObject> GetChildExcludeSelf(this Transform trans)
         {
-            return trans.GetComponentsInChildren<Transform>().Where(x=>x!=trans).Select(x => x.gameObject).ToList();
+            return trans.GetComponentsInChildren<Transform>().Where(x => x != trans).Select(x => x.gameObject).ToList();
         }
     }
 }

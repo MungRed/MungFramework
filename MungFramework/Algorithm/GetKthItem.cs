@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace MungFramework.Algorithm
 {
-    public static class GetKthItemStatic
+    public static class GetKthItem
     {
-        public static T GetKthItem<T>(List<T> list, int k, Func<T, T, bool> cmp)
+        public static T GetKth<T>(List<T> list, int k, Func<T, T, bool> cmp)
         {
             if (list == null || list.Count == 0 || k < 0 || k >= list.Count)
             {

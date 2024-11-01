@@ -6,6 +6,8 @@ namespace MungFramework.Logic.MungBag.EquipBag
 {
     /// <summary>
     /// 装备背包项
+    /// 记录装备id，guid
+    /// 装备者id，guid
     /// </summary>
     [Serializable]
     public class MungEquipBagItem : MungFramework.ModelData.ModelData

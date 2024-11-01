@@ -6,7 +6,7 @@ namespace MungFramework.Logic.FSM
     /// <summary>
     /// 有限状态机状态接口
     /// </summary>
-    public interface IFSMState<T_StateEnum,T_Parameter> where T_StateEnum : Enum where T_Parameter : IFSMParameter
+    public interface IFSMState<T_StateEnum, T_Parameter> where T_StateEnum : Enum where T_Parameter : IFSMParameter
     {
         /// <summary>
         /// 进入状态

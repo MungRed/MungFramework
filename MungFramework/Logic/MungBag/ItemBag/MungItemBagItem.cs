@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MungFramework.Logic.MungBag.ItemBag
 {
     /// <summary>
-    /// 道具背包项
+    /// 道具背包项,记录道具id和数量
     /// </summary>
     [Serializable]
     public class MungItemBagItem : MungFramework.ModelData.ModelData

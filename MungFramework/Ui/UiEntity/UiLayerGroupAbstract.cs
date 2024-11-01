@@ -1,7 +1,7 @@
+using MungFramework.Algorithm;
 using MungFramework.Extension.ComponentExtension;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace MungFramework.Ui
 {
@@ -20,13 +20,6 @@ namespace MungFramework.Ui
             Left, Right
         }
 
-        public UiEventModel LayerGroupEvent = new();
-
-        [SerializeField]
-        protected UnityEvent openEvent = new();
-        [SerializeField]
-        protected UnityEvent closeEvent = new();
-
         [SerializeField]
         protected UiLayerGroupTittleAbstract groupTittle;
         [SerializeField]
@@ -44,9 +37,9 @@ namespace MungFramework.Ui
             {
                 return;
             }
-
-            int index = (nowLayerIndex + uiLayerList.Count - 1) % uiLayerList.Count;
-            Jump(index, JumpDirection.Left);
+            int nextIndex = nowLayerIndex;
+            nextIndex.RollNum(0, uiLayerList.Count - 1, -1);
+            Jump(nextIndex, JumpDirection.Left);
         }
 
         public virtual void RightPage()
@@ -55,9 +48,9 @@ namespace MungFramework.Ui
             {
                 return;
             }
-
-            int index = (nowLayerIndex + uiLayerList.Count + 1) % uiLayerList.Count;
-            Jump(index, JumpDirection.Right);
+            int nextIndex = nowLayerIndex;
+            nextIndex.RollNum(0, uiLayerList.Count - 1, 1);
+            Jump(nextIndex, JumpDirection.Right);
         }
 
         protected virtual void Jump(int index, JumpDirection jumpDirection)
@@ -67,23 +60,15 @@ namespace MungFramework.Ui
                 return;
             }
 
-            if (nowLayer != null)
-            {
-                nowLayer.Close();
-            }
-
+            nowLayer?.Close();
             groupTittle?.OnLayerChange(index);
 
-            nowLayer = uiLayerList[index];
             nowLayerIndex = index;
-
-            if (nowLayer != null)
-            {
-                nowLayer.Open();
-            }
+            nowLayer = uiLayerList[nowLayerIndex];
+            nowLayer?.Open();
         }
-
         #endregion
+
         #region OpenAndClose
         public virtual void Open()
         {
@@ -98,51 +83,14 @@ namespace MungFramework.Ui
                 nowLayer.Open();
                 groupTittle?.OnLayerChange(nowLayerIndex);
             }
-
             gameObject.SetActive(true);
-            openEvent.Invoke();
         }
 
         public virtual void Close()
         {
-            if (nowLayer != null)
-            {
-                nowLayer.Close();
-            }
-
+            nowLayer?.Close();
+            CallAction(ON_LAYERGROUP_CLOSE);
             gameObject.SetActive(false);
-            closeEvent.Invoke();
-        }
-        #endregion
-        #region Event
-        public void AddOpenEventListener(UnityAction action) => openEvent.AddListener(action);
-        public void AddCloseEventListener(UnityAction action) => closeEvent.AddListener(action);
-        public void RemoveOpenEventListener(UnityAction action) => openEvent.RemoveListener(action);
-        public void RemoveCloseEventListener(UnityAction action) => closeEvent.RemoveListener(action);
-
-        public virtual void OnButtonSelect(UiButtonAbstract uiButton)
-        {
-            LayerGroupEvent.Call_OnButtonSelect(uiButton);
-        }
-        public virtual void OnButtonUnSelect(UiButtonAbstract uiButton)
-        {
-            LayerGroupEvent.Call_OnButtonUnSelect(uiButton);
-        }
-        public virtual void OnButtonOK(UiButtonAbstract uiButton)
-        {
-            LayerGroupEvent.Call_OnButtonOK(uiButton);
-        }
-        public virtual void OnButtonSpecialAction(UiButtonAbstract uiButton)
-        {
-            LayerGroupEvent.Call_OnButtonSpecialAction(uiButton);
-        }
-        public virtual void OnLayerOpen(UiLayerAbstract uiLayer)
-        {
-            LayerGroupEvent.Call_OnLayerOpen(uiLayer);
-        }
-        public virtual void OnLayerClose(UiLayerAbstract uiLayer)
-        {
-            LayerGroupEvent.Call_OnLayerClose(uiLayer);
         }
         #endregion
     }

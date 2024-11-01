@@ -1,8 +1,5 @@
 ﻿using Sirenix.OdinInspector;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using UnityEngine;
 
 namespace MungFramework.Logic.MungBag.ItemBag
 {
@@ -11,17 +8,8 @@ namespace MungFramework.Logic.MungBag.ItemBag
     /// 背包中储存拥有的道具以及数量
     /// </summary>
     [Serializable]
-    public class MungItemBagModel<T_BagItem> : MungFramework.Model.Model where T_BagItem : MungItemBagItem,new()
+    public class MungItemBagModel<T_BagItem> : ListBagModel<T_BagItem> where T_BagItem : MungItemBagItem,new()
     {
-        [SerializeField]
-        private List<T_BagItem> itemList = new();
-
-
-        public ReadOnlyCollection<T_BagItem> GetItemList()
-        {
-            return itemList.AsReadOnly();
-        }
-
         public bool HaveItem(string itemId)
         {
             return FindItem(itemId) != null;
@@ -146,14 +134,14 @@ namespace MungFramework.Logic.MungBag.ItemBag
 
         private void InsertItem(T_BagItem item)
         {
-            itemList.Add(item);
-            for (int i = itemList.Count - 1; i >= 1; i--)
+            ItemList.Add(item);
+            for (int i = ItemList.Count - 1; i >= 1; i--)
             {
-                if (itemList[i].ItemId.CompareTo(itemList[i - 1].ItemId) < 0)
+                if (ItemList[i].ItemId.CompareTo(ItemList[i - 1].ItemId) < 0)
                 {
-                    var temp = itemList[i];
-                    itemList[i] = itemList[i - 1];
-                    itemList[i - 1] = temp;
+                    var temp = ItemList[i];
+                    ItemList[i] = ItemList[i - 1];
+                    ItemList[i - 1] = temp;
                 }
             }
         }
@@ -161,14 +149,14 @@ namespace MungFramework.Logic.MungBag.ItemBag
         {
             //二分查找
             int left = 0;
-            int right = itemList.Count - 1;
+            int right = ItemList.Count - 1;
             while (left <= right)
             {
                 int mid = (left + right) / 2;
-                int compare = string.Compare(itemId, itemList[mid].ItemId);
+                int compare = string.Compare(itemId, ItemList[mid].ItemId);
                 if (compare == 0)
                 {
-                    return itemList[mid];
+                    return ItemList[mid];
                 }
                 else if (compare < 0)
                 {
@@ -182,11 +170,12 @@ namespace MungFramework.Logic.MungBag.ItemBag
             return null;
         }
 
+#if UNITY_EDITOR
         [Button]
         private void SortItemList()
         {
-            itemList.Sort((a, b) => string.Compare(a.ItemId, b.ItemId));
+            ItemList.Sort((a, b) => string.Compare(a.ItemId, b.ItemId));
         }
-
+#endif
     }
 }

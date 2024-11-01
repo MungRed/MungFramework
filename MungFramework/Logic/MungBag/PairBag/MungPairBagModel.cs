@@ -1,22 +1,10 @@
 ﻿using Sirenix.OdinInspector;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using UnityEngine;
-
 namespace MungFramework.Logic.MungBag.PairBag
 {
     [Serializable]
-    public class MungPairBagModel<T_BagItem> where T_BagItem : MungPairBagItem, new()
+    public class MungPairBagModel<T_BagItem> :ListBagModel<T_BagItem> where T_BagItem : MungPairBagItem, new()
     {
-        [SerializeField]
-        private List<T_BagItem> itemList = new();
-
-        public ReadOnlyCollection<T_BagItem> GetItemList()
-        {
-            return itemList.AsReadOnly();
-        }
-
         [Button]
         public T_BagItem AddItem(string key)
         {
@@ -61,14 +49,14 @@ namespace MungFramework.Logic.MungBag.PairBag
 
         private void InsertItem(T_BagItem item)
         {
-            itemList.Add(item);
-            for (int i = itemList.Count - 1; i >= 1; i--)
+            ItemList.Add(item);
+            for (int i = ItemList.Count - 1; i >= 1; i--)
             {
-                if (itemList[i].Key.CompareTo(itemList[i - 1].Key) < 0)
+                if (ItemList[i].Key.CompareTo(ItemList[i - 1].Key) < 0)
                 {
-                    var temp = itemList[i];
-                    itemList[i] = itemList[i - 1];
-                    itemList[i - 1] = temp;
+                    var temp = ItemList[i];
+                    ItemList[i] = ItemList[i - 1];
+                    ItemList[i - 1] = temp;
                 }
             }
         }
@@ -77,14 +65,14 @@ namespace MungFramework.Logic.MungBag.PairBag
         {
             //二分查找
             int left = 0;
-            int right = itemList.Count - 1;
+            int right = ItemList.Count - 1;
             while (left <= right)
             {
                 int mid = (left + right) / 2;
-                int compare = string.Compare(key, itemList[mid].Key);
+                int compare = string.Compare(key, ItemList[mid].Key);
                 if (compare == 0)
                 {
-                    return itemList[mid];
+                    return ItemList[mid];
                 }
                 else if (compare < 0)
                 {
@@ -98,10 +86,12 @@ namespace MungFramework.Logic.MungBag.PairBag
             return null;
         }
 
+#if UNITY_EDITOR
         [Button]
         private void SortItemList()
         {
-            itemList.Sort((a, b) => string.Compare(a.Key, b.Key));
+            ItemList.Sort((a, b) => string.Compare(a.Key, b.Key));
         }
+#endif
     }
 }

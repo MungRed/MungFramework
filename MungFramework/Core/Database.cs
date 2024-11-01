@@ -153,7 +153,7 @@ namespace MungFramework.Core
         /// <summary>
         /// 获得数据表的键值对
         /// </summary>
-        public static IEnumerator GetKeyValues(string tableName, UnityAction<List<KeyValuePair<string, string>>,string> resultAction)
+        public static IEnumerator GetKeyValues(string tableName, UnityAction<List<KeyValuePair<string, string>>, string> resultAction)
         {
             DataTable dataTable = null;
             yield return GetDataTable(tableName, x => dataTable = x);
@@ -162,7 +162,7 @@ namespace MungFramework.Core
             {
                 yield break;
             }
-            resultAction.Invoke(dataTable.GetKeyValues(),dataTable.TableTime);
+            resultAction.Invoke(dataTable.GetKeyValues(), dataTable.TableTime);
         }
 
         /// <summary>

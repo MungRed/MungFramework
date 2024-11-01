@@ -1,24 +1,11 @@
 ﻿using Sirenix.OdinInspector;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace MungFramework.Logic.MungBag.FlagBag
 {
     [Serializable]
-    public class MungFlagBagModel : MungFramework.Model.Model
+    public class MungFlagBagModel : ListBagModel<MungFlagBagItem>
     {
-        [SerializeField]
-        private List<MungFlagBagItem> flagList = new();
-
-
-        public ReadOnlyCollection<MungFlagBagItem> GetFlagList()
-        {
-            return flagList.AsReadOnly();
-        }
-
         [Button]
         public void AddFlag(string flagName, int flagValue)
         {
@@ -46,21 +33,7 @@ namespace MungFramework.Logic.MungBag.FlagBag
 
         public void ChangeFlagValue(string flagName, int flagValue)
         {
-            if (flagName == null)
-            {
-                return;
-            }
-
-            var find = FindFlag(flagName);
-            if (find != null)
-            {
-                find.FlagValue = flagValue;
-                find.LastChangeTime = DateTime.Now.ToString();
-            }
-            else
-            {
-                AddFlag(flagName, flagValue);
-            }
+            AddFlag(flagName, flagValue);
         }
 
         public void DeltaFlagValue(string flagName, int deltaValue)
@@ -88,7 +61,7 @@ namespace MungFramework.Logic.MungBag.FlagBag
             {
                 return false;
             }
-            return flagList.RemoveAll(x => x.FlagName == flagName) > 0;
+            return ItemList.RemoveAll(x => x.FlagName == flagName) > 0;
         }
 
         public MungFlagBagItem GetFlag(string flagName)
@@ -122,33 +95,32 @@ namespace MungFramework.Logic.MungBag.FlagBag
             }
             return 0;
         }
+
         private void InsertFlag(MungFlagBagItem flag)
         {
-            flagList.Add(flag);
-            for (int i = flagList.Count - 1; i >= 1; i--)
+            ItemList.Add(flag);
+            for (int i = ItemList.Count - 1; i >= 1; i--)
             {
-                if (flagList[i].FlagName.CompareTo(flagList[i - 1].FlagName) < 0)
+                if (ItemList[i].FlagName.CompareTo(ItemList[i - 1].FlagName) < 0)
                 {
-                    var temp = flagList[i];
-                    flagList[i] = flagList[i - 1];
-                    flagList[i - 1] = temp;
+                    Algorithm.Math.Swap(ItemList[i - 1], ItemList[i]);
                 }
             }
         }
-       
+
         private MungFlagBagItem FindFlag(string flagName)
         {
             //二分查找
             int left = 0;
-            int right = flagList.Count - 1;
+            int right = ItemList.Count - 1;
             while (left <= right)
             {
                 int mid = (left + right) / 2;
-                if (flagList[mid].FlagName == flagName)
+                if (ItemList[mid].FlagName == flagName)
                 {
-                    return flagList[mid];
+                    return ItemList[mid];
                 }
-                else if (flagList[mid].FlagName.CompareTo(flagName) > 0)
+                else if (ItemList[mid].FlagName.CompareTo(flagName) > 0)
                 {
                     right = mid - 1;
                 }
@@ -160,10 +132,13 @@ namespace MungFramework.Logic.MungBag.FlagBag
             return null;
         }
 
+#if UNITY_EDITOR
         [Button]
         private void SortFlagList()
         {
-            flagList.Sort((x, y) => x.FlagName.CompareTo(y.FlagName));
+            ItemList.Sort((x, y) => x.FlagName.CompareTo(y.FlagName));
         }
+#endif
     }
+
 }

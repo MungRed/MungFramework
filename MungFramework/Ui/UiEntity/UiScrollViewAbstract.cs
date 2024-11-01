@@ -20,7 +20,7 @@ namespace MungFramework.Ui
 
         //°´Å¥¾àÀë±ß½çµÄ¾àÀë
         [SerializeField]
-        protected float upLimit, downLimit, leftLimit, rightLimit;
+        private float upLimit, downLimit, leftLimit, rightLimit;
 
         public virtual void SetContentZero()
         {
@@ -79,7 +79,6 @@ namespace MungFramework.Ui
 
 
 #if UNITY_EDITOR
-
         [ShowInInspector]
         private Vector2 viewportPosition => viewport == null ? Vector2.zero : viewport.MCanvasPosition(Canvas);
         [ShowInInspector]
@@ -92,7 +91,6 @@ namespace MungFramework.Ui
         private Vector2 contentLeftTop => content == null ? Vector2.zero : content.MCanvasPosition_LeftTop(Canvas);
         [ShowInInspector]
         private Vector2 contentRightBottom => content == null ? Vector2.zero : content.MCanvasPosition_RightBottom(Canvas);
-
 #endif
     }
 }

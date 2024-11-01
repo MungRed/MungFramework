@@ -6,7 +6,7 @@ namespace MungFramework.Logic.Camera
 {
     public class AimCameraControllerAbstarct : GameControllerAbstract
     {
-        private UnityEngine.Camera mainCamera=>UnityEngine.Camera.main;
+        private UnityEngine.Camera mainCamera => UnityEngine.Camera.main;
 
         [ReadOnly]
         [SerializeField]
@@ -50,12 +50,12 @@ namespace MungFramework.Logic.Camera
         /// <summary>
         /// 输入摄像机的相对向量，返回世界向量
         /// </summary>
-        public Vector3 CameraToWorld(Vector3 input)=> directionTransform.TransformDirection(input);
- 
+        public Vector3 CameraToWorld(Vector3 input) => directionTransform.TransformDirection(input);
+
         /// <summary>
         /// 输入基于世界的向量，返回基于摄像机的向量
         /// </summary>
-        public Vector3 WolrdToCamera(Vector3 input)=> directionTransform.InverseTransformDirection(input);
+        public Vector3 WolrdToCamera(Vector3 input) => directionTransform.InverseTransformDirection(input);
 
         /// <summary>
         /// 判断某个坐标是否在视野内

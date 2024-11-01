@@ -10,6 +10,7 @@ namespace MungFramework.Ui
     /// </summary>
     public abstract class UiEntityComponentAbstract<T> : MungFramework.Entity.EntityComponent<T> where T : UiEntityAbstract
     {
+        #region Component
         private RectTransform rectTransform;
         public RectTransform RectTransform
         {
@@ -24,8 +25,6 @@ namespace MungFramework.Ui
         }
 
         private RectTransform canvas;
-        [ShowInInspector]
-        [FoldoutGroup("Canvas")]
         public RectTransform Canvas
         {
             get
@@ -37,7 +36,7 @@ namespace MungFramework.Ui
                 return canvas;
             }
         }
-
+        #endregion
         #region CanvasPosition
         [ShowInInspector]
         [FoldoutGroup("Canvas")]

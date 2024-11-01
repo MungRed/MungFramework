@@ -36,18 +36,18 @@ namespace MungFramework.Logic.Camera
 
         public void Update()
         {
-            if (follow_isBinding&&follow_Bind!=null)
+            if (follow_isBinding && follow_Bind != null)
             {
                 follow_Pos.position = follow_Bind.position;
             }
 
-            if (lookAt_isBinding&&lookAt_Bind!=null)
+            if (lookAt_isBinding && lookAt_Bind != null)
             {
                 lookAt_Pos.position = lookAt_Bind.position;
             }
         }
 
-        private TweenerCore<float,float,FloatOptions> setFovTweenCore;
+        private TweenerCore<float, float, FloatOptions> setFovTweenCore;
 
         public void SetFov(int val, float time)
         {
@@ -58,7 +58,7 @@ namespace MungFramework.Logic.Camera
 
             setFovTweenCore = DOTween
                 .To(() => virtualCamera.m_Lens.FieldOfView, x => virtualCamera.m_Lens.FieldOfView = x, val, time)
-                .OnComplete(()=>setFovTweenCore=null);
+                .OnComplete(() => setFovTweenCore = null);
         }
 
         public void ResetFov(float time)
@@ -97,10 +97,10 @@ namespace MungFramework.Logic.Camera
             isPause = false;
         }
 
-        public IEnumerator ChangeCameraSource(CameraSource cameraSource,float time)
+        public IEnumerator ChangeCameraSource(CameraSource cameraSource, float time)
         {
-            var changeFollow = StartCoroutine(ChangeBindFollow(cameraSource.Follow,time));
-            var changeLookAt = StartCoroutine(ChangeBindLookAt(cameraSource.LookAt,time));
+            var changeFollow = StartCoroutine(ChangeBindFollow(cameraSource.Follow, time));
+            var changeLookAt = StartCoroutine(ChangeBindLookAt(cameraSource.LookAt, time));
 
             yield return changeFollow;
             yield return changeLookAt;

@@ -6,7 +6,7 @@ namespace MungFramework.Logic.FSM
     /// <summary>
     /// 有限状态机管理器接口
     /// </summary>
-    public interface  IFSMManager<T_StateEnum, T_Parameter> where T_StateEnum : Enum where T_Parameter : IFSMParameter
+    public interface IFSMManager<T_StateEnum, T_Parameter> where T_StateEnum : Enum where T_Parameter : IFSMParameter
     {
         public IFSMManager<T_StateEnum, T_Parameter> FSManager
         {
@@ -106,7 +106,7 @@ namespace MungFramework.Logic.FSM
             }
 
             //状态按键输入，并获取下一状态
-            T_StateEnum nextState = state.OnStateInput(inputValue,FSMParameter);
+            T_StateEnum nextState = state.OnStateInput(inputValue, FSMParameter);
             //如果下一状态不等于当前状态，改变状态
             if (!nextState.Equals(FSMNowState))
             {
@@ -132,7 +132,7 @@ namespace MungFramework.Logic.FSM
                     return;
                 }
             }
-            if(nextStateInstance != null)
+            if (nextStateInstance != null)
             {
                 //是否进入状态成功
                 if (nextStateInstance.OnStateEnter(FSMNowState, FSMParameter) == true)

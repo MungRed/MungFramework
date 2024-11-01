@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using MungFramework.Extension.ComponentExtension;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,30 +21,23 @@ namespace MungFramework.Ui
         public void Open()
         {
             imageBack.gameObject.SetActive(true);
-            imageBack.sprite = null;
-            imageBack.color = new Color(1, 1, 1, 0);
-
             imageFront.gameObject.SetActive(true);
-            imageFront.sprite = null;
-            imageFront.color = new Color(1, 1, 1, 0);
+            imageBack.SetSpriteAndColor(null);
+            imageFront.SetSpriteAndColor(null);
         }
 
         public void Close()
         {
             imageBack.gameObject.SetActive(false);
-            imageBack.sprite = null;
-            imageBack.color = new Color(1, 1, 1, 0);
-
             imageFront.gameObject.SetActive(false);
-            imageFront.sprite = null;
-            imageFront.color = new Color(1, 1, 1, 0);
+            imageBack.SetSpriteAndColor(null);
+            imageFront.SetSpriteAndColor(null);
         }
+
         public void ClearImage()
         {
-            imageBack.sprite = null;
-            imageBack.color = new Color(1, 1, 1, 0);
-            imageFront.sprite = null;
-            imageFront.color = new Color(1, 1, 1, 0);
+            imageBack.SetSpriteAndColor(null);
+            imageFront.SetSpriteAndColor(null);
         }
 
         public void ChangeImage(Sprite sprite,float duration)
