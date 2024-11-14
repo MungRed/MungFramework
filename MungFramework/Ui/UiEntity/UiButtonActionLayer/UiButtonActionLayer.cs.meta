@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: a2d8cd936c3316e4da505f2d25744992
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - nowSelectButton: {instanceID: 0}
+  - selectPoint: {instanceID: 0}
+  - buttonRoot: {instanceID: 0}
+  - actionButtonPrefab: {fileID: 6864925394862439361, guid: 2779ad58586bd374885f610e5c197a1e, type: 3}
+  - rootLayer: {instanceID: 0}
+  - rootButton: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

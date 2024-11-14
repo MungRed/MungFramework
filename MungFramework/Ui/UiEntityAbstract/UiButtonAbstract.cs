@@ -230,6 +230,7 @@ namespace MungFramework.Ui
         }
         public virtual void MOnMouseEnter()
         {
+            UiLayer?.JumpButton(this);
             CallActionHelp(ON_BUTTON_MOUSE_ENTER);
         }
         public virtual void MOnMouseExit()

@@ -7,6 +7,7 @@ namespace MungFramework.Logic.Sound
 {
     public abstract class SoundDataManagerAbstract : GameManagerAbstract
     {
+        private static readonly string VolumeSaveDataKey = "VolumeSaveData";
         public enum VolumeTypeEnum
         {
             Music, Effect, Voice
@@ -29,20 +30,19 @@ namespace MungFramework.Logic.Sound
             Load();
         }
 
-        public virtual int GetVolumeData(VolumeTypeEnum volumeType)
+
+        internal virtual int GetVolumeData(VolumeTypeEnum volumeType)
         {
-            switch (volumeType)
+            return volumeType switch
             {
-                case VolumeTypeEnum.Music:
-                    return volumeData.MusicVolume;
-                case VolumeTypeEnum.Effect:
-                    return volumeData.EffectVolume;
-                case VolumeTypeEnum.Voice:
-                    return volumeData.VoiceVolume;
-            }
-            return 0;
+                VolumeTypeEnum.Music => volumeData.MusicVolume,
+                VolumeTypeEnum.Effect => volumeData.EffectVolume,
+                VolumeTypeEnum.Voice => volumeData.VoiceVolume,
+                _ => 0,
+            };
         }
-        public virtual void SetVolumeData(VolumeTypeEnum volumeType,int val)
+
+        internal virtual void SetVolumeData(VolumeTypeEnum volumeType,int val)
         {
             switch (volumeType)
             {
@@ -58,30 +58,34 @@ namespace MungFramework.Logic.Sound
             }
             Save();
         }
-
-
-        public virtual void Load()
+        internal virtual void DefaultVolumeData()
         {
-            var loadSuccess = SaveManagerAbstract.Instance.GetSystemSaveValue("volumedata");
-            if (loadSuccess.hasValue == false)
+            volumeData = new()
             {
-                volumeData = new()
-                {
-                    MusicVolume = 70,
-                    EffectVolume = 70,
-                    VoiceVolume = 70
-                };
-                Save();
+                MusicVolume = 70,
+                EffectVolume = 70,
+                VoiceVolume = 70
+            };
+        }
+
+
+        protected virtual void Load()
+        {
+            var loadSuccess = SaveManagerAbstract.Instance.GetSystemSaveValue(VolumeSaveDataKey);
+            if (loadSuccess.hasValue)
+            {
+                JsonUtility.FromJsonOverwrite(loadSuccess.value, volumeData);
             }
             else
             {
-                volumeData = JsonUtility.FromJson<VolumeData>(loadSuccess.value);
+                DefaultVolumeData();
+                Save();
             }
         }
 
-        public virtual void  Save()
+        protected virtual void  Save()
         {
-            SaveManagerAbstract.Instance.SetSystemSaveValue("volumedata", JsonUtility.ToJson(volumeData));
+            SaveManagerAbstract.Instance.SetSystemSaveValue(VolumeSaveDataKey, JsonUtility.ToJson(volumeData));
         }
     }
 }

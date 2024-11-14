@@ -22,6 +22,14 @@ namespace MungFramework.Ui
         [SerializeField]
         private float upLimit, downLimit, leftLimit, rightLimit;
 
+        public virtual void SetContentSizeDelta_X(float x)
+        {
+            content.sizeDelta = new Vector2(x, content.sizeDelta.y);
+        }
+        public virtual void SetContentSizeDelta_Y(float y)
+        {
+            content.sizeDelta = new Vector2(content.sizeDelta.x, y);
+        }
         public virtual void SetContentZero()
         {
             content.DOKill();

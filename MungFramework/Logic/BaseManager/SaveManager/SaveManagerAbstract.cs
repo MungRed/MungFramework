@@ -139,7 +139,7 @@ namespace MungFramework.Logic.Save
                 //新建
                 CurrentSaveFile = new SaveFile() { SaveName = nowSaveFileName.value,};
                 //并保存
-                yield return SaveIn(CurrentSaveFile);
+                yield return SaveInAsync(CurrentSaveFile);
             }
             else
             {
@@ -235,7 +235,7 @@ namespace MungFramework.Logic.Save
                 Sprite sprite = ImageSystem.TextureToSprite(saveImage);
                 SaveImageBuffer.UpdateBuffer(CurrentSaveFile.SaveName, sprite);
             }
-            yield return SaveIn(CurrentSaveFile);
+            yield return SaveInAsync(CurrentSaveFile);
         }
 
         /// <summary>
@@ -246,7 +246,7 @@ namespace MungFramework.Logic.Save
             SaveFile saveFile = new SaveFile() { 
                 SaveName = "save" + saveIndex,
             };
-            yield return SaveIn(saveFile);
+            yield return SaveInAsync(saveFile);
         }
 
         /// <summary>
@@ -260,9 +260,13 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 保存存档文件
         /// </summary>
-        protected virtual IEnumerator SaveIn(SaveFile saveFile)
+        protected virtual IEnumerator SaveInAsync(SaveFile saveFile)
         {
-            yield return Database.SetKeyValues(saveFile.SaveName, saveFile.GetKeyValues());
+            yield return Database.SetKeyValuesAsync(saveFile.SaveName, saveFile.GetKeyValues());
+        }
+        protected virtual void SaveIn(SaveFile saveFile)
+        {
+            Database.SetKeyValues(saveFile.SaveName, saveFile.GetKeyValues());
         }
 
 
@@ -303,7 +307,7 @@ namespace MungFramework.Logic.Save
         {
             List<KeyValuePair<string, string>> saveData = null;
             string saveTime = "";
-            yield return Database.GetKeyValues(saveName, (x, y) => { saveData = x; saveTime = y; });
+            yield return Database.GetKeyValuesAsync(saveName, (x, y) => { saveData = x; saveTime = y; });
 
             if (saveData != null)
             {
@@ -329,7 +333,7 @@ namespace MungFramework.Logic.Save
         {
             SystemSaveFile.SaveName = "system";
             SystemSaveFile.Clear();
-            StartCoroutine(SaveIn(SystemSaveFile));
+            SaveIn(SystemSaveFile);
         }
 
         /// <summary>
@@ -339,7 +343,7 @@ namespace MungFramework.Logic.Save
         {
             SystemSaveFile.SetValue(key, val);
             //保存系统存档
-            StartCoroutine(SaveIn(SystemSaveFile));
+            SaveIn(SystemSaveFile);
         }
 
         /// <summary>
@@ -349,7 +353,7 @@ namespace MungFramework.Logic.Save
         {
             SystemSaveFile.SetValue(key, val);
             //保存系统存档
-            yield return SaveIn(SystemSaveFile);
+            yield return SaveInAsync(SystemSaveFile);
         }
 
         /// <summary>

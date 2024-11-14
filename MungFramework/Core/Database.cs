@@ -46,7 +46,6 @@ namespace MungFramework.Core
         public static string DatabasePath => Application.dataPath + "/data";
         public static string DataTableFormat => "sav";
 
-
         /// <summary>
         /// 是否存在数据库
         /// </summary>
@@ -70,7 +69,6 @@ namespace MungFramework.Core
 
             return true;
         }
-
         /// <summary>
         /// 是否存在数据表
         /// </summary>
@@ -153,7 +151,7 @@ namespace MungFramework.Core
         /// <summary>
         /// 获得数据表的键值对
         /// </summary>
-        public static IEnumerator GetKeyValues(string tableName, UnityAction<List<KeyValuePair<string, string>>, string> resultAction)
+        public static IEnumerator GetKeyValuesAsync(string tableName, UnityAction<List<KeyValuePair<string, string>>, string> resultAction)
         {
             DataTable dataTable = null;
             yield return GetDataTable(tableName, x => dataTable = x);
@@ -168,7 +166,7 @@ namespace MungFramework.Core
         /// <summary>
         /// 设置数据表的键值对
         /// </summary>
-        public static IEnumerator SetKeyValues(string tableName, List<KeyValuePair<string, string>> keyValues)
+        public static IEnumerator SetKeyValuesAsync(string tableName, List<KeyValuePair<string, string>> keyValues)
         {
             DataTable dataTable = new()
             {
@@ -178,8 +176,15 @@ namespace MungFramework.Core
             dataTable.SetKeyValues(keyValues);
             yield return FileSystem.WriteFileAsync(DatabasePath, tableName, DataTableFormat, JsonUtility.ToJson(dataTable, true));
         }
-
-
-
+        public static void SetKeyValues(string tableName, List<KeyValuePair<string, string>> keyValues)
+        {
+            DataTable dataTable = new()
+            {
+                TableName = tableName,
+                TableTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            };
+            dataTable.SetKeyValues(keyValues);
+            FileSystem.WriteFile(DatabasePath, tableName, DataTableFormat, JsonUtility.ToJson(dataTable, true));
+        }
     }
 }

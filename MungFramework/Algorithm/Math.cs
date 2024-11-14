@@ -24,6 +24,17 @@ namespace MungFramework.Algorithm
             int range = right - left + 1;
             num = ((num - left) % range + delta % range + range) % range + left;
         }
+        public static void Clamp<T>(this ref T num, T min, T max) where T : struct, IComparable<T>
+        {
+            if (num.CompareTo(min) < 0)
+            {
+                num = min;
+            }
+            else if (num.CompareTo(max) > 0)
+            {
+                num = max;
+            }
+        }
         public static void Swap<T>(ref T a, ref T b) where T : struct
         {
             T temp = a;

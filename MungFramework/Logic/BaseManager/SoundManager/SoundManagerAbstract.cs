@@ -6,7 +6,9 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static MungFramework.Logic.Sound.SoundDataManagerAbstract;
 
 namespace MungFramework.Logic.Sound
 {
@@ -18,21 +20,38 @@ namespace MungFramework.Logic.Sound
 
         [ReadOnly]
         [SerializeField]
-        protected List<SoundSource> SoundSourceList;
+        protected List<SoundSource> SoundSourceList = new();
 
         [ReadOnly]
         [SerializeField]
         //默认的声音源
-        protected  List<(string, SoundDataManagerAbstract.VolumeTypeEnum)> DefaultSoundSourceList = new List<(string, SoundDataManagerAbstract.VolumeTypeEnum)>() {
-            ("music",SoundDataManagerAbstract.VolumeTypeEnum.Music),
-            ("effect",SoundDataManagerAbstract.VolumeTypeEnum.Effect),
-            ("voice",SoundDataManagerAbstract.VolumeTypeEnum.Voice)
+        protected readonly List<(string, VolumeTypeEnum)> DefaultSoundSourceList = new List<(string, SoundDataManagerAbstract.VolumeTypeEnum)>() {
+            ("music",VolumeTypeEnum.Music),
+            ("effect",VolumeTypeEnum.Effect),
+            ("voice",VolumeTypeEnum.Voice)
         };
 
-        public virtual void SetSoundVolume(SoundDataManagerAbstract.VolumeTypeEnum volumeType, int val)
+        public virtual int GetVolumeData(VolumeTypeEnum volumeType)=>soundDataManager.GetVolumeData(volumeType);
+
+        public virtual void SetSoundVolume(VolumeTypeEnum volumeType, int val)
         {
             soundDataManager.SetVolumeData(volumeType, val);
+            foreach (var soundSource in SoundSourceList.Where(x => x.VolumeType == volumeType))
+            {
+                soundSource.Volume = val / 100f;
+                soundSource.Source.volume = soundSource.Volume;
+            }
         }
+
+        public virtual void DefaultVolumeData(){
+            soundDataManager.DefaultVolumeData();
+            foreach (var soundSource in SoundSourceList)
+            {
+                soundSource.Volume = GetVolumeData(soundSource.VolumeType) / 100f;
+                soundSource.Source.volume = soundSource.Volume;
+            }
+        } 
+
 
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
@@ -45,7 +64,7 @@ namespace MungFramework.Logic.Sound
         {
             base.OnGameUpdate(parentManager);
 
-            //设置每个音频源的位置
+            //设置每个音频源的位置和音量
             foreach (var soundSource in SoundSourceList)
             {
                 soundSource.Source.transform.position = soundSource.Follow.DirectionLocalPosition(soundSource.LocalPosition);

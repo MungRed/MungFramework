@@ -70,7 +70,7 @@ namespace MungFramework.Ui
         #endregion
 
         public bool isOpen;
-        public bool isTop => InputManager.IsTopInputAcceptor(this);
+        public bool isTop => InputManager.IsTop(this);
 
         protected virtual void FixedUpdate()
         {
@@ -439,7 +439,7 @@ namespace MungFramework.Ui
         /// <summary>
         /// Ìø×ªµ½Ä³¸öButton
         /// </summary>
-        protected virtual void JumpButton(UiButtonAbstract nextButton)
+        public virtual void JumpButton(UiButtonAbstract nextButton)
         {
             if (nowSelectButton != null)
             {

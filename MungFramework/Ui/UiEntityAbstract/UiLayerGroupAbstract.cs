@@ -21,7 +21,7 @@ namespace MungFramework.Ui
         }
 
         [SerializeField]
-        protected UiLayerGroupTittleAbstract groupTittle;
+        protected UiLayerGroupTitleAbstract groupTitle;
         [SerializeField]
         protected List<UiLayerAbstract> uiLayerList = new();
         [SerializeField]
@@ -61,7 +61,7 @@ namespace MungFramework.Ui
             }
 
             nowLayer?.Close();
-            groupTittle?.OnLayerChange(index);
+            groupTitle?.OnLayerChange(index);
 
             nowLayerIndex = index;
             nowLayer = uiLayerList[nowLayerIndex];
@@ -81,7 +81,7 @@ namespace MungFramework.Ui
             if (nowLayer != null)
             {
                 nowLayer.Open();
-                groupTittle?.OnLayerChange(nowLayerIndex);
+                groupTitle?.OnLayerOpen(nowLayerIndex);
             }
             gameObject.SetActive(true);
         }

@@ -5,14 +5,10 @@
     /// </summary>
     public interface IInputAcceptor
     {
-        public InputManagerAbstract InputManager 
+        public InputManagerAbstract InputManager
         {
             get;
         }
-
-        /// <summary>
-        /// 输入事件
-        /// </summary>
         public void OnInput(InputValueEnum inputType);
     }
 

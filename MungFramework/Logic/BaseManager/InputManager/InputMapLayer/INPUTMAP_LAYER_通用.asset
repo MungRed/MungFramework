@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed7b12d871f872f4f8d26cc7995c96c4, type: 3}
-  m_Name: INPUTMAP_LAYER_Ui
+  m_Script: {fileID: 11500000, guid: 87ad1a712aebff74fb9db3f3b3f183f0, type: 3}
+  m_Name: "INPUTMAP_LAYER_\u901A\u7528"
   m_EditorClassIdentifier: 
-  Id: INPUTMAP_LAYER_Ui
-  InputMapLayerName: Ui
+  Id: "INPUTMAP_LAYER_\u901A\u7528"
+  InputMapLayerName: "\u901A\u7528"
   InputMapList:
   - InputKey: 47
     InputValue: 20
@@ -49,3 +49,19 @@ MonoBehaviour:
     InputValue: 22
   - InputKey: 63
     InputValue: 22
+  - InputKey: 32
+    InputValue: 11
+  - InputKey: 59
+    InputValue: 11
+  - InputKey: 41
+    InputValue: 10
+  - InputKey: 57
+    InputValue: 10
+  - InputKey: 42
+    InputValue: 12
+  - InputKey: 60
+    InputValue: 12
+  - InputKey: 43
+    InputValue: 13
+  - InputKey: 58
+    InputValue: 13

@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed7b12d871f872f4f8d26cc7995c96c4, type: 3}
-  m_Name: INPUTMAP_LAYER_Battle
+  m_Script: {fileID: 11500000, guid: 87ad1a712aebff74fb9db3f3b3f183f0, type: 3}
+  m_Name: "INPUTMAP_LAYER_\u6218\u6597"
   m_EditorClassIdentifier: 
-  Id: INPUTMAP_LAYER_Battle
+  Id: "INPUTMAP_LAYER_\u6218\u6597"
   InputMapLayerName: "\u6218\u6597"
   InputMapList:
   - InputKey: 47
@@ -43,3 +43,11 @@ MonoBehaviour:
     InputValue: 66
   - InputKey: 66
     InputValue: 66
+  - InputKey: 59
+    InputValue: 0
+  - InputKey: 60
+    InputValue: 0
+  - InputKey: 57
+    InputValue: 0
+  - InputKey: 58
+    InputValue: 0
