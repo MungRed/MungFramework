@@ -1,0 +1,4 @@
+﻿.scroll-view-left-scrollbar {
+    -unity-overflow-vertical: scroll;
+    -unity-scrollbar-vertical-align: left;
+}

@@ -2,6 +2,7 @@ using DG.Tweening;
 using MungFramework.Extension.ComponentExtension;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MungFramework.Ui
 {
@@ -17,6 +18,8 @@ namespace MungFramework.Ui
         [SerializeField]
         [Required]
         protected RectTransform content;
+
+        public RectTransform Content => content;
 
         //°´Å¥¾àÀë±ß½çµÄ¾àÀë
         [SerializeField]

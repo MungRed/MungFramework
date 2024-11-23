@@ -31,7 +31,6 @@ namespace MungFramework.Logic
             protected set => gameState = value;
         }
 
-
         #region Unity消息
         public virtual void Awake()
         {
@@ -64,6 +63,7 @@ namespace MungFramework.Logic
         }
         #endregion
 
+        #region SceneLoad
         /// <summary>
         /// 当场景加载时调用
         /// 对每个Manager进行初始化
@@ -83,7 +83,9 @@ namespace MungFramework.Logic
         {
             yield return base.OnSceneLoad(parentManager);
         }
+        #endregion
 
+        #region GameStart
         /// <summary>
         /// 游戏开始时调用
         /// </summary>
@@ -93,7 +95,7 @@ namespace MungFramework.Logic
         }
         public new IEnumerator OnGameStart(GameManagerAbstract parentManager)
         {
-            yield return new WaitUntil(()=>GameState == GameStateEnum.Start);
+            yield return new WaitUntil(() => GameState == GameStateEnum.Start);
             Debug.Log("GameStart");
             yield return OnGameStartExtra(parentManager);
             GameState = GameStateEnum.Update;
@@ -103,7 +105,9 @@ namespace MungFramework.Logic
             base.OnGameStart(parentManager);
             yield return null;
         }
+        #endregion
 
+        #region GamePause
         /// <summary>
         /// 游戏暂停
         /// </summary>
@@ -115,6 +119,7 @@ namespace MungFramework.Logic
                 OnGamePause(this);
             }
         }
+
         public override void OnGamePause(GameManagerAbstract parentManager)
         {
             base.OnGamePause(parentManager);
@@ -134,13 +139,16 @@ namespace MungFramework.Logic
                 OnGameResume(this);
             }
         }
+
         public override void OnGameResume(GameManagerAbstract parentManager)
         {
             base.OnGameResume(parentManager);
             Debug.Log("GameResume");
             GameState = GameStateEnum.Update;
         }
+        #endregion
 
+        #region GameReload
         /// <summary>
         /// 重新载入场景，用于完成某个任务后刷新npc等
         /// </summary>
@@ -156,6 +164,7 @@ namespace MungFramework.Logic
             yield return OnGameReloadExtra(parentManager);
             yield return OnGameReloadFinish(parentManager);
         }
+
         public virtual IEnumerator OnGameReloadExtra(GameManagerAbstract parentManager)
         {
             base.OnGameReload(parentManager);
@@ -169,15 +178,20 @@ namespace MungFramework.Logic
             Debug.Log("GameReloadFinish");
             yield return null;
         }
+
         public virtual IEnumerator OnGameReloadFinishExtra(GameManagerAbstract parentManager)
         {
             base.OnGameReloadFinish(parentManager);
             yield break;
         }
+        #endregion
+
+        #region GameQuit
         public virtual void DOGameQuit()
         {
             StartCoroutine(OnGameQuit(this));
         }
+
         public override IEnumerator OnGameQuit(GameManagerAbstract parentManager)
         {
             GameState = GameStateEnum.Quit;
@@ -185,7 +199,7 @@ namespace MungFramework.Logic
             yield return base.OnGameQuit(parentManager);
             Application.Quit();
         }
-
+        #endregion
     }
 }
 

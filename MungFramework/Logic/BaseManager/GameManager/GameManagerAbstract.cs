@@ -11,56 +11,6 @@ namespace MungFramework.Logic
     /// </summary>
     public abstract class GameManagerAbstract : MonoBehaviour
     {
-
-#if UNITY_EDITOR
-        [InfoBox("$subManagerInfo")]
-        [ShowInInspector]
-        [PropertyOrder(10)]
-        private string subManagerInfo
-        {
-            get
-            {
-                string info = "";
-                if (subGameControllerList!=null&& !subGameManagerList.Empty())
-                {
-                    info += "子管理器：\n";
-                    foreach (var subManager in subGameManagerList)
-                    {
-                        if (subManager != null)
-                        {
-                            info += subManager.name + "\n";
-                        }
-                        else
-                        {
-                            Debug.LogError(name + "子管理器错误，请查看");
-                        }
-
-                    }
-                }
-                if (subGameControllerList!=null && !subGameControllerList.Empty())
-                {
-                    info += "子执行器：\n";
-                    foreach (var subExecutor in subGameControllerList)
-                    {
-                        if (subExecutor != null)
-                        {
-                            info += subExecutor.name + "\n";
-                        }
-                        else
-                        {
-                            Debug.LogError(name + "子执行器错误，请查看");                       
-                        }
-                    }
-                }
-                return info;
-            }
-        }
-#endif
-
-        [SerializeField]
-        [LabelText("事件")]
-        protected GameManagerEvents gameManagerEvents = new();
-
         /// <summary>
         /// 按一定顺序获取所有的子管理器
         /// </summary>
@@ -77,10 +27,8 @@ namespace MungFramework.Logic
         [SerializeField]
         protected List<GameControllerAbstract> subGameControllerList;
 
-
         public virtual IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
-            gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnSceneLoad)?.Invoke();
             RegisterEventOnSceneLoad();
             foreach (var subManager in subGameManagerList)
             {
@@ -91,13 +39,14 @@ namespace MungFramework.Logic
                 subController.OnSceneLoad(this);
             }
         }
+
         protected virtual void RegisterEventOnSceneLoad()
         {
+
         }
 
         public virtual void OnGameStart(GameManagerAbstract parentManager)
         {
-            gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameStart)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameStart(this);
@@ -108,15 +57,14 @@ namespace MungFramework.Logic
             }
             StartCoroutine(OnGameStartIEnumerator(parentManager));
         }
+
         public virtual IEnumerator OnGameStartIEnumerator(GameManagerAbstract parentManager)
         {
             yield return null;
         }
 
-
         public virtual void OnGamePause(GameManagerAbstract parentManager)
         {
-            gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGamePause)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGamePause(this);
@@ -126,9 +74,9 @@ namespace MungFramework.Logic
                 subController.OnGamePause(this);
             }
         }
+
         public virtual void OnGameResume(GameManagerAbstract parentManager)
         {
-            gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameResume)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameResume(this);
@@ -139,10 +87,8 @@ namespace MungFramework.Logic
             }
         }
 
-
         public virtual void OnGameReload(GameManagerAbstract parentManager)
         {
-            gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameReload)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameReload(this);
@@ -153,10 +99,8 @@ namespace MungFramework.Logic
             }
         }
 
-
         public virtual void OnGameReloadFinish(GameManagerAbstract parentManager)
         {
-            gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameReloadFinish)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameReloadFinish(this);
@@ -169,7 +113,6 @@ namespace MungFramework.Logic
 
         public virtual IEnumerator OnGameQuit(GameManagerAbstract parentManager)
         {
-            gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameQuit)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
                 yield return subManager.OnGameQuit(this);
@@ -183,7 +126,6 @@ namespace MungFramework.Logic
 
         public virtual void OnGameUpdate(GameManagerAbstract parentManager)
         {
-            gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameUpdate)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameUpdate(this);
@@ -195,7 +137,6 @@ namespace MungFramework.Logic
         }
         public virtual void OnGameFixedUpdate(GameManagerAbstract parentManager)
         {
-            gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameFixedUpdate)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameFixedUpdate(this);
@@ -207,7 +148,6 @@ namespace MungFramework.Logic
         }
         public virtual void OnGameLateUpdate(GameManagerAbstract parentManager)
         {
-            gameManagerEvents.GetEvent(GameManagerEvents.GameMangerEventsEnum.OnGameLateUpdate)?.Invoke();
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameLateUpdate(this);
@@ -217,7 +157,50 @@ namespace MungFramework.Logic
                 subController.OnGameLateUpdate(this);
             }
         }
+#if UNITY_EDITOR
+        [InfoBox("$subManagerInfo")]
+        [ShowInInspector]
+        [PropertyOrder(10)]
+        private string subManagerInfo
+        {
+            get
+            {
+                string info = "";
+                if (subGameControllerList != null && !subGameManagerList.Empty())
+                {
+                    info += "子管理器：\n";
+                    foreach (var subManager in subGameManagerList)
+                    {
+                        if (subManager != null)
+                        {
+                            info += subManager.name + "\n";
+                        }
+                        else
+                        {
+                            Debug.LogError(name + "子管理器错误，请查看");
+                        }
 
+                    }
+                }
+                if (subGameControllerList != null && !subGameControllerList.Empty())
+                {
+                    info += "子执行器：\n";
+                    foreach (var subExecutor in subGameControllerList)
+                    {
+                        if (subExecutor != null)
+                        {
+                            info += subExecutor.name + "\n";
+                        }
+                        else
+                        {
+                            Debug.LogError(name + "子执行器错误，请查看");
+                        }
+                    }
+                }
+                return info;
+            }
+        }
+#endif
     }
 
 }

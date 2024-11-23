@@ -79,7 +79,9 @@ namespace MungFramework.Ui
                 if (nowSelectButton != null)
                 {
                     selectPoint.gameObject.SetActive(true);
+                    // Debug.LogError("1    "+selectPoint.position);
                     selectPoint.LerpRectTransform(nowSelectButton.RectTransform, StaticData.FixedDeltaTimeLerpValue_Faster);
+                    //  Debug.LogError("2    "+selectPoint.position);
                 }
                 else
                 {
@@ -91,7 +93,10 @@ namespace MungFramework.Ui
         #region Input
         public virtual void OnInput(InputValueEnum inputType)
         {
-            LayerControll(inputType);
+            if (isOpen)
+            {
+                LayerControll(inputType);
+            }
         }
         protected virtual void LayerControll(InputValueEnum inputType)
         {
@@ -228,21 +233,25 @@ namespace MungFramework.Ui
                 nowSelectButton.OnSelect(false);
             }
 
+            if (selectPoint != null)
+            {
+                selectPoint.gameObject.SetActive(false);
+            }
+
+            gameObject.SetActive(true);
+            InputManager.Push_InputAcceptor(this);
+            CallActionHelp(ON_LAYER_OPEN);
+
+            //等渲染结束再设置isOpen
             void openHelp()
             {
                 isOpen = true;
                 if (nowSelectButton != null && selectPoint != null)
                 {
-                    selectPoint.LerpRectTransform(nowSelectButton.RectTransform, 1);
+                    selectPoint.position = nowSelectButton.RectTransform.position;
                 }
             }
-
-            //等渲染结束再设置isOpen
             LifeCycleExtension.LateUpdateHelp(openHelp);
-
-            gameObject.SetActive(true);
-            InputManager.Push_InputAcceptor(this);
-            CallActionHelp(ON_LAYER_OPEN);
         }
         public virtual void Close()
         {

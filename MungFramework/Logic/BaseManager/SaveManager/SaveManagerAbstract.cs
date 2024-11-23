@@ -24,9 +24,13 @@ namespace MungFramework.Logic.Save
         [SerializeField]
         protected MungBufferModel<string, Sprite> SaveImageBuffer = new(); //存档图片的缓存
 
+        protected const string NowSaveFileNameSaveKey = "NowSaveFileName";
+
         //存档数上限
         public static int SaveFileCount => 10;
 
+
+        #region InitSave
         public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
         {
             yield return base.OnSceneLoad(parentManager);
@@ -116,7 +120,7 @@ namespace MungFramework.Logic.Save
         protected virtual IEnumerator LoadPlayerSaveFiles()
         {
             //获取当前使用的存档
-            var nowSaveFileName = SystemSaveFile.GetValue("NowSaveFileName");
+            var nowSaveFileName = SystemSaveFile.GetValue(NowSaveFileNameSaveKey);
 
             //如果没有当前使用的存档，说明是第一次进入游戏，默认使用自动存档
             if (nowSaveFileName.hasValue == false)
@@ -124,7 +128,7 @@ namespace MungFramework.Logic.Save
                 Debug.Log("没有当前使用的存档，说明是第一次进入游戏，默认使用自动存档");
                 nowSaveFileName.value = "save0";
 
-                SetSystemSaveValue("NowSaveFileName", nowSaveFileName.value);
+                SetSystemSaveValue(NowSaveFileNameSaveKey, nowSaveFileName.value);
             }
 
 
@@ -148,6 +152,40 @@ namespace MungFramework.Logic.Save
             }
         }
 
+        #endregion
+
+        #region LoadScene
+        /// <summary>
+        /// 载入某个存档同时进入游戏场景
+        /// </summary>
+        public virtual IEnumerator LoadSaveAndToGameScene(int saveIndex)
+        {
+            var saveName = "save" + saveIndex;
+            if (!ExistSaveFile(saveName))
+            {
+                Debug.LogError("目标存档文件不存在，不能Reload存档:" + saveName);
+                yield break;
+            }
+            yield return SetSystemSaveValue_Async(NowSaveFileNameSaveKey, saveName);
+            SceneManager.LoadScene(GameSceneName);
+        }
+
+        /// <summary>
+        /// 载入某个存档同时不进入游戏场景，用于标题界面的异步加载场景
+        /// </summary>
+        public virtual bool LoadSaveButNotToGameScene(int saveIndex)
+        {
+            var saveName = "save" + saveIndex;
+            if (!ExistSaveFile(saveName))
+            {
+                Debug.LogError("目标存档文件不存在，不能Reload存档:" + saveName);
+                return false;
+            }
+            SetSystemSaveValue(NowSaveFileNameSaveKey, saveName);
+            return true;
+        }
+        #endregion
+
         /// <summary>
         /// 在存档之前调用
         /// </summary>
@@ -161,63 +199,30 @@ namespace MungFramework.Logic.Save
         }
 
         /// <summary>
-        /// 自动保存
-        /// 保存至save0
+        /// 异步自动保存至save0
         /// </summary>
-        public virtual IEnumerator AutoSave()
+        public virtual IEnumerator AutoSave_Async(bool shotScreen)
         {
             //保存一张屏幕截图
             Texture2D screenShot = null;
-            yield return ImageSystem.ScreenShot(x => screenShot = x);
-            yield return SaveInByIndex(0,saveImage:screenShot);
-        }
-
-        /// <summary>
-        /// 是否存在某个存档
-        /// </summary>
-        public virtual bool ExistSaveFile(string saveName)
-        {
-            return Database.ExistDataTable(saveName);
-        }
-
-        /// <summary>
-        /// 载入某个存档同时进入游戏场景
-        /// </summary>
-        public virtual IEnumerator LoadSaveAndToGameScene(int saveIndex)
-        {
-            var saveName = "save" + saveIndex;
-            if (!ExistSaveFile(saveName))
+            if (shotScreen)
             {
-                Debug.LogError("目标存档文件不存在，不能Reload存档:" + saveName);
-                yield break;
+                yield return ImageSystem.ScreenShot(x => screenShot = x);
             }
-            yield return SetSystemSaveValueIEnumerator("NowSaveFileName", saveName);
-            SceneManager.LoadScene(GameSceneName);
+            yield return SaveInByIndex_Async(0,saveImage:screenShot);
         }
 
-        /// <summary>
-        /// 载入某个存档同时不进入游戏场景，用于标题界面的异步加载场景
-        /// </summary>
-        public virtual IEnumerator LoadSaveButNotToGameScene(int saveIndex,UnityAction loadSuccess)
+        public virtual void AutoSave()
         {
-            var saveName = "save" + saveIndex;
-            if (!ExistSaveFile(saveName))
-            {
-                Debug.LogError("目标存档文件不存在，不能Reload存档:" + saveName);
-                yield break;
-            }
-            yield return SetSystemSaveValueIEnumerator("NowSaveFileName", saveName);
-            if (loadSuccess != null)
-            {
-                loadSuccess.Invoke();
-            }
+            SaveInByIndex(0);
         }
 
 
+
         /// <summary>
-        /// 把当前存档保存到指定存档
+        /// 把当前存档异步保存到指定存档
         /// </summary>
-        public virtual IEnumerator SaveInByIndex(int saveIndex, bool onSave = true,Texture2D saveImage = null)
+        public virtual IEnumerator SaveInByIndex_Async(int saveIndex, bool onSave = true,Texture2D saveImage = null)
         {
             //是否在存档之前调用
             if (onSave)
@@ -226,7 +231,7 @@ namespace MungFramework.Logic.Save
             }
 
             CurrentSaveFile.SaveName = "save" + saveIndex;
-            SetSystemSaveValue("NowSaveFileName", CurrentSaveFile.SaveName);
+            SetSystemSaveValue(NowSaveFileNameSaveKey, CurrentSaveFile.SaveName);
 
             //如果有存档截图，保存图标并更新缓存
             if (saveImage != null)
@@ -236,6 +241,23 @@ namespace MungFramework.Logic.Save
                 SaveImageBuffer.UpdateBuffer(CurrentSaveFile.SaveName, sprite);
             }
             yield return SaveInAsync(CurrentSaveFile);
+        }
+
+        /// <summary>
+        /// 把当前存档同步保存到指定存档
+        /// </summary>
+        public virtual void SaveInByIndex(int saveIndex, bool onSave = true)
+        {
+            //是否在存档之前调用
+            if (onSave)
+            {
+                OnSave();
+            }
+
+            CurrentSaveFile.SaveName = "save" + saveIndex;
+            SetSystemSaveValue(NowSaveFileNameSaveKey, CurrentSaveFile.SaveName);
+
+            SaveIn(CurrentSaveFile);
         }
 
         /// <summary>
@@ -269,7 +291,6 @@ namespace MungFramework.Logic.Save
             Database.SetKeyValues(saveFile.SaveName, saveFile.GetKeyValues());
         }
 
-
         /// <summary>
         /// 获取所有存档文件，0号存档为自动存档
         /// </summary>
@@ -290,6 +311,14 @@ namespace MungFramework.Logic.Save
         public virtual string GetNowSaveName()
         {
             return CurrentSaveFile.SaveName;
+        }
+
+        /// <summary>
+        /// 是否存在某个存档
+        /// </summary>
+        public virtual bool ExistSaveFile(string saveName)
+        {
+            return Database.ExistDataTable(saveName);
         }
 
         /// <summary>
@@ -349,7 +378,7 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 异步设置系统存档值
         /// </summary>
-        public virtual IEnumerator SetSystemSaveValueIEnumerator(string key, string val)
+        public virtual IEnumerator SetSystemSaveValue_Async(string key, string val)
         {
             SystemSaveFile.SetValue(key, val);
             //保存系统存档

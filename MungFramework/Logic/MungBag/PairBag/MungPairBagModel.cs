@@ -3,7 +3,7 @@ using System;
 namespace MungFramework.Logic.MungBag.PairBag
 {
     [Serializable]
-    public class MungPairBagModel<T_BagItem> :ListBagModel<T_BagItem> where T_BagItem : MungPairBagItem, new()
+    public class MungPairBagModel<T_BagItem> : ListBagModel<T_BagItem> where T_BagItem : MungPairBagItem, new()
     {
         [Button]
         public T_BagItem AddItem(string key)

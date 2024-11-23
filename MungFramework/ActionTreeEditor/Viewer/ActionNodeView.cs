@@ -6,7 +6,6 @@ using UnityEngine.UIElements;
 
 namespace MungFramework.ActionTreeEditor
 {
-
     /// <summary>
     /// 节点视图
     /// </summary>
@@ -15,24 +14,16 @@ namespace MungFramework.ActionTreeEditor
         public ActionNode Node;
 
         public Port InputPort;
-
         public Port NextPort, AtTimePort;
 
         public Action<ActionNodeView> OnNodeSelected;
-
         public Action<ActionNodeView> OnNodeUnSelected;
 
-        private void SetStyle()
-        {
-            title = Node.NodeTitle;
-            titleContainer.style.backgroundColor = Node.颜色;
-        }
         public ActionNodeView(ActionNode node)
         {
             Node = node;
 
             SetStyle();
-
             viewDataKey = Node.guid;
 
             style.left = Node.position.x;
@@ -45,9 +36,16 @@ namespace MungFramework.ActionTreeEditor
             }
             CreateOutputPort();
         }
-        public void CreateInputPort()
+
+        private void SetStyle()
         {
-            InputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
+            title = Node.NodeTitle;
+            titleContainer.style.backgroundColor = Node.颜色;
+        }
+
+        private void CreateInputPort()
+        {
+            InputPort = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(bool));
 
             if (InputPort != null)
             {
@@ -56,7 +54,7 @@ namespace MungFramework.ActionTreeEditor
             }
         }
 
-        public void CreateOutputPort()
+        private void CreateOutputPort()
         {
             NextPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
 
@@ -72,25 +70,23 @@ namespace MungFramework.ActionTreeEditor
                 AtTimePort.portName = "AtTime";
                 outputContainer.Add(AtTimePort);
             }
-
             outputContainer.style.flexDirection = FlexDirection.Column;
         }
-
 
         public override void OnSelected()
         {
             base.OnSelected();
             SetStyle();
-
             OnNodeSelected?.Invoke(this);
         }
+
         public override void OnUnselected()
         {
             base.OnUnselected();
             SetStyle();
-
             OnNodeUnSelected?.Invoke(this);
         }
+
         public override void SetPosition(Rect newPos)
         {
             base.SetPosition(newPos);

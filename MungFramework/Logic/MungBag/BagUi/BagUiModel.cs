@@ -11,8 +11,8 @@ namespace MungFramework.Logic.MungBag.BagUi
     /// 记录背包Ui中的道具信息，具体如何显示道具由组合该模型的Ui控制器决定
     /// </summary>
     [Serializable]
-    public class BagUiModel<T_ItemTypeEnum,T_ItemModel> : MungFramework.Model.Model 
-        where T_ItemTypeEnum: Enum 
+    public class BagUiModel<T_ItemTypeEnum, T_ItemModel> : MungFramework.Model.Model
+        where T_ItemTypeEnum : Enum
         where T_ItemModel : BagUiItemModel
     {
         [SerializeField]
@@ -101,7 +101,7 @@ namespace MungFramework.Logic.MungBag.BagUi
         {
             if (!itemDictionary.ContainsKey(itemType))
             {
-                itemDictionary.Add(itemType, new ());
+                itemDictionary.Add(itemType, new());
             }
             itemDictionary[itemType].Add(itemModel);
         }

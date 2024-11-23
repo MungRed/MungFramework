@@ -8,7 +8,7 @@ namespace MungFramework.Logic.MungBag.ItemBag
     /// 背包中储存拥有的道具以及数量
     /// </summary>
     [Serializable]
-    public class MungItemBagModel<T_BagItem> : ListBagModel<T_BagItem> where T_BagItem : MungItemBagItem,new()
+    public class MungItemBagModel<T_BagItem> : ListBagModel<T_BagItem> where T_BagItem : MungItemBagItem, new()
     {
         public bool HaveItem(string itemId)
         {

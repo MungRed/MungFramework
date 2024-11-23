@@ -1,9 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using UnityEngine;
 
 namespace MungFramework.Logic.MungBag.EquipBag
 {
@@ -13,7 +11,7 @@ namespace MungFramework.Logic.MungBag.EquipBag
     /// 储存每个装备单的的id和装备id和被装备的角色id
     /// </summary>
     [Serializable]
-    public class MungEquipBagModel<T_BagItem> : ListBagModel<T_BagItem> where T_BagItem:MungEquipBagItem,new()
+    public class MungEquipBagModel<T_BagItem> : ListBagModel<T_BagItem> where T_BagItem : MungEquipBagItem, new()
     {
         /// <summary>
         /// 向背包中添加一个道具
@@ -28,8 +26,10 @@ namespace MungFramework.Logic.MungBag.EquipBag
 
             T_BagItem item = new()
             {
-                EquipId = itemId,EquipGuid = Guid.NewGuid().ToString(),
-                OwnerId = "",OwnerGuid = ""
+                EquipId = itemId,
+                EquipGuid = Guid.NewGuid().ToString(),
+                OwnerId = "",
+                OwnerGuid = ""
             };
 
             InsertEquip(item);
@@ -56,9 +56,9 @@ namespace MungFramework.Logic.MungBag.EquipBag
         {
             return ItemList.Where(x => x.OwnerId == ownerId);
         }
-        public IEnumerable<T_BagItem> GetEquipByOwner(string ownerId,string ownerGuid)
+        public IEnumerable<T_BagItem> GetEquipByOwner(string ownerId, string ownerGuid)
         {
-            return ItemList.Where(x => x.OwnerId == ownerId&&x.OwnerGuid==ownerGuid);
+            return ItemList.Where(x => x.OwnerId == ownerId && x.OwnerGuid == ownerGuid);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace MungFramework.Logic.MungBag.EquipBag
         /// <summary>
         /// 改变道具的拥有者
         /// </summary>
-        public bool ChangeEquipOwner(string equipId, string equipGuid, string ownerId,string ownerGuid = "")
+        public bool ChangeEquipOwner(string equipId, string equipGuid, string ownerId, string ownerGuid = "")
         {
             if (equipId == null)
             {
@@ -96,7 +96,7 @@ namespace MungFramework.Logic.MungBag.EquipBag
         /// <summary>
         /// 获得道具的拥有者
         /// </summary>
-        public (string ownerId,string ownerGuid) GetEquipOwner(string equipId, string guid)
+        public (string ownerId, string ownerGuid) GetEquipOwner(string equipId, string guid)
         {
             if (equipId == null)
             {
@@ -105,9 +105,9 @@ namespace MungFramework.Logic.MungBag.EquipBag
             var item = ItemList.Find(x => x.EquipId == equipId && x.EquipGuid == guid);
             if (item != null)
             {
-                return (item.OwnerId,item.OwnerGuid);
+                return (item.OwnerId, item.OwnerGuid);
             }
-            return ("","");
+            return ("", "");
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace MungFramework.Logic.MungBag.EquipBag
             {
                 if (ItemList[i].EquipId.CompareTo(ItemList[i - 1].EquipId) < 0)
                 {
-                    Algorithm.Math.Swap(ItemList[i - 1],ItemList[i]);
+                    Algorithm.Math.Swap(ItemList[i - 1], ItemList[i]);
                 }
             }
         }

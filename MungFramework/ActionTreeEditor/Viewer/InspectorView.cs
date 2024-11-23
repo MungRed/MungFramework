@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 
 namespace MungFramework.ActionTreeEditor
 {
-
     /// <summary>
     /// 属性面板
     /// </summary>
@@ -40,10 +39,17 @@ namespace MungFramework.ActionTreeEditor
                     }
                 });
 
-            Add(container);
+            container.style.flexGrow = 1;
+            container.style.flexShrink = 0;
+            container.style.flexBasis = StyleKeyword.Auto;
+
+            // 创建一个 ScrollView 并将 IMGUIContainer 添加到其中
+            ScrollView scrollView = new ScrollView();
+            scrollView.Add(container);
+
+            Add(scrollView);
         }
     }
-
 }
 #endif
 

@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-direction: row; flex-grow: 1; align-items: stretch; justify-content: space-around;">
+        <ui:VisualElement name="LeftDiv" style="flex-grow: 0.5; flex-basis: 0; align-items: stretch; width: 0; height: 100%; display: none;">
+            <MungFramework.ActionTreeEditor.InspectorView style="height: initial; align-items: stretch; justify-content: flex-start; width: initial; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="RightDiv" style="flex-grow: 1; width: 0; height: 100%;">
+            <ui:Label text="Title" display-tooltip-when-elided="true" name="Title" enable-rich-text="true" style="flex-shrink: 1; overflow: visible; visibility: visible; display: flex; opacity: 1; background-color: rgba(0, 0, 0, 0); -unity-text-align: upper-center; -unity-font: url(&apos;project://database/Library/unity%20default%20resources?fileID=10102&amp;guid=0000000000000000e000000000000000&amp;type=0#Arial&apos;);" />
+            <MungFramework.ActionTreeEditor.ActionTreeViewer focusable="true" style="height: 100%; align-items: stretch; flex-grow: 0; justify-content: flex-start; -unity-text-align: upper-left;">
+                <ui:Toggle label="固定视图" name="FixedViewToggle" style="height: 17px; width: 172px; flex-direction: row; flex-wrap: nowrap; align-items: center; opacity: 1; max-width: none; background-color: rgba(255, 128, 0, 0.5); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-background-scale-mode: stretch-to-fill; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; flex-shrink: 0; position: relative; left: auto; overflow: hidden; visibility: visible; display: flex; justify-content: flex-start;" />
+            </MungFramework.ActionTreeEditor.ActionTreeViewer>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

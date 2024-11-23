@@ -13,14 +13,14 @@ namespace MungFramework.ScriptableObjects
 #if UNITY_EDITOR
         //将id设置为资源名称
         [Button("将id设置为资源名称", ButtonSizes.Medium)]
-        private void SetId()
+        public virtual void SetId()
         {
             Id = name;
             UnityEditor.EditorUtility.SetDirty(this);
         }
         //将资源名称设置为id
         [Button("将资源名称设置为id", ButtonSizes.Medium)]
-        private void SetAssetName()
+        public virtual void SetAssetName()
         {
             UnityEditor.AssetDatabase.RenameAsset(UnityEditor.AssetDatabase.GetAssetPath(this), Id);
         }
