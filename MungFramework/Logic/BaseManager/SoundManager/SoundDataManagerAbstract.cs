@@ -24,9 +24,9 @@ namespace MungFramework.Logic.Sound
         [SerializeField]
         private VolumeData volumeData = new();
 
-        public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
+        public override void OnSceneLoad(GameManagerAbstract parentManager)
         {
-            yield return base.OnSceneLoad(parentManager);
+            base.OnSceneLoad(parentManager);
             Load();
         }
 

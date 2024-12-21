@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace MungFramework.Logic.EventCenter
 {
-    public class EventCenterAbstract : MungFramework.Logic.SingletonGameControllerAbstract<EventCenterAbstract>, IEventCenter
+    public class EventCenterAbstract : MungFramework.Logic.SingletonGameManagerAbstract<EventCenterAbstract>, IEventCenter
     {
         private EventCenterModel eventCenterModel = new();
 

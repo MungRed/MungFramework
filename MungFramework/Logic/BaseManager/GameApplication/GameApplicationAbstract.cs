@@ -68,20 +68,29 @@ namespace MungFramework.Logic
         /// 当场景加载时调用
         /// 对每个Manager进行初始化
         /// </summary>
-        public virtual void DOSceneLoad()
+        public void DOSceneLoad()
         {
-            StartCoroutine(OnSceneLoad(this));
+            StartCoroutine(OnSceneLoadIEnumerator(this));
         }
-        public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
+        public IEnumerator OnSceneLoadIEnumerator(GameManagerAbstract parentManager)
         {
             Debug.Log("SceneLoad");
             GameState = GameStateEnum.Awake;
-            yield return OnSceneLoadExtra(parentManager);
+            yield return OnSceneLoadIEnumeratorExtra(parentManager);
             GameState = GameStateEnum.Start;
         }
-        public virtual IEnumerator OnSceneLoadExtra(GameManagerAbstract parentManager)
+        public virtual IEnumerator OnSceneLoadIEnumeratorExtra(GameManagerAbstract parentManager)
         {
-            yield return base.OnSceneLoad(parentManager);
+            RegisterEventOnSceneLoad();
+            foreach (var subManager in subGameManagerList)
+            {
+                subManager.OnSceneLoad(this);
+                if (subManager is IOnSceneLoadIEnumerator ienumerator)
+                {
+                    yield return ienumerator.OnSceneLoadIEnumerator(this);
+                }
+            }
+            yield return null;
         }
         #endregion
 
@@ -89,18 +98,18 @@ namespace MungFramework.Logic
         /// <summary>
         /// 游戏开始时调用
         /// </summary>
-        public virtual void DOGameStart()
+        public void DOGameStart()
         {
-            StartCoroutine(OnGameStart(this));
+            StartCoroutine(OnGameStartIEnumerator(this));
         }
-        public new IEnumerator OnGameStart(GameManagerAbstract parentManager)
+        public IEnumerator OnGameStartIEnumerator(GameManagerAbstract parentManager)
         {
             yield return new WaitUntil(() => GameState == GameStateEnum.Start);
             Debug.Log("GameStart");
-            yield return OnGameStartExtra(parentManager);
+            yield return OnGameStartIEnumeratorExtra(parentManager);
             GameState = GameStateEnum.Update;
         }
-        public virtual IEnumerator OnGameStartExtra(GameManagerAbstract parentManager)
+        public virtual IEnumerator OnGameStartIEnumeratorExtra(GameManagerAbstract parentManager)
         {
             base.OnGameStart(parentManager);
             yield return null;
@@ -111,7 +120,7 @@ namespace MungFramework.Logic
         /// <summary>
         /// 游戏暂停
         /// </summary>
-        public virtual void DOGamePause()
+        public void DOGamePause()
         {
             //只有在游戏更新状态下才能暂停
             if (GameState == GameStateEnum.Update)
@@ -131,7 +140,7 @@ namespace MungFramework.Logic
         /// <summary>
         /// 游戏恢复
         /// </summary>
-        public virtual void DOGameResume()
+        public void DOGameResume()
         {
             //只有在游戏暂停状态下才能恢复暂停
             if (GameState == GameStateEnum.Pause)
@@ -139,7 +148,6 @@ namespace MungFramework.Logic
                 OnGameResume(this);
             }
         }
-
         public override void OnGameResume(GameManagerAbstract parentManager)
         {
             base.OnGameResume(parentManager);
@@ -152,34 +160,34 @@ namespace MungFramework.Logic
         /// <summary>
         /// 重新载入场景，用于完成某个任务后刷新npc等
         /// </summary>
-        public virtual void DOGameReload()
+        public void DOGameReload()
         {
-            StartCoroutine(OnGameReload(this));
+            StartCoroutine(OnGameReloadIEnumerator(this));
         }
 
-        public virtual new IEnumerator OnGameReload(GameManagerAbstract parentManager)
+        public IEnumerator OnGameReloadIEnumerator(GameManagerAbstract parentManager)
         {
             Debug.Log("GameReload");
             GameState = GameStateEnum.Reload;
-            yield return OnGameReloadExtra(parentManager);
-            yield return OnGameReloadFinish(parentManager);
+            yield return OnGameReloadIEnumeratorExtra(parentManager);
+            yield return OnGameReloadIEnumeratorFinish(parentManager);
         }
 
-        public virtual IEnumerator OnGameReloadExtra(GameManagerAbstract parentManager)
+        public virtual IEnumerator OnGameReloadIEnumeratorExtra(GameManagerAbstract parentManager)
         {
             base.OnGameReload(parentManager);
             yield break;
         }
 
-        public virtual new IEnumerator OnGameReloadFinish(GameManagerAbstract parentManager)
+        public IEnumerator OnGameReloadIEnumeratorFinish(GameManagerAbstract parentManager)
         {
-            yield return OnGameReloadFinishExtra(parentManager);
+            yield return OnGameReloadFinishIEnumerator(parentManager);
             GameState = GameStateEnum.Update;
             Debug.Log("GameReloadFinish");
             yield return null;
         }
 
-        public virtual IEnumerator OnGameReloadFinishExtra(GameManagerAbstract parentManager)
+        public virtual IEnumerator OnGameReloadFinishIEnumerator(GameManagerAbstract parentManager)
         {
             base.OnGameReloadFinish(parentManager);
             yield break;
@@ -187,16 +195,17 @@ namespace MungFramework.Logic
         #endregion
 
         #region GameQuit
-        public virtual void DOGameQuit()
+        public void DOGameQuit()
         {
-            StartCoroutine(OnGameQuit(this));
+            StartCoroutine(OnGameQuitIEnumerator(this));
         }
 
-        public override IEnumerator OnGameQuit(GameManagerAbstract parentManager)
+        public IEnumerator OnGameQuitIEnumerator(GameManagerAbstract parentManager)
         {
             GameState = GameStateEnum.Quit;
             Debug.Log("GameQuit");
-            yield return base.OnGameQuit(parentManager);
+            base.OnGameQuit(parentManager);
+            yield return null;
             Application.Quit();
         }
         #endregion

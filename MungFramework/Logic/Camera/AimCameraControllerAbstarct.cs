@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MungFramework.Logic.Camera
 {
-    public class AimCameraControllerAbstarct : GameControllerAbstract
+    public class AimCameraControllerAbstarct : GameManagerAbstract
     {
         private UnityEngine.Camera mainCamera => UnityEngine.Camera.main;
 

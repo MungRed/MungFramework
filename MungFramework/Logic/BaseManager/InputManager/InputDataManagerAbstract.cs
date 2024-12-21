@@ -35,9 +35,9 @@ namespace MungFramework.Logic.Input
             }
         }
 
-        public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
+        public override void OnSceneLoad(GameManagerAbstract parentManager)
         {
-            yield return base.OnSceneLoad(parentManager);
+            base.OnSceneLoad(parentManager);
             InputSystem.DisableAllEnabledActions();
             InputSource = new();
             InputSource.Enable();

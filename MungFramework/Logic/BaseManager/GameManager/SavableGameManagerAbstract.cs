@@ -6,7 +6,7 @@ namespace MungFramework.Logic
     /// <summary>
     /// 可保存的游戏管理器，只能用于根节点，在开始游戏时读取数据，存档时保存数据
     /// </summary>
-    public abstract class SavableDataGameManagerAbstract : DataGameManagerAbstract
+    public abstract class SavableGameManagerAbstract : GameManagerAbstract
     {
         private SaveManagerAbstract _saveManager;
         protected SaveManagerAbstract saveManager

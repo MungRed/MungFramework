@@ -8,7 +8,7 @@ namespace MungFramework.Logic.MungAnim
     /// <summary>
     /// 全局的动画控制器
     /// </summary>
-    public class MungAnimatorController : SingletonGameControllerAbstract<MungAnimatorController>
+    public class MungAnimatorController : SingletonGameManagerAbstract<MungAnimatorController>
     {
         [SerializeField]
         [ReadOnly]

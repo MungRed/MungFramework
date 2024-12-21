@@ -31,7 +31,7 @@ namespace MungFramework.Logic.Sound
             ("voice",VolumeTypeEnum.Voice)
         };
 
-        public virtual int GetVolumeData(VolumeTypeEnum volumeType)=>soundDataManager.GetVolumeData(volumeType);
+        public virtual int GetVolumeData(VolumeTypeEnum volumeType) => soundDataManager.GetVolumeData(volumeType);
 
         public virtual void SetSoundVolume(VolumeTypeEnum volumeType, int val)
         {
@@ -43,21 +43,22 @@ namespace MungFramework.Logic.Sound
             }
         }
 
-        public virtual void DefaultVolumeData(){
+        public virtual void DefaultVolumeData()
+        {
             soundDataManager.DefaultVolumeData();
             foreach (var soundSource in SoundSourceList)
             {
                 soundSource.Volume = GetVolumeData(soundSource.VolumeType) / 100f;
                 soundSource.Source.volume = soundSource.Volume;
             }
-        } 
+        }
 
 
-        public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
+        public override void OnSceneLoad(GameManagerAbstract parentManager)
         {
-            yield return base.OnSceneLoad(parentManager);
+            base.OnSceneLoad(parentManager);
             //加载默认声音源
-            yield return InitSoundSource();
+            InitSoundSource();
         }
 
         public override void OnGameUpdate(GameManagerAbstract parentManager)
@@ -68,20 +69,19 @@ namespace MungFramework.Logic.Sound
             foreach (var soundSource in SoundSourceList)
             {
                 soundSource.Source.transform.position = soundSource.Follow.DirectionLocalPosition(soundSource.LocalPosition);
-                soundSource.Volume = soundDataManager.GetVolumeData(soundSource.VolumeType)/100f;
+                soundSource.Volume = soundDataManager.GetVolumeData(soundSource.VolumeType) / 100f;
             }
         }
 
         /// <summary>
         /// 初始化声音源
         /// </summary>
-        public virtual IEnumerator InitSoundSource()
+        public virtual void InitSoundSource()
         {
             foreach (var defaultSoundSource in DefaultSoundSourceList)
             {
                 AddSoundSource(defaultSoundSource.Item1, defaultSoundSource.Item2);
             }
-            yield break;
         }
 
 
@@ -183,7 +183,7 @@ namespace MungFramework.Logic.Sound
             return this;
         }
 
-        public virtual SoundManagerAbstract PlayAudio(string id, AudioClip audioclip, bool loop = false, bool transition = false,bool replace = false)
+        public virtual SoundManagerAbstract PlayAudio(string id, AudioClip audioclip, bool loop = false, bool transition = false, bool replace = false)
         {
             var soundSource = GetSoundSource(id);
 
@@ -192,7 +192,7 @@ namespace MungFramework.Logic.Sound
                 return this;
             }
 
-            if (soundSource.Source.clip == audioclip&&replace==false)
+            if (soundSource.Source.clip == audioclip && replace == false)
             {
                 return this;
             }
@@ -244,7 +244,7 @@ namespace MungFramework.Logic.Sound
         }
 
 
-        private TweenerCore<float,float, FloatOptions> tmpTweenCore;
+        private TweenerCore<float, float, FloatOptions> tmpTweenCore;
 
         public virtual IEnumerator PauseAudio(string id, bool transition = false)
         {
@@ -257,7 +257,7 @@ namespace MungFramework.Logic.Sound
             {
                 if (!tmpTweenCore.IsComplete())
                 {
-                    tmpTweenCore.Kill();          
+                    tmpTweenCore.Kill();
                 }
             }
             var audioSource = soundSource.Source;

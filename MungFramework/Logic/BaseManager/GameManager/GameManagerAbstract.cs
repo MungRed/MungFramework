@@ -1,6 +1,5 @@
 ﻿using MungFramework.Extension.ComponentExtension;
 using Sirenix.OdinInspector;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,30 +18,18 @@ namespace MungFramework.Logic
         [SerializeField]
         protected List<GameManagerAbstract> subGameManagerList;
 
-        /// <summary>
-        /// 按一定顺序获取所有的子执行器
-        /// </summary>
-        /// <returns></returns>
-        [LabelText("子控制器")]
-        [SerializeField]
-        protected List<GameControllerAbstract> subGameControllerList;
+        protected virtual void RegisterEventOnSceneLoad()
+        {
 
-        public virtual IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
+        }
+
+        public virtual void OnSceneLoad(GameManagerAbstract parentManager)
         {
             RegisterEventOnSceneLoad();
             foreach (var subManager in subGameManagerList)
             {
-                yield return subManager.OnSceneLoad(this);
+                subManager.OnSceneLoad(this);
             }
-            foreach (var subController in subGameControllerList)
-            {
-                subController.OnSceneLoad(this);
-            }
-        }
-
-        protected virtual void RegisterEventOnSceneLoad()
-        {
-
         }
 
         public virtual void OnGameStart(GameManagerAbstract parentManager)
@@ -51,16 +38,6 @@ namespace MungFramework.Logic
             {
                 subManager.OnGameStart(this);
             }
-            foreach (var subController in subGameControllerList)
-            {
-                subController.OnGameStart(this);
-            }
-            StartCoroutine(OnGameStartIEnumerator(parentManager));
-        }
-
-        public virtual IEnumerator OnGameStartIEnumerator(GameManagerAbstract parentManager)
-        {
-            yield return null;
         }
 
         public virtual void OnGamePause(GameManagerAbstract parentManager)
@@ -68,10 +45,6 @@ namespace MungFramework.Logic
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGamePause(this);
-            }
-            foreach (var subController in subGameControllerList)
-            {
-                subController.OnGamePause(this);
             }
         }
 
@@ -81,10 +54,6 @@ namespace MungFramework.Logic
             {
                 subManager.OnGameResume(this);
             }
-            foreach (var subController in subGameControllerList)
-            {
-                subController.OnGameResume(this);
-            }
         }
 
         public virtual void OnGameReload(GameManagerAbstract parentManager)
@@ -92,10 +61,6 @@ namespace MungFramework.Logic
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameReload(this);
-            }
-            foreach (var subController in subGameControllerList)
-            {
-                subController.OnGameReload(this);
             }
         }
 
@@ -105,23 +70,14 @@ namespace MungFramework.Logic
             {
                 subManager.OnGameReloadFinish(this);
             }
-            foreach (var subController in subGameControllerList)
-            {
-                subController.OnGameReloadFinish(this);
-            }
         }
 
-        public virtual IEnumerator OnGameQuit(GameManagerAbstract parentManager)
+        public virtual void OnGameQuit(GameManagerAbstract parentManager)
         {
             foreach (var subManager in subGameManagerList)
             {
-                yield return subManager.OnGameQuit(this);
+                subManager.OnGameQuit(this);
             }
-            foreach (var subController in subGameControllerList)
-            {
-                subController.OnGameQuit(this);
-            }
-            yield return null;
         }
 
         public virtual void OnGameUpdate(GameManagerAbstract parentManager)
@@ -130,20 +86,12 @@ namespace MungFramework.Logic
             {
                 subManager.OnGameUpdate(this);
             }
-            foreach (var subController in subGameControllerList)
-            {
-                subController.OnGameUpdate(this);
-            }
         }
         public virtual void OnGameFixedUpdate(GameManagerAbstract parentManager)
         {
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameFixedUpdate(this);
-            }
-            foreach (var subController in subGameControllerList)
-            {
-                subController.OnGameFixedUpdate(this);
             }
         }
         public virtual void OnGameLateUpdate(GameManagerAbstract parentManager)
@@ -152,21 +100,31 @@ namespace MungFramework.Logic
             {
                 subManager.OnGameLateUpdate(this);
             }
-            foreach (var subController in subGameControllerList)
+        }
+
+#if UNITY_EDITOR
+        [Button("挂载所有子管理器")]
+        public void FindSubManager()
+        {
+            subGameManagerList.Clear();
+            foreach (var subManager in GetComponentsInChildren<GameManagerAbstract>(true))
             {
-                subController.OnGameLateUpdate(this);
+                if (subManager != this && subManager.GetComponentsInParent<GameManagerAbstract>(true)[1] ==this)
+                {
+                    subGameManagerList.Add(subManager);
+                }
             }
         }
-#if UNITY_EDITOR
+
         [InfoBox("$subManagerInfo")]
         [ShowInInspector]
         [PropertyOrder(10)]
-        private string subManagerInfo
+        public string subManagerInfo
         {
             get
             {
                 string info = "";
-                if (subGameControllerList != null && !subGameManagerList.Empty())
+                if (subGameManagerList != null && !subGameManagerList.Empty())
                 {
                     info += "子管理器：\n";
                     foreach (var subManager in subGameManagerList)
@@ -180,21 +138,6 @@ namespace MungFramework.Logic
                             Debug.LogError(name + "子管理器错误，请查看");
                         }
 
-                    }
-                }
-                if (subGameControllerList != null && !subGameControllerList.Empty())
-                {
-                    info += "子执行器：\n";
-                    foreach (var subExecutor in subGameControllerList)
-                    {
-                        if (subExecutor != null)
-                        {
-                            info += subExecutor.name + "\n";
-                        }
-                        else
-                        {
-                            Debug.LogError(name + "子执行器错误，请查看");
-                        }
                     }
                 }
                 return info;

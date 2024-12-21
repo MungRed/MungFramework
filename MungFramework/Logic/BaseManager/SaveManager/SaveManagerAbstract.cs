@@ -9,11 +9,11 @@ using UnityEngine.SceneManagement;
 
 namespace MungFramework.Logic.Save
 {
-    public abstract class SaveManagerAbstract : SingletonGameManagerAbstract<SaveManagerAbstract>
+    public abstract class SaveManagerAbstract : SingletonGameManagerAbstract<SaveManagerAbstract>,IOnSceneLoadIEnumerator
     {
         [SerializeField]
         [ReadOnly]
-        protected List<SavableDataGameManagerAbstract> SavableManagerList;
+        protected List<SavableGameManagerAbstract> SavableManagerList;
         [SerializeField]
         protected SaveFile SystemSaveFile; //系统存档文件
         [SerializeField]
@@ -31,9 +31,8 @@ namespace MungFramework.Logic.Save
 
 
         #region InitSave
-        public override IEnumerator OnSceneLoad(GameManagerAbstract parentManager)
+        public  IEnumerator OnSceneLoadIEnumerator(GameManagerAbstract parentManager)
         {
-            yield return base.OnSceneLoad(parentManager);
             //初始化数据库
             yield return InitDatabase();
             //加载存档文件,加载存档文件时默认数据库初始化成功，即存在系统存档文件
@@ -410,7 +409,7 @@ namespace MungFramework.Logic.Save
         }
 
 
-        public virtual void AddManager(SavableDataGameManagerAbstract savableManager)
+        public virtual void AddManager(SavableGameManagerAbstract savableManager)
         {
             if (!SavableManagerList.Contains(savableManager))
             {

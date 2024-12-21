@@ -2,17 +2,33 @@
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
+using MungFramework.Logic.TimeCounter;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace MungFramework.Logic.Camera
 {
-    public abstract class CameraControllerAbstract : GameControllerAbstract
+    public abstract class CameraControllerAbstract : GameManagerAbstract
     {
         [Required("需要挂载摄像机")]
         [SerializeField]
         private CinemachineVirtualCamera virtualCamera;
+
+        private CinemachineBasicMultiChannelPerlin  multiChannelPerlin;
+
+        private CinemachineBasicMultiChannelPerlin MultiChannelPerlin
+        {
+            get
+            {
+                if (multiChannelPerlin == null)
+                {
+                    multiChannelPerlin = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+                }
+                return multiChannelPerlin;
+            }
+        }
 
         [SerializeField]
         [Required("需要挂载跟随和注释Transform")]
@@ -49,6 +65,35 @@ namespace MungFramework.Logic.Camera
 
         private TweenerCore<float, float, FloatOptions> setFovTweenCore;
 
+
+        [Button]
+        public void SetNoise(float value)
+        {
+            MultiChannelPerlin.m_AmplitudeGain = value;
+        }
+
+        [Button]
+        public void SetNoise(float value, float time,UnityAction endCallback = null)
+        {
+            float nowValue = MultiChannelPerlin.m_AmplitudeGain;
+            MultiChannelPerlin.m_AmplitudeGain = value;
+            TimeCounterManager.StartTimeCounter(time, 0, null, () => { MultiChannelPerlin.m_AmplitudeGain = nowValue; endCallback?.Invoke(); });
+        }
+
+        [Button]
+        public void SetNoise(float init, float target, float duration,UnityAction endCallback = null)
+        {
+            MultiChannelPerlin.m_AmplitudeGain = init;
+            DOTween.To(() => MultiChannelPerlin.m_AmplitudeGain, x => MultiChannelPerlin.m_AmplitudeGain = x, target, duration).onComplete+= () => endCallback?.Invoke();
+        }
+
+        [Button]
+        public void ResetNoise()
+        {
+            MultiChannelPerlin.m_AmplitudeGain = 0;
+        }
+
+        [Button]
         public void SetFov(int val, float time)
         {
             if (setFovTweenCore != null)
@@ -61,6 +106,7 @@ namespace MungFramework.Logic.Camera
                 .OnComplete(() => setFovTweenCore = null);
         }
 
+        [Button]
         public void ResetFov(float time)
         {
             if (setFovTweenCore != null)
@@ -158,23 +204,18 @@ namespace MungFramework.Logic.Camera
         private IEnumerator MoveFollow(Transform aim, float time)
         {
             float nowTime = 0;
-            /*            float smoothTime = 0.2f; // Adjust the smooth time as needed
-                        Vector3 velocity = Vector3.zero;*/
-
             var wait = new WaitForFixedUpdate();
             while (nowTime < time)
             {
                 if (!isPause)
                 {
                     float t = nowTime / time;
-                    float smoothTime = Mathf.SmoothStep(0, 1, t); // Apply smooth step function
+                    float smoothTime = Mathf.SmoothStep(0, 1, t);
                     follow_Pos.transform.position = Vector3.Lerp(follow_Pos.position, aim.position, smoothTime);
                     nowTime += Time.fixedDeltaTime;
                 }
                 yield return wait;
             }
-            //yield return follow_Pos.DOMove(aim.position, time).SetEase(Ease.OutCubic).WaitForCompletion();
-
             follow_isBinding = true;
         }
 
@@ -187,13 +228,12 @@ namespace MungFramework.Logic.Camera
                 if (!isPause)
                 {
                     float t = nowTime / time;
-                    float smoothT = Mathf.SmoothStep(0, 1, t); // Apply smooth step function
+                    float smoothT = Mathf.SmoothStep(0, 1, t);
                     lookAt_Pos.transform.position = Vector3.Lerp(lookAt_Pos.position, aim.position, smoothT);
                     nowTime += Time.fixedDeltaTime;
                 }
                 yield return wait;
             }
-            //yield return lookAt_Pos.DOMove(aim.position, time).SetEase(Ease.OutCubic).WaitForCompletion();
             lookAt_isBinding = true;
         }
     }
