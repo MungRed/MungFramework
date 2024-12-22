@@ -26,7 +26,7 @@ namespace MungFramework.Logic
         private bool notLoadOnStart;
 #endif
 
-        public override void  OnSceneLoad(GameManagerAbstract parentManager)
+        public override void OnSceneLoad(GameManagerAbstract parentManager)
         {
             base.OnSceneLoad(parentManager);
             //把自身添加到存档管理器中

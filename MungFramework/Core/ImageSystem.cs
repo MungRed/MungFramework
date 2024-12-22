@@ -7,6 +7,7 @@ namespace MungFramework.Core
 {
     public static class ImageSystem
     {
+        public static IFileSystem FileSystem = new FileSystemWindows();
         public static string ImageSavePath => Database.DatabasePath + "/image";
         public static string ImageFormat => "jpg";
 

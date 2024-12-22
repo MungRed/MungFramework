@@ -15,7 +15,7 @@ namespace MungFramework.Logic.Input
         public string InputMapLayerName;
 
         [SerializeField]
-        public  List<InputMapKeyValuePair> InputMapList = new();
+        public List<InputMapKeyValuePair> InputMapList = new();
 
         /// <summary>
         /// 获取某个键对应的输入值
@@ -23,12 +23,12 @@ namespace MungFramework.Logic.Input
         public InputValueEnum GetInputValue(InputKeyEnum key)
         {
             var find = InputMapList.Find(x => x.InputKey == key);
-            return find?.InputValue??InputValueEnum.NONE;
+            return find?.InputValue ?? InputValueEnum.NONE;
         }
 
         public IEnumerable<InputKeyEnum> GetInputKey(InputValueEnum value)
         {
-            return InputMapList.Where(x=>x.InputValue==value).Select(x => x.InputKey);
+            return InputMapList.Where(x => x.InputValue == value).Select(x => x.InputKey);
         }
 
         /// <summary>
@@ -51,14 +51,14 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 改变值的按键
         /// </summary>
-        public bool ChangeBind(InputKeyEnum oldkey,InputKeyEnum newkey,InputValueEnum value)
+        public bool ChangeBind(InputKeyEnum oldkey, InputKeyEnum newkey, InputValueEnum value)
         {
             if (oldkey == newkey)
             {
                 return true;
             }
 
-            var oldBind = InputMapList.Find(x => x.InputKey==oldkey&&x.InputValue == value);
+            var oldBind = InputMapList.Find(x => x.InputKey == oldkey && x.InputValue == value);
             if (oldBind == null)
             {
                 return AddBind(newkey, value);

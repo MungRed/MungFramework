@@ -5,8 +5,31 @@ namespace MungFramework.Extension.ComponentExtension
 {
     public static class ListExtension
     {
+        public enum TraversalOrder
+        {
+            先序遍历,
+            后序遍历,
+        }
+
         public static bool Empty<T>(this List<T> list) => list.Count == 0;
 
+        public static IEnumerable<T> Traversal<T>(this List<T> list, TraversalOrder order)
+        {
+            if (order == TraversalOrder.先序遍历)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    yield return list[i];
+                }
+            }
+            else
+            {
+                for (int i = list.Count - 1; i >= 0; i--)
+                {
+                    yield return list[i];
+                }
+            }
+        }
 
         public static List<T> Init<T>(this List<T> list, int n, T val)
         {

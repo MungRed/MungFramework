@@ -222,7 +222,7 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 改变按键绑定
         /// </summary>
-        public virtual IEnumerator ChangeKeyBind(string inputMapName, InputKeyEnum oldkey, InputValueEnum value,InputDeviceEnum inputDevice, UnityAction<bool> changeBindCallback)
+        public virtual IEnumerator ChangeKeyBind(string inputMapName, InputKeyEnum oldkey, InputValueEnum value, InputDeviceEnum inputDevice, UnityAction<bool> changeBindCallback)
         {
             var inputMap = inputDataManager.GetInputMap(inputMapName);
             if (inputMap == null)
@@ -242,11 +242,11 @@ namespace MungFramework.Logic.Input
                 UnityAction<InputKeyEnum> addBind = (InputKeyEnum newkey) =>
                 {
                     isKeyDown = true;
-                    if (inputDevice == InputDeviceEnum.手柄&& InputDataManagerAbstract.isGamepad(newkey))
+                    if (inputDevice == InputDeviceEnum.手柄 && InputDataManagerAbstract.isGamepad(newkey))
                     {
                         changeSuccess = inputMap.AddBind(newkey, value);
                     }
-                    else if (inputDevice == InputDeviceEnum.键鼠&& InputDataManagerAbstract.isKeyboard(newkey))
+                    else if (inputDevice == InputDeviceEnum.键鼠 && InputDataManagerAbstract.isKeyboard(newkey))
                     {
                         changeSuccess = inputMap.AddBind(newkey, value);
                     }
@@ -296,13 +296,13 @@ namespace MungFramework.Logic.Input
         }
 
 
-        public virtual IEnumerable<InputValueEnum> GetInputValues(InputKeyEnum inputKey)=> inputDataManager.GetInputValues(inputKey);
+        public virtual IEnumerable<InputValueEnum> GetInputValues(InputKeyEnum inputKey) => inputDataManager.GetInputValues(inputKey);
         public virtual InputValueEnum GetInputValue(string inputMapLayerName, InputKeyEnum inputKey) => inputDataManager.GetInputValue(inputMapLayerName, inputKey);
 
-        public virtual IEnumerable<InputKeyEnum> GetInputKeys(InputValueEnum value)=> inputDataManager.GetInputKeys(value);
+        public virtual IEnumerable<InputKeyEnum> GetInputKeys(InputValueEnum value) => inputDataManager.GetInputKeys(value);
         public virtual IEnumerable<InputKeyEnum> GetInputKeys(string inputMapLayerName, InputValueEnum inputValue) => inputDataManager.GetInputKeys(inputMapLayerName, inputValue);
         public virtual InputKeyEnum GetInputKey(string inputMapLayerName, InputValueEnum inputValue, InputDeviceEnum inputDevice) => inputDataManager.GetInputKey(inputMapLayerName, inputValue, inputDevice);
-        public virtual void DefaultKeyConfig()=> inputDataManager.DefaultKeyConfig();
+        public virtual void DefaultKeyConfig() => inputDataManager.DefaultKeyConfig();
         #endregion
 
         #region 轴
@@ -449,11 +449,11 @@ namespace MungFramework.Logic.Input
             //Debug.Log(inputkey);
             //触发一次任意键按下的事件
             InputAction_AnyKeyDown(inputkey);
-            
+
 
             IInputAcceptor inputAcceptor = null;
 
-           
+
             if (inputAcceptorStack.Count > 0)
             {
                 //如果栈顶的接收器不为空，就使用栈顶的接收器

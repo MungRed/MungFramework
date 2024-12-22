@@ -11,6 +11,8 @@ namespace MungFramework.Core
 {
     public static class Database
     {
+        public static IFileSystem FileSystem = new FileSystemWindows();
+
         [Serializable]
         public class DataTable
         {
@@ -95,7 +97,7 @@ namespace MungFramework.Core
             };
 
             //异步写入文件
-            yield return FileSystem.WriteFileAsync(DatabasePath, systemTableName, DataTableFormat, JsonUtility.ToJson(dataTable));
+            yield return FileSystem.WriteTextAsync(DatabasePath, systemTableName, DataTableFormat, JsonUtility.ToJson(dataTable));
         }
 
         /// <summary>
@@ -112,7 +114,7 @@ namespace MungFramework.Core
 
             string readContent = null;
 
-            yield return FileSystem.ReadFileAsync(DatabasePath, tableName, DataTableFormat, x => { readContent = x; });
+            yield return FileSystem.ReadTextAsync(DatabasePath, tableName, DataTableFormat, x => { readContent = x; });
 
             if (readContent == null)
             {
@@ -174,7 +176,7 @@ namespace MungFramework.Core
                 TableTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
             dataTable.SetKeyValues(keyValues);
-            yield return FileSystem.WriteFileAsync(DatabasePath, tableName, DataTableFormat, JsonUtility.ToJson(dataTable, true));
+            yield return FileSystem.WriteTextAsync(DatabasePath, tableName, DataTableFormat, JsonUtility.ToJson(dataTable, true));
         }
         public static void SetKeyValues(string tableName, List<KeyValuePair<string, string>> keyValues)
         {
@@ -184,7 +186,7 @@ namespace MungFramework.Core
                 TableTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
             dataTable.SetKeyValues(keyValues);
-            FileSystem.WriteFile(DatabasePath, tableName, DataTableFormat, JsonUtility.ToJson(dataTable, true));
+            FileSystem.WriteText(DatabasePath, tableName, DataTableFormat, JsonUtility.ToJson(dataTable, true));
         }
     }
 }

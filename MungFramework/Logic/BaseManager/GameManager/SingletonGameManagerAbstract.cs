@@ -1,6 +1,6 @@
 ﻿namespace MungFramework.Logic
 {
-    public class SingletonGameManagerAbstract<T> : GameManagerAbstract where T: GameManagerAbstract
+    public class SingletonGameManagerAbstract<T> : GameManagerAbstract where T : GameManagerAbstract
     {
         private static T _Instance;
         public static T Instance

@@ -2,13 +2,13 @@
 
 namespace MungFramework.Logic.Input
 {
-    public class InputMapLayerSOModelStream:SOModelStream<InputMapLayerDataSO,InputMapLayer>
+    public class InputMapLayerSOModelStream : SOModelStream<InputMapLayerDataSO, InputMapLayer>
     {
         public override InputMapLayer Stream(InputMapLayerDataSO so)
         {
             InputMapLayer res = new()
             {
-                InputMapLayerName=so.InputMapLayerName
+                InputMapLayerName = so.InputMapLayerName
             };
             foreach (var inputItem in so.InputMapList)
             {

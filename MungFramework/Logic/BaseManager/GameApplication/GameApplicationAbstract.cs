@@ -7,7 +7,7 @@ namespace MungFramework.Logic
     /// <summary>
     /// 游戏应用程序，游戏的入口，每个场景有且只有一个GameApplication
     /// </summary>
-    public abstract class GameApplicationAbstract : SingletonGameManagerAbstract<GameApplicationAbstract>
+    public abstract class GameApplicationAbstract : SingletonGameManagerAbstract<GameApplicationAbstract>, IOnSceneLoadIEnumerator, IOnGameStartIEnumerator, IOnGameReloadIEnumerator, IOnGameReloadFinishIEnumerator,IOnGamePauseIEnumerator,IOnGameResumeIEnumerator,IOnGameQuitIEnumerator
     {
         /// <summary>
         /// 游戏状态
@@ -90,7 +90,7 @@ namespace MungFramework.Logic
                     yield return ienumerator.OnSceneLoadIEnumerator(this);
                 }
             }
-            yield return null;
+            yield break;
         }
         #endregion
 
@@ -111,8 +111,15 @@ namespace MungFramework.Logic
         }
         public virtual IEnumerator OnGameStartIEnumeratorExtra(GameManagerAbstract parentManager)
         {
-            base.OnGameStart(parentManager);
-            yield return null;
+            foreach (var subManager in subGameManagerList)
+            {
+                subManager.OnGameStart(this);
+                if (subManager is IOnGameStartIEnumerator ienumerator)
+                {
+                    yield return ienumerator.OnGameStartIEnumerator(this);
+                }
+            }
+            yield break;
         }
         #endregion
 
@@ -125,16 +132,22 @@ namespace MungFramework.Logic
             //只有在游戏更新状态下才能暂停
             if (GameState == GameStateEnum.Update)
             {
-                OnGamePause(this);
+                StartCoroutine(OnGamePauseIEnumerator(this));
             }
         }
-
-        public override void OnGamePause(GameManagerAbstract parentManager)
+        public IEnumerator OnGamePauseIEnumerator(GameManagerAbstract parentManager)
         {
-            base.OnGamePause(parentManager);
             Debug.Log("GamePause");
-            //暂停
             GameState = GameStateEnum.Pause;
+            foreach (var subManager in subGameManagerList)
+            {
+                subManager.OnGamePause(this);
+                if (subManager is IOnGamePauseIEnumerator ienumerator)
+                {
+                    yield return ienumerator.OnGamePauseIEnumerator(this);
+                }
+            }
+            yield break;
         }
 
         /// <summary>
@@ -145,14 +158,22 @@ namespace MungFramework.Logic
             //只有在游戏暂停状态下才能恢复暂停
             if (GameState == GameStateEnum.Pause)
             {
-                OnGameResume(this);
+                StartCoroutine(OnGameResumeIEnumerator(this));
             }
         }
-        public override void OnGameResume(GameManagerAbstract parentManager)
+        public IEnumerator OnGameResumeIEnumerator(GameManagerAbstract parentManager)
         {
-            base.OnGameResume(parentManager);
             Debug.Log("GameResume");
+            foreach (var subManager in subGameManagerList)
+            {
+                subManager.OnGameResume(this);
+                if (subManager is IOnGameResumeIEnumerator ienumerator)
+                {
+                    yield return ienumerator.OnGameResumeIEnumerator(this);
+                }
+            }
             GameState = GameStateEnum.Update;
+            yield break;
         }
         #endregion
 
@@ -170,26 +191,39 @@ namespace MungFramework.Logic
             Debug.Log("GameReload");
             GameState = GameStateEnum.Reload;
             yield return OnGameReloadIEnumeratorExtra(parentManager);
-            yield return OnGameReloadIEnumeratorFinish(parentManager);
+
+            yield return OnGameReloadFinishIEnumerator(parentManager);
+            GameState = GameStateEnum.Update;
+            Debug.Log("GameReloadFinish");
         }
 
         public virtual IEnumerator OnGameReloadIEnumeratorExtra(GameManagerAbstract parentManager)
         {
-            base.OnGameReload(parentManager);
+            foreach (var subManager in subGameManagerList)
+            {
+                subManager.OnGameReload(this);
+                if (subManager is IOnGameReloadIEnumerator ienumerator)
+                {
+                    yield return ienumerator.OnGameReloadIEnumerator(this);
+                }
+            }
             yield break;
         }
 
-        public IEnumerator OnGameReloadIEnumeratorFinish(GameManagerAbstract parentManager)
+        public IEnumerator OnGameReloadFinishIEnumerator(GameManagerAbstract parentManager)
         {
-            yield return OnGameReloadFinishIEnumerator(parentManager);
-            GameState = GameStateEnum.Update;
-            Debug.Log("GameReloadFinish");
-            yield return null;
+            yield return OnGameReloadFinishIEnumeratorExtra(parentManager);
         }
-
-        public virtual IEnumerator OnGameReloadFinishIEnumerator(GameManagerAbstract parentManager)
+        public virtual IEnumerator OnGameReloadFinishIEnumeratorExtra(GameManagerAbstract parentManager)
         {
-            base.OnGameReloadFinish(parentManager);
+            foreach (var subManager in subGameManagerList)
+            {
+                subManager.OnGameReloadFinish(this);
+                if (subManager is IOnGameReloadFinishIEnumerator ienumerator)
+                {
+                    yield return ienumerator.OnGameReloadFinishIEnumerator(this);
+                }
+            }
             yield break;
         }
         #endregion
@@ -204,7 +238,14 @@ namespace MungFramework.Logic
         {
             GameState = GameStateEnum.Quit;
             Debug.Log("GameQuit");
-            base.OnGameQuit(parentManager);
+            foreach (var subManager in subGameManagerList)
+            {
+                subManager.OnGameQuit(this);
+                if (subManager is IOnGameQuitIEnumerator ienumerator)
+                {
+                    yield return ienumerator.OnGameQuitIEnumerator(this);
+                }
+            }
             yield return null;
             Application.Quit();
         }

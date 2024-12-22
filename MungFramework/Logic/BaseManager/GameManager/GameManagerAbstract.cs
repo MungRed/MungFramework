@@ -18,6 +18,10 @@ namespace MungFramework.Logic
         [SerializeField]
         protected List<GameManagerAbstract> subGameManagerList;
 
+
+        /// <summary>
+        /// 在场景加载时注册事件
+        /// </summary>
         protected virtual void RegisterEventOnSceneLoad()
         {
 
@@ -109,7 +113,7 @@ namespace MungFramework.Logic
             subGameManagerList.Clear();
             foreach (var subManager in GetComponentsInChildren<GameManagerAbstract>(true))
             {
-                if (subManager != this && subManager.GetComponentsInParent<GameManagerAbstract>(true)[1] ==this)
+                if (subManager != this && subManager.GetComponentsInParent<GameManagerAbstract>(true)[1] == this)
                 {
                     subGameManagerList.Add(subManager);
                 }
@@ -137,7 +141,6 @@ namespace MungFramework.Logic
                         {
                             Debug.LogError(name + "子管理器错误，请查看");
                         }
-
                     }
                 }
                 return info;

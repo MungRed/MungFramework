@@ -10,7 +10,7 @@ namespace MungFramework.Logic.Input
     public class InputMapLayerDataSO : DataSO
     {
         public string InputMapLayerName;
-        
+
         public List<InputMapKeyValuePair> InputMapList = new();
     }
 }

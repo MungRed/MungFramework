@@ -1,6 +1,5 @@
 ﻿using MungFramework.Logic.Save;
 using Sirenix.OdinInspector;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -106,7 +105,7 @@ namespace MungFramework.Logic.Input
                 return InputKeyEnum.NONE;
             }
             var inputKeys = inputMap.GetInputKey(inputValue);
-            var keybord = inputKeys.Where(x =>isKeyboard(x));
+            var keybord = inputKeys.Where(x => isKeyboard(x));
             var gamepad = inputKeys.Where(x => isGamepad(x));
             if (inputDevice == InputDeviceEnum.键鼠)
             {
@@ -214,7 +213,7 @@ namespace MungFramework.Logic.Input
             foreach (var inputMap in inputMapLayerList)
             {
                 var savename = "INPUTMAP_LAYER_" + inputMap.InputMapLayerName;
-                Debug.Log("Save:"+savename);
+                Debug.Log("Save:" + savename);
                 SaveManagerAbstract.Instance.SetSystemSaveValue(savename, JsonUtility.ToJson(inputMap));
             }
         }

@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 namespace MungFramework.Logic.Save
 {
-    public abstract class SaveManagerAbstract : SingletonGameManagerAbstract<SaveManagerAbstract>,IOnSceneLoadIEnumerator
+    public abstract class SaveManagerAbstract : SingletonGameManagerAbstract<SaveManagerAbstract>, IOnSceneLoadIEnumerator
     {
         [SerializeField]
         [ReadOnly]
@@ -31,7 +31,7 @@ namespace MungFramework.Logic.Save
 
 
         #region InitSave
-        public  IEnumerator OnSceneLoadIEnumerator(GameManagerAbstract parentManager)
+        public IEnumerator OnSceneLoadIEnumerator(GameManagerAbstract parentManager)
         {
             //初始化数据库
             yield return InitDatabase();
@@ -62,7 +62,7 @@ namespace MungFramework.Logic.Save
         protected virtual IEnumerator LoadSaves()
         {
             yield return LoadSystemSaveFile();
-            yield return LoadPlayerSaveFiles();    
+            yield return LoadPlayerSaveFiles();
         }
 
         /// <summary>
@@ -74,11 +74,12 @@ namespace MungFramework.Logic.Save
             int totalCnt = 0;
             SaveImageBuffer.Clear();
 
-            UnityAction<int,Sprite> action = (i,x) => {           
+            UnityAction<int, Sprite> action = (i, x) =>
+            {
                 nowCnt++;
                 if (x != null)
                 {
-                    SaveImageBuffer.UpdateBuffer("save"+i, x);
+                    SaveImageBuffer.UpdateBuffer("save" + i, x);
                 }
             };
 
@@ -86,9 +87,9 @@ namespace MungFramework.Logic.Save
             {
                 totalCnt++;
                 int t = i;
-                StartCoroutine(ImageSystem.GetImageAsync("save" + i, x=>action(t,x)));
+                StartCoroutine(ImageSystem.GetImageAsync("save" + i, x => action(t, x)));
             }
-            yield return new WaitUntil(()=>nowCnt >= totalCnt);
+            yield return new WaitUntil(() => nowCnt >= totalCnt);
         }
 
         /// <summary>
@@ -137,10 +138,10 @@ namespace MungFramework.Logic.Save
 
             //如果没有存档文件
             if (saveFile == null)
-            {          
+            {
                 Debug.Log("存档不存在，新建" + nowSaveFileName.value);
                 //新建
-                CurrentSaveFile = new SaveFile() { SaveName = nowSaveFileName.value,};
+                CurrentSaveFile = new SaveFile() { SaveName = nowSaveFileName.value, };
                 //并保存
                 yield return SaveInAsync(CurrentSaveFile);
             }
@@ -208,7 +209,7 @@ namespace MungFramework.Logic.Save
             {
                 yield return ImageSystem.ScreenShot(x => screenShot = x);
             }
-            yield return SaveInByIndex_Async(0,saveImage:screenShot);
+            yield return SaveInByIndex_Async(0, saveImage: screenShot);
         }
 
         public virtual void AutoSave()
@@ -221,7 +222,7 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 把当前存档异步保存到指定存档
         /// </summary>
-        public virtual IEnumerator SaveInByIndex_Async(int saveIndex, bool onSave = true,Texture2D saveImage = null)
+        public virtual IEnumerator SaveInByIndex_Async(int saveIndex, bool onSave = true, Texture2D saveImage = null)
         {
             //是否在存档之前调用
             if (onSave)
@@ -264,7 +265,8 @@ namespace MungFramework.Logic.Save
         /// </summary>
         public virtual IEnumerator SaveEmptyInByIndex(int saveIndex)
         {
-            SaveFile saveFile = new SaveFile() { 
+            SaveFile saveFile = new SaveFile()
+            {
                 SaveName = "save" + saveIndex,
             };
             yield return SaveInAsync(saveFile);
@@ -293,15 +295,16 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 获取所有存档文件，0号存档为自动存档
         /// </summary>
-        public virtual IEnumerator GetAllSaveFile(Dictionary<int,SaveFile> saveFileList)
+        public virtual IEnumerator GetAllSaveFile(Dictionary<int, SaveFile> saveFileList)
         {
-            saveFileList.Clear();;
+            saveFileList.Clear();
+            ;
             for (int i = 0; i <= SaveFileCount; i++)
             {
                 int t = i;
                 StartCoroutine(LoadSaveFile("save" + i, x => saveFileList.Add(t, x)));
             }
-            yield return new WaitUntil(()=> saveFileList.Count >= SaveFileCount + 1);
+            yield return new WaitUntil(() => saveFileList.Count >= SaveFileCount + 1);
         }
 
         /// <summary>
@@ -323,7 +326,7 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 根据索引获取存档文件
         /// </summary>
-        public virtual IEnumerator GetSaveFile(int saveIndex,UnityAction<SaveFile> resultAction)
+        public virtual IEnumerator GetSaveFile(int saveIndex, UnityAction<SaveFile> resultAction)
         {
             yield return LoadSaveFile("save" + saveIndex, resultAction);
         }
