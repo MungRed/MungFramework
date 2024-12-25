@@ -61,7 +61,7 @@ namespace MungFramework.Ui
                     selectPoint.position = nowSelectTitleButton.Button.position;
                     selectPoint.sizeDelta = nowSelectTitleButton.Button.sizeDelta;
                 };
-                LifeCycleExtension.LateUpdateHelp(action);
+                action.LateInvoke();
             }
         }
 
@@ -98,7 +98,7 @@ namespace MungFramework.Ui
             }
             if (scrollView != null)
             {
-                LifeCycleExtension.LateUpdateHelp(action);
+                LifeCycleExtension.LateInvoke(action);
             }
         }
     }

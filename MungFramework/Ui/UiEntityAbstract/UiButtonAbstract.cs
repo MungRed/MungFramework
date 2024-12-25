@@ -255,7 +255,7 @@ namespace MungFramework.Ui
             }
             if (UiScrollView != null)
             {
-                LifeCycleExtension.LateUpdateHelp(action);
+                LifeCycleExtension.LateInvoke(action);
             }
         }
     }

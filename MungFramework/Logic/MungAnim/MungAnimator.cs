@@ -9,14 +9,14 @@ namespace MungFramework.Logic.MungAnim
 {
     public class MungAnimator : MungFramework.Entity.Entity
     {
-        private MungAnimatorController _animController;
-        private MungAnimatorController animController
+        private MungAnimatorManager _animController;
+        private MungAnimatorManager animController
         {
             get
             {
                 if (_animController == null)
                 {
-                    _animController = MungAnimatorController.Instance;
+                    _animController = MungAnimatorManager.Instance;
                 }
                 return _animController;
             }

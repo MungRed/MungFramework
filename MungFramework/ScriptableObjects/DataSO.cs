@@ -1,5 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
+
 namespace MungFramework.ScriptableObjects
 {
     /// <summary>

@@ -251,7 +251,7 @@ namespace MungFramework.Ui
                     selectPoint.position = nowSelectButton.RectTransform.position;
                 }
             }
-            LifeCycleExtension.LateUpdateHelp(openHelp);
+            LifeCycleExtension.LateInvoke(openHelp);
         }
         public virtual void Close()
         {

@@ -11,7 +11,7 @@ namespace MungFramework.Logic.TimeCounter
         private float nowTime;        //当前时间
         private bool complete;        //完成
 
-        private UnityAction<float,float> stepAction;
+        private UnityAction<float, float> stepAction;
         private UnityAction completeAction;
 
         public float TotalTime => totalTime;
@@ -19,7 +19,7 @@ namespace MungFramework.Logic.TimeCounter
         public float Progress => nowTime / totalTime;
         public bool Complete => complete;
 
-        internal TimeCounter(float totalTime, float stepTime,UnityAction<float,float> stepAction,UnityAction completeAction)
+        internal TimeCounter(float totalTime, float stepTime, UnityAction<float, float> stepAction, UnityAction completeAction)
         {
             this.totalTime = totalTime;
             this.stepTime = stepTime;
@@ -41,7 +41,7 @@ namespace MungFramework.Logic.TimeCounter
                 stepCount = 0;
                 if (stepAction != null)
                 {
-                    stepAction.Invoke(nowTime,totalTime);
+                    stepAction.Invoke(nowTime, totalTime);
                 }
             }
 
