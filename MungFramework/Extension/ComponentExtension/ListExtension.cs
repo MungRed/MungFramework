@@ -58,5 +58,14 @@ namespace MungFramework.Extension.ComponentExtension
             }
             return list[0];
         }
+
+        public static T GetRandomItem<T>(this List<T> list)
+        {
+            if (list.Count == 0)
+            {
+                return default;
+            }
+            return list[UnityEngine.Random.Range(0, list.Count)];
+        }
     }
 }

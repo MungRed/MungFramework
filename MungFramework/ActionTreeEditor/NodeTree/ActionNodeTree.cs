@@ -41,7 +41,7 @@ namespace MungFramework.ActionTreeEditor
 
 
 #if UNITY_EDITOR
-        [Button("载入所有节点")]  
+        [Button("载入所有节点")]
         public void LoadAllActionNode()
         {
             // 获取当前 ScriptableObject 的路径

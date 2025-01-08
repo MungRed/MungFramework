@@ -1,8 +1,6 @@
 using MungFramework.ScriptableObjects;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 
@@ -72,7 +70,7 @@ namespace MungFramework.ActionTreeEditor
         /// 3.如果Next节点为null，返回null
         /// 4.如果没有满足的AtTime节点，返回null
         /// </summary>
-        public T GetNextNodeWithLogic<T>(Func<T,bool> match) where T : ActionNode
+        public T GetNextNodeWithMatch<T>(Func<T, bool> match) where T : ActionNode
         {
             T GetNextNodeInAtTime(T nowNode)
             {
@@ -92,7 +90,7 @@ namespace MungFramework.ActionTreeEditor
             }
 
             var nextNode = GetNextNode<T>();
-            if (nextNode==null)
+            if (nextNode == null)
             {
                 return null;
             }

@@ -7,7 +7,7 @@ namespace MungFramework.Logic.EventCenter
     /// <summary>
     /// 事件中心模型，可以组合到任何需要的类中，可以代替UnityEvent，实现事件的监听和调用
     /// </summary>
-    public class EventCenterModel : MungFramework.Model.Model, IEventCenter
+    public class EventCenterModel : MungFramework.Model.Model
     {
         private UnityEvent<string> onActionCall = new();
         private UnityEvent<string> onFuncCall = new();

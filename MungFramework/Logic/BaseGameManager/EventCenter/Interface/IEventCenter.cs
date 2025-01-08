@@ -6,6 +6,11 @@ namespace MungFramework.Logic.EventCenter
 {
     public interface IEventCenter
     {
+        public abstract EventCenterModel EventCenterModel
+        {
+            get;
+        }
+
         public void AddListener_OnActionCall(UnityAction<string> listener);
         public void RemoveListener_OnActionCall(UnityAction<string> listener);
         public void AddListener_OnFuncCall(UnityAction<string> listener);
@@ -26,5 +31,7 @@ namespace MungFramework.Logic.EventCenter
         public void AddListener_Func<T, R>(string eventType, Func<T, R> listener);
         public void RemoveListener_Func<T, R>(string eventType, Func<T, R> listener);
         public List<R> CallFunc<T, R>(string eventType, T parameter);
+
+        public void Clear();
     }
 }

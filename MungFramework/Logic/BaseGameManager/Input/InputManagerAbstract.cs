@@ -515,6 +515,8 @@ namespace MungFramework.Logic.Input
         #endregion
 
         #region 手柄震动
+        private int moterCount = 0;
+
         /// <summary>
         /// 默认震动
         /// </summary>
@@ -540,26 +542,22 @@ namespace MungFramework.Logic.Input
         /// </summary>
         public virtual void Moter(Gamepad pad, float low, float max)
         {
-            if (InputDevice != InputDeviceEnum.手柄)
+            moterCount++;
+            if (InputDevice == InputDeviceEnum.手柄&&pad !=null)
             {
-                return;
+                pad.SetMotorSpeeds(low, max);
             }
-            if (pad == null)
-            {
-                return;
-            }
-            pad.SetMotorSpeeds(low, max);
         }
         /// <summary>
         /// 取消震动
         /// </summary>
         public virtual void CancelMoter(Gamepad pad)
         {
-            if (pad == null)
+            moterCount--;
+            if (pad != null&&moterCount<=0)
             {
-                return;
+                pad.SetMotorSpeeds(0, 0);
             }
-            pad.SetMotorSpeeds(0, 0);
         }
         #endregion
     }
