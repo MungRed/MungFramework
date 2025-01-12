@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 namespace MungFramework.Logic.Save
 {
-    public abstract class SaveManagerAbstract : SingletonGameManagerAbstract<SaveManagerAbstract>, IOnSceneLoadIEnumerator
+    public abstract class SaveManagerAbstract : SingletonGameManagerAbstract<SaveManagerAbstract>, IOnSceneLoadEnumerator
     {
         [SerializeField]
         [ReadOnly]

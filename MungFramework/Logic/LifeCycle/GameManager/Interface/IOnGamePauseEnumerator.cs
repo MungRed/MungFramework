@@ -2,7 +2,7 @@
 
 namespace MungFramework.Logic
 {
-    public interface IOnGamePauseIEnumerator
+    public interface IOnGamePauseEnumerator
     {
         public IEnumerator OnGamePauseIEnumerator(GameManagerAbstract parentManager);
     }

@@ -7,7 +7,7 @@ namespace MungFramework.Logic
     /// <summary>
     /// 游戏应用程序，游戏的入口，每个场景有且只有一个GameApplication
     /// </summary>
-    public abstract class GameApplicationAbstract : SingletonGameManagerAbstract<GameApplicationAbstract>, IOnSceneLoadIEnumerator, IOnGameStartIEnumerator, IOnGameReloadIEnumerator, IOnGameReloadFinishIEnumerator,IOnGamePauseIEnumerator,IOnGameResumeIEnumerator,IOnGameQuitIEnumerator
+    public abstract class GameApplicationAbstract : SingletonGameManagerAbstract<GameApplicationAbstract>, IOnSceneLoadEnumerator, IOnGameStartEnumerator, IOnGameReloadEnumerator, IOnGameReloadFinishEnumerator,IOnGamePauseEnumerator,IOnGameResumeEnumerator,IOnGameQuitEnumerator
     {
         /// <summary>
         /// 游戏状态
@@ -85,7 +85,7 @@ namespace MungFramework.Logic
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnSceneLoad(this);
-                if (subManager is IOnSceneLoadIEnumerator ienumerator)
+                if (subManager is IOnSceneLoadEnumerator ienumerator)
                 {
                     yield return ienumerator.OnSceneLoadIEnumerator(this);
                 }
@@ -114,7 +114,7 @@ namespace MungFramework.Logic
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameStart(this);
-                if (subManager is IOnGameStartIEnumerator ienumerator)
+                if (subManager is IOnGameStartEnumerator ienumerator)
                 {
                     yield return ienumerator.OnGameStartIEnumerator(this);
                 }
@@ -142,7 +142,7 @@ namespace MungFramework.Logic
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGamePause(this);
-                if (subManager is IOnGamePauseIEnumerator ienumerator)
+                if (subManager is IOnGamePauseEnumerator ienumerator)
                 {
                     yield return ienumerator.OnGamePauseIEnumerator(this);
                 }
@@ -167,7 +167,7 @@ namespace MungFramework.Logic
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameResume(this);
-                if (subManager is IOnGameResumeIEnumerator ienumerator)
+                if (subManager is IOnGameResumeEnumerator ienumerator)
                 {
                     yield return ienumerator.OnGameResumeIEnumerator(this);
                 }
@@ -202,7 +202,7 @@ namespace MungFramework.Logic
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameReload(this);
-                if (subManager is IOnGameReloadIEnumerator ienumerator)
+                if (subManager is IOnGameReloadEnumerator ienumerator)
                 {
                     yield return ienumerator.OnGameReloadIEnumerator(this);
                 }
@@ -219,7 +219,7 @@ namespace MungFramework.Logic
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameReloadFinish(this);
-                if (subManager is IOnGameReloadFinishIEnumerator ienumerator)
+                if (subManager is IOnGameReloadFinishEnumerator ienumerator)
                 {
                     yield return ienumerator.OnGameReloadFinishIEnumerator(this);
                 }
@@ -241,7 +241,7 @@ namespace MungFramework.Logic
             foreach (var subManager in subGameManagerList)
             {
                 subManager.OnGameQuit(this);
-                if (subManager is IOnGameQuitIEnumerator ienumerator)
+                if (subManager is IOnGameQuitEnumerator ienumerator)
                 {
                     yield return ienumerator.OnGameQuitIEnumerator(this);
                 }

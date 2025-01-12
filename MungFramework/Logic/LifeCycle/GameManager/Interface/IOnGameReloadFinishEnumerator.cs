@@ -2,7 +2,7 @@
 
 namespace MungFramework.Logic
 {
-    public interface  IOnGameReloadFinishIEnumerator
+    public interface  IOnGameReloadFinishEnumerator
     {
         public IEnumerator OnGameReloadFinishIEnumerator(GameManagerAbstract parentManager);
     }
