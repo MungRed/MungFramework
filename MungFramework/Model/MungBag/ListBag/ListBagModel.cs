@@ -17,9 +17,7 @@ namespace MungFramework.Model.MungBag
             {
                 return;
             }
-            var temp = itemList[index1];
-            itemList[index1] = itemList[index2];
-            itemList[index2] = temp;
+            (itemList[index2], itemList[index1]) = (itemList[index1], itemList[index2]);
         }
     }
 }

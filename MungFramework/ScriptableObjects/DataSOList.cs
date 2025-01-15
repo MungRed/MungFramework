@@ -40,7 +40,7 @@ namespace MungFramework.ScriptableObjects
         private string TDataSOName => typeof(TDataSO).Name;
 
         [Button("@\"获取所有\" + TDataSOName + \"文件\"", ButtonSizes.Medium)]
-        private void GetAllSO()
+        protected virtual void GetAllSO()
         {
             DataSOItemList.Clear();
             var guids = UnityEditor.AssetDatabase.FindAssets("t:" + typeof(TDataSO).Name);

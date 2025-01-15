@@ -142,7 +142,7 @@ namespace MungFramework.Model.MungBag.EquipBag
             {
                 if (ItemList[i].EquipId.CompareTo(ItemList[i - 1].EquipId) < 0)
                 {
-                    Algorithm.Math.Swap(ItemList[i - 1], ItemList[i]);
+                    (ItemList[i - 1], ItemList[i]) = (ItemList[i], ItemList[i-1]);
                 }
             }
         }

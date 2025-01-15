@@ -37,15 +37,11 @@ namespace MungFramework.Algorithm
         }
         public static void Swap<T>(ref T a, ref T b) where T : struct
         {
-            T temp = a;
-            a = b;
-            b = temp;
+            (b, a) = (a, b);
         }
         public static void Swap<T>(T a, T b) where T : class
         {
-            T temp = a;
-            a = b;
-            b = temp;
+            (b, a) = (a, b);
         }
         public static int Round(this float num)
         {

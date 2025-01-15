@@ -1,4 +1,5 @@
 ﻿using MungFramework.Logic.Save;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace MungFramework.Logic
@@ -49,10 +50,12 @@ namespace MungFramework.Logic
         /// <summary>
         /// 保存到存档
         /// </summary>
+        [Button]
         public abstract void Save();
         /// <summary>
         /// 从存档中读取
         /// </summary>
+        [Button]
         public abstract void Load();
     }
 

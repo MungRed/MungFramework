@@ -103,7 +103,7 @@ namespace MungFramework.Model.MungBag.FlagBag
             {
                 if (ItemList[i].FlagName.CompareTo(ItemList[i - 1].FlagName) < 0)
                 {
-                    Algorithm.Math.Swap(ItemList[i - 1], ItemList[i]);
+                    (ItemList[i - 1], ItemList[i]) = (ItemList[i], ItemList[i - 1]);
                 }
             }
         }
