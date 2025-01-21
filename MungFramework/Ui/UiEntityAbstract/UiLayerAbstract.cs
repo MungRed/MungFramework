@@ -28,7 +28,7 @@ namespace MungFramework.Ui
             {
                 if (uiLayerGroup == null)
                 {
-                    uiLayerGroup = GetComponentInParent<UiLayerGroupAbstract>();
+                    uiLayerGroup = GetComponentInParent<UiLayerGroupAbstract>(true);
                 }
                 return uiLayerGroup;
             }
@@ -41,7 +41,7 @@ namespace MungFramework.Ui
             {
                 if (uiScrollView == null)
                 {
-                    uiScrollView = GetComponentInChildren<UiScrollViewAbstract>();
+                    uiScrollView = GetComponentInChildren<UiScrollViewAbstract>(true);
                 }
                 return uiScrollView;
             }
@@ -49,6 +49,8 @@ namespace MungFramework.Ui
 
         [SerializeField]
         protected List<UiButtonAbstract> buttonList = new(); //按钮列表
+        protected IEnumerable<UiButtonAbstract> enabledButtonList => buttonList.Where(x => x.gameObject.activeSelf);
+
         [SerializeField]
         protected UiButtonAbstract nowSelectButton; //当前选中的按钮
         [SerializeField]
@@ -69,14 +71,14 @@ namespace MungFramework.Ui
         private int RollJumpCount;
         #endregion
 
-        public bool isOpen;
-        public bool isTop => InputManager.IsTop(this);
+        public bool IsOpen;
+        public bool IsTop => InputManager.IsTop(this);
 
         protected virtual void FixedUpdate()
         {
-            if (isOpen && selectPoint != null)
+            if (IsOpen && selectPoint != null)
             {
-                if (nowSelectButton != null)
+                if (nowSelectButton != null && nowSelectButton.gameObject.activeSelf)
                 {
                     selectPoint.gameObject.SetActive(true);
                     // Debug.LogError("1    "+selectPoint.position);
@@ -93,7 +95,7 @@ namespace MungFramework.Ui
         #region Input
         public virtual void OnInput(InputValueEnum inputType)
         {
-            if (isOpen)
+            if (IsOpen)
             {
                 LayerControll(inputType);
             }
@@ -182,7 +184,7 @@ namespace MungFramework.Ui
                 yield return new WaitForSeconds(0.5f);
                 while (true)
                 {
-                    if (isTop)
+                    if (IsTop)
                     {
                         handle.Invoke();
                     }
@@ -214,11 +216,7 @@ namespace MungFramework.Ui
         public virtual void Open()
         {
             //获取所有的按钮
-            buttonList = GetComponentsInChildren<UiButtonAbstract>().ToList();
-            if (buttonList.Count == 0 && selectPoint != null)
-            {
-                selectPoint.gameObject.SetActive(false);
-            }
+            buttonList = GetComponentsInChildren<UiButtonAbstract>(true).ToList();
             //如果当前没有选中的按钮，或者选中的按钮无效
             //则选中第一个按钮
             if (nowSelectButton == null || nowSelectButton.gameObject.activeSelf == false)
@@ -233,7 +231,7 @@ namespace MungFramework.Ui
                 nowSelectButton.OnSelect(false);
             }
 
-            if (selectPoint != null)
+            if (selectPoint != null && (nowSelectButton == null || nowSelectButton.gameObject.activeSelf==false))
             {
                 selectPoint.gameObject.SetActive(false);
             }
@@ -245,10 +243,10 @@ namespace MungFramework.Ui
             //等渲染结束再设置isOpen
             void openHelp()
             {
-                isOpen = true;
-                if (nowSelectButton != null && selectPoint != null)
+                IsOpen = true;
+                if (selectPoint != null && nowSelectButton != null && nowSelectButton.gameObject.activeSelf)
                 {
-                    selectPoint.position = nowSelectButton.RectTransform.position;
+                    selectPoint.LerpRectTransform(nowSelectButton.RectTransform, 1);
                 }
             }
             LifeCycleExtension.LateInvoke(openHelp);
@@ -264,11 +262,12 @@ namespace MungFramework.Ui
             InputManager.Pop_InputAcceptor(this);
 
             gameObject.SetActive(false);
-            isOpen = false;
+            IsOpen = false;
             StopAllCoroutines();
             CallActionHelp(ON_LAYER_CLOSE);
         }
         #endregion
+
         #region Direction
         public virtual void Up()
         {
@@ -286,7 +285,7 @@ namespace MungFramework.Ui
                 return;
             }
 
-            UiButtonAbstract nextButton = GetNearstButtonOrDefault(GetUpButtons(buttonList, nowSelectButton), nowSelectButton, () => GetBottomButton(buttonList, nowSelectButton));
+            UiButtonAbstract nextButton = GetNearstButtonOrDefault(GetUpButtons(enabledButtonList, nowSelectButton), nowSelectButton, () => GetBottomButton(enabledButtonList, nowSelectButton));
 
             if (nextButton != null)
             {
@@ -308,7 +307,7 @@ namespace MungFramework.Ui
                 return;
             }
 
-            UiButtonAbstract nextButton = GetNearstButtonOrDefault(GetDownButtons(buttonList, nowSelectButton), nowSelectButton, () => GetTopButton(buttonList, nowSelectButton));
+            UiButtonAbstract nextButton = GetNearstButtonOrDefault(GetDownButtons(enabledButtonList, nowSelectButton), nowSelectButton, () => GetTopButton(enabledButtonList, nowSelectButton));
 
             if (nextButton != null)
             {
@@ -330,7 +329,7 @@ namespace MungFramework.Ui
                 return;
             }
 
-            UiButtonAbstract nextButton = GetNearstButtonOrDefault(GetLeftButtons(buttonList, nowSelectButton), nowSelectButton, () => GetRightMostButton(buttonList, nowSelectButton));
+            UiButtonAbstract nextButton = GetNearstButtonOrDefault(GetLeftButtons(enabledButtonList, nowSelectButton), nowSelectButton, () => GetRightMostButton(enabledButtonList, nowSelectButton));
 
             if (nextButton != null)
             {
@@ -352,7 +351,7 @@ namespace MungFramework.Ui
                 return;
             }
 
-            UiButtonAbstract nextButton = GetNearstButtonOrDefault(GetRightButtons(buttonList, nowSelectButton), nowSelectButton, () => GetLeftMostButton(buttonList, nowSelectButton));
+            UiButtonAbstract nextButton = GetNearstButtonOrDefault(GetRightButtons(enabledButtonList, nowSelectButton), nowSelectButton, () => GetLeftMostButton(enabledButtonList, nowSelectButton));
 
             if (nextButton != null)
             {
@@ -418,10 +417,10 @@ namespace MungFramework.Ui
         protected virtual void UpJump(int JumpCount)
         {
             var nextButton = GetKthNearstButtonOrDefault(
-                GetUpButtonsGroupByY(buttonList, nowSelectButton),
+                GetUpButtonsGroupByY(enabledButtonList, nowSelectButton),
                 nowSelectButton,
                 JumpCount,
-                () => GetTopButton(buttonList, nowSelectButton));
+                () => GetTopButton(enabledButtonList, nowSelectButton));
 
             if (nextButton != null)
             {
@@ -435,10 +434,10 @@ namespace MungFramework.Ui
         protected virtual void DownJump(int JumpCount)
         {
             var nextButton = GetKthNearstButtonOrDefault(
-                GetDownButtonsGroupByY(buttonList, nowSelectButton),
+                GetDownButtonsGroupByY(enabledButtonList, nowSelectButton),
                 nowSelectButton,
                 JumpCount,
-                () => GetBottomButton(buttonList, nowSelectButton));
+                () => GetBottomButton(enabledButtonList, nowSelectButton));
 
             if (nextButton != null)
             {
@@ -491,7 +490,7 @@ namespace MungFramework.Ui
             if (nowSelectButton == button)
             {
                 //从左右上下选择一个最近的按钮选中
-                var nextButton = GetNextButtonOnButtonRemove(buttonList, button);
+                var nextButton = GetNextButtonOnButtonRemove(enabledButtonList, button);
                 JumpButton(nextButton);
             }
             buttonList.Remove(button);
@@ -530,14 +529,15 @@ namespace MungFramework.Ui
         /// </summary>
         protected bool FindFirstButton()
         {
-            if (buttonList.Count == 0)
+            var enabledButtonList = this.enabledButtonList.ToList();
+            if (enabledButtonList.Count() == 0)
             {
                 nowSelectButton = null;
                 return false;
             }
 
-            UiButtonAbstract nowButton = buttonList[0];
-            foreach (UiButtonAbstract button in buttonList)
+            UiButtonAbstract nowButton = enabledButtonList[0];
+            foreach (UiButtonAbstract button in enabledButtonList)
             {
                 button.OnUnSelect();
                 if (Mathf.Abs(button.CanvasPosition.x - nowButton.CanvasPosition.x) < 1)

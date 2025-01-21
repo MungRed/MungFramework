@@ -4,7 +4,7 @@ using System;
 namespace MungFramework.Model.MungBag.FlagBag
 {
     [Serializable]
-    public class FlagBagModel : ListBagModel<FlagBagItem>
+    public class FlagBagModel : ListBagModel<FlagBagItem>,IFlagBag
     {
         [Button]
         public void AddFlag(string flagName, int flagValue)
@@ -30,12 +30,50 @@ namespace MungFramework.Model.MungBag.FlagBag
                 });
             }
         }
+        public FlagBagItem GetFlag(string flagName)
+        {
+            if (flagName == null)
+            {
+                return null;
+            }
+            return FindFlag(flagName);
+        }
+        public bool HaveFlag(string flagName)
+        {
+            if (flagName == null)
+            {
+                return false;
+            }
+            var find = FindFlag(flagName);
+            return find != null;
+        }
+        public int GetFlagValue(string flagName)
+        {
+            if (flagName == null)
+            {
+                return 0;
+            }
+            var find = FindFlag(flagName);
+            if (find != null)
+            {
+                return find.FlagValue;
+            }
+            return 0;
+        }
+        public bool RemoveFlag(string flagName)
+        {
+            if (flagName == null)
+            {
+                return false;
+            }
+            return ItemList.RemoveAll(x => x.FlagName == flagName) > 0;
+        }
+
 
         public void ChangeFlagValue(string flagName, int flagValue)
         {
             AddFlag(flagName, flagValue);
-        }
-
+        }     
         public void DeltaFlagValue(string flagName, int deltaValue)
         {
             if (flagName == null)
@@ -54,48 +92,8 @@ namespace MungFramework.Model.MungBag.FlagBag
                 AddFlag(flagName, deltaValue);
             }
         }
-
-        public bool RemoveFlag(string flagName)
-        {
-            if (flagName == null)
-            {
-                return false;
-            }
-            return ItemList.RemoveAll(x => x.FlagName == flagName) > 0;
-        }
-
-        public FlagBagItem GetFlag(string flagName)
-        {
-            if (flagName == null)
-            {
-                return null;
-            }
-            return FindFlag(flagName);
-        }
-        public bool HaveFalg(string flagName)
-        {
-            if (flagName == null)
-            {
-                return false;
-            }
-            var find = FindFlag(flagName);
-            return find != null;
-        }
-
-        public int GetFlagValue(string flagName)
-        {
-            if (flagName == null)
-            {
-                return 0;
-            }
-            var find = FindFlag(flagName);
-            if (find != null)
-            {
-                return find.FlagValue;
-            }
-            return 0;
-        }
-
+        
+        
         private void InsertFlag(FlagBagItem flag)
         {
             ItemList.Add(flag);
@@ -107,7 +105,7 @@ namespace MungFramework.Model.MungBag.FlagBag
                 }
             }
         }
-
+        
         private FlagBagItem FindFlag(string flagName)
         {
             //二分查找

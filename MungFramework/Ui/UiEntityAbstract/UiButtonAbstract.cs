@@ -32,7 +32,7 @@ namespace MungFramework.Ui
             {
                 if (_uiScrollView == null)
                 {
-                    _uiScrollView = GetComponentInParent<UiScrollViewAbstract>();
+                    _uiScrollView = GetComponentInParent<UiScrollViewAbstract>(true);
                 }
                 return _uiScrollView;
             }
@@ -45,7 +45,7 @@ namespace MungFramework.Ui
             {
                 if (_uiLayer == null)
                 {
-                    _uiLayer = GetComponentInParent<UiLayerAbstract>();
+                    _uiLayer = GetComponentInParent<UiLayerAbstract>(true);
                 }
                 return _uiLayer;
             }
@@ -152,7 +152,7 @@ namespace MungFramework.Ui
 
         protected virtual void Update()
         {
-            if (couldMouseSelect && InputManagerAbstract.Instance.UseMouse && UiLayer != null && UiLayer.isTop)
+            if (couldMouseSelect && InputManagerAbstract.Instance.UseMouse && UiLayer != null && UiLayer.IsTop)
             {
                 if (MouseIn)
                 {

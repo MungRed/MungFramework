@@ -31,7 +31,7 @@ namespace MungFramework.Ui
             {
                 if (canvas == null)
                 {
-                    canvas = GetComponentInParent<Canvas>()?.GetComponent<RectTransform>();
+                    canvas = GetComponentInParent<Canvas>(true)?.GetComponent<RectTransform>();
                 }
                 return canvas;
             }

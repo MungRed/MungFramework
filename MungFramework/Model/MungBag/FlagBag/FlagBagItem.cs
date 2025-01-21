@@ -1,6 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
+
 namespace MungFramework.Model.MungBag.FlagBag
 {
     /// <summary>
