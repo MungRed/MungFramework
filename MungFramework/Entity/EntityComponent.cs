@@ -23,6 +23,15 @@ namespace MungFramework.Entity
             }
         }
 
+        protected virtual void Awake()
+        {
+            RegisterListenerOnAwake();
+        }
+        protected virtual void RegisterListenerOnAwake()
+        {
+
+        }
+
         protected void AddListener_OnActionCall(UnityAction<string> listener) => Entity?.AddListener_OnActionCall(listener);
         protected void RemoveListener_OnActionCall(UnityAction<string> listener) => Entity?.RemoveListener_OnActionCall(listener);
         protected void AddListener_OnFuncCall(UnityAction<string> listener) => Entity?.AddListener_OnFuncCall(listener);
