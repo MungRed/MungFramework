@@ -1,6 +1,6 @@
 ﻿namespace MungFramework.Ui
 {
-    public class UiButton : MungFramework.Ui.UiButtonAbstract
+    public sealed class UiButton : MungFramework.Ui.UiButtonAbstract
     {
     }
 }

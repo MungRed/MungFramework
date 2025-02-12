@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace MungFramework.Extension.ComponentExtension
+namespace MungFramework.Extension.AudioSourceExtension
 {
     public static class AudioSourceExtension
     {

@@ -1,4 +1,4 @@
-﻿using MungFramework.Extension.ComponentExtension;
+﻿using MungFramework.Extension.RectTransformExtension;
 using MungFramework.Logic.Input;
 using Sirenix.OdinInspector;
 using UnityEngine;

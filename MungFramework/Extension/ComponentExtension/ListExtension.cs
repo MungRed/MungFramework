@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MungFramework.Extension.ComponentExtension
+namespace MungFramework.Extension.ListExtension
 {
     public static class ListExtension
     {

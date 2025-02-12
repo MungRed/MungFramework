@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MungFramework.Extension.ComponentExtension
+namespace MungFramework.Extension.DictionaryExtension
 {
     public static class DictionaryExtension
     {

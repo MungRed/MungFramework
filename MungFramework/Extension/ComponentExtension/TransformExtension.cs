@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace MungFramework.Extension.ComponentExtension
+namespace MungFramework.Extension.TransformExtension
 {
     public static class TransformExtension
     {

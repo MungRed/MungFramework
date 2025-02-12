@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace MungFramework.Extension.ComponentExtension
+namespace MungFramework.Extension.ImageExtension
 {
     public static class ImageExtension
     {

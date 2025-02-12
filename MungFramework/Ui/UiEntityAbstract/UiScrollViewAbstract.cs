@@ -1,8 +1,7 @@
 using DG.Tweening;
-using MungFramework.Extension.ComponentExtension;
+using MungFramework.Extension.RectTransformExtension;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MungFramework.Ui
 {

@@ -1,6 +1,6 @@
 ﻿namespace MungFramework.Ui
 {
-    public class UiLayerGroup : MungFramework.Ui.UiLayerGroupAbstract
+    public sealed class UiLayerGroup : MungFramework.Ui.UiLayerGroupAbstract
     {
     }
 }

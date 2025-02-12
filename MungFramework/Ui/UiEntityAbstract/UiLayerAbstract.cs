@@ -1,6 +1,6 @@
 using MungFramework.Algorithm;
-using MungFramework.Extension.ComponentExtension;
 using MungFramework.Extension.LifeCycleExtension;
+using MungFramework.Extension.RectTransformExtension;
 using MungFramework.Logic.Input;
 using Sirenix.OdinInspector;
 using System;
@@ -231,7 +231,7 @@ namespace MungFramework.Ui
                 nowSelectButton.OnSelect(false);
             }
 
-            if (selectPoint != null && (nowSelectButton == null || nowSelectButton.gameObject.activeSelf==false))
+            if (selectPoint != null && (nowSelectButton == null || nowSelectButton.gameObject.activeSelf == false))
             {
                 selectPoint.gameObject.SetActive(false);
             }

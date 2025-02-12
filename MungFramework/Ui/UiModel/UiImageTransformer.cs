@@ -1,5 +1,5 @@
 ﻿using DG.Tweening;
-using MungFramework.Extension.ComponentExtension;
+using MungFramework.Extension.ImageExtension;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,7 +40,7 @@ namespace MungFramework.Ui
             imageFront.SetSpriteAndColor(null);
         }
 
-        public void ChangeImage(Sprite sprite,float duration)
+        public void ChangeImage(Sprite sprite, float duration)
         {
             if (imageFront.sprite == null)
             {

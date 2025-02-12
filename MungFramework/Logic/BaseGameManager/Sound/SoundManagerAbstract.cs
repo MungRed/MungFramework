@@ -1,7 +1,8 @@
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
-using MungFramework.Extension.ComponentExtension;
+using MungFramework.Extension.AudioSourceExtension;
+using MungFramework.Extension.TransformExtension;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;

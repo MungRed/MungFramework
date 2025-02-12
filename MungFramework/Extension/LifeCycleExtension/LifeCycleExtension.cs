@@ -19,5 +19,17 @@ namespace MungFramework.Extension.LifeCycleExtension
             }
             GameApplicationAbstract.Instance.StartCoroutine(LateInvokeIEnumerator(action));
         }
+        public static void DelayInvoke(this UnityAction action)
+        {
+            IEnumerator DelayInvokeIEnumerator(UnityAction action)
+            {
+                yield return null;
+                if (action != null)
+                {
+                    action.Invoke();
+                }
+            }
+            GameApplicationAbstract.Instance.StartCoroutine(DelayInvokeIEnumerator(action));
+        }
     }
 }

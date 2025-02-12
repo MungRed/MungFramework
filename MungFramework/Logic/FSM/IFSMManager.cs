@@ -115,7 +115,8 @@ namespace MungFramework.Logic.FSM
         }
 
         /// <summary>
-        /// 改变状态
+        /// 改变状态，只有当前状态和下一状态都正常才会切换
+        /// 即不允许从null切换到非null或从非null切换到null
         /// </summary>
         public void FSMChangeState(T_StateEnum nextState)
         {
@@ -123,6 +124,8 @@ namespace MungFramework.Logic.FSM
             IFSMState<T_StateEnum, T_Parameter> nowStateInstance = FSMGetStateInstance(FSMNowState);
             //下一状态实例
             IFSMState<T_StateEnum, T_Parameter> nextStateInstance = FSMGetStateInstance(nextState);
+
+            //只有当前状态不为空才能切换
             if (nowStateInstance != null)
             {
                 //是否离开状态成功
@@ -131,15 +134,38 @@ namespace MungFramework.Logic.FSM
                 {
                     return;
                 }
+                //只有下一状态不为空才能切换
+                if (nextStateInstance != null)
+                {
+                    //只有进入下一状态成功才会切换
+                    if (nextStateInstance.OnStateEnter(FSMNowState, FSMParameter) == true)
+                    {
+                        FSMNowState = nextState;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 强制切换状态，不考虑当前状态是否正常
+        /// 即可以切换至null或从null切换，且不考虑状态切换成功与否
+        /// </summary>
+        public void FSMForceChangeState(T_StateEnum nextState)
+        {            
+            //当前状态实例
+            IFSMState<T_StateEnum, T_Parameter> nowStateInstance = FSMGetStateInstance(FSMNowState);
+            //下一状态实例
+            IFSMState<T_StateEnum, T_Parameter> nextStateInstance = FSMGetStateInstance(nextState);
+
+            if (nowStateInstance != null)
+            {
+                nowStateInstance.OnStateExit(nextState, FSMParameter);
             }
             if (nextStateInstance != null)
             {
-                //是否进入状态成功
-                if (nextStateInstance.OnStateEnter(FSMNowState, FSMParameter) == true)
-                {
-                    FSMNowState = nextState;
-                }
+                nextStateInstance.OnStateEnter(FSMNowState, FSMParameter);
             }
+            FSMNowState = nextState;
         }
     }
 }

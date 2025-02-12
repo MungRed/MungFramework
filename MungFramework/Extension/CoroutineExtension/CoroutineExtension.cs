@@ -10,5 +10,9 @@ namespace MungFramework.Extension.CoroutineExtension
         {
             return GameApplicationAbstract.Instance.StartCoroutine(enumerator);
         }
+        public static void StopCoroutine(this Coroutine coroutine)
+        {
+            GameApplicationAbstract.Instance.StopCoroutine(coroutine);
+        }
     }
 }
