@@ -104,8 +104,6 @@ namespace MungFramework.Ui
         {
             switch (inputType)
             {
-                case InputValueEnum.NONE:
-                    break;
                 case InputValueEnum.LEFT:
                     if (LeftRightJump)
                     {

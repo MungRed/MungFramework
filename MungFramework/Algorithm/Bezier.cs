@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MungFramework.Algorithm.Bezier
 {
     public static class Bezier
     {
-        public static Vector3[] GetBezierPointList(Vector3 startPosition, Vector3 endPosition, Vector3 midPosition, int segmentCount,int left,int right)
+        public static Vector3[] GetBezierPointList(Vector3 startPosition, Vector3 endPosition, Vector3 midPosition, int segmentCount, int left, int right)
         {
-            Vector3[] result = new Vector3[right-left+1];
+            Vector3[] result = new Vector3[right - left + 1];
             for (int i = left; i <= right; i++)
-            {               
+            {
                 float t = (float)i / segmentCount;
                 Vector3 point = GetBezierPoint(startPosition, endPosition, midPosition, t);
-                result[i-left] = point;
+                result[i - left] = point;
             }
             return result;
         }

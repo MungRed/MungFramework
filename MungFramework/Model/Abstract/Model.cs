@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace MungFramework.Model
+﻿namespace MungFramework.Model
 {
     /// <summary>
     /// 数据模型基类

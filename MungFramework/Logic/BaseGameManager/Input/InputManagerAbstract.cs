@@ -75,7 +75,7 @@ namespace MungFramework.Logic.Input
         DEFENSE = 63,
         OVERDRIVE = 64,
         EXTRA = 65,
-        DEPLOY = 66,
+        //DEPLOY = 66,
     }
     /// <summary>
     ///  ‰»Î…Ë±∏

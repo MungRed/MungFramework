@@ -39,15 +39,3 @@ MonoBehaviour:
     InputValue: 65
   - InputKey: 68
     InputValue: 65
-  - InputKey: 33
-    InputValue: 66
-  - InputKey: 66
-    InputValue: 66
-  - InputKey: 59
-    InputValue: 0
-  - InputKey: 60
-    InputValue: 0
-  - InputKey: 57
-    InputValue: 0
-  - InputKey: 58
-    InputValue: 0

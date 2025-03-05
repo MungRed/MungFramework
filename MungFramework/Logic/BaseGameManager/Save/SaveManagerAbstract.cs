@@ -275,9 +275,9 @@ namespace MungFramework.Logic.Save
         /// <summary>
         /// 根据索引删除存档文件
         /// </summary>
-        public void DeleteSaveFileByIndex(int saveIndex)
+        public bool DeleteSaveFileByIndex(int saveIndex)
         {
-            Database.RemoveDataTable("save" + saveIndex);
+            return Database.RemoveDataTable("save" + saveIndex);
         }
 
         /// <summary>
@@ -313,6 +313,10 @@ namespace MungFramework.Logic.Save
         public virtual string GetNowSaveName()
         {
             return CurrentSaveFile.SaveName;
+        }
+        public virtual int GetNowSaveIndex()
+        {
+            return int.Parse(CurrentSaveFile.SaveName.Replace("save",""));
         }
 
         /// <summary>

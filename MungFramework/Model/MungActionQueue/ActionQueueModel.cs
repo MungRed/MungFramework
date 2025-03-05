@@ -175,7 +175,7 @@ namespace MungFramework.Model.MungActionQueue
                 {
                     if (actionModel is ActionModelAbstract_Sync syncActionModel)
                     {
-                        DoActionSync(actionModelQueue,syncActionModel, mono);
+                        DoActionSync(actionModelQueue, syncActionModel, mono);
                     }
                     else if (actionModel is ActionModelAbstract_Enumerator enumeratorActionAbstract)
                     {
@@ -191,7 +191,7 @@ namespace MungFramework.Model.MungActionQueue
             actionModelQueueList.Clear();
         }
 
-        private void DoActionSync(ActionModelQueue actionModelQueue,ActionModelAbstract_Sync syncActionModel, MonoBehaviour mono)
+        private void DoActionSync(ActionModelQueue actionModelQueue, ActionModelAbstract_Sync syncActionModel, MonoBehaviour mono)
         {
             actionModelQueue.NowActionModel = syncActionModel;
             syncActionModel.DoActionSync();
@@ -199,7 +199,7 @@ namespace MungFramework.Model.MungActionQueue
             CheckAction(mono);
         }
 
-        private IEnumerator DoActionEnumerator(ActionModelQueue actionModelQueue,ActionModelAbstract_Enumerator enumeratorActionAbstract, MonoBehaviour mono)
+        private IEnumerator DoActionEnumerator(ActionModelQueue actionModelQueue, ActionModelAbstract_Enumerator enumeratorActionAbstract, MonoBehaviour mono)
         {
             actionModelQueue.NowActionModel = enumeratorActionAbstract;
             yield return enumeratorActionAbstract.DoActionEnumerator();
@@ -208,7 +208,7 @@ namespace MungFramework.Model.MungActionQueue
         }
 
         #region QueueControl        
-        public void AddAction_First(IEnumerator actionEnumerator,int queuePriority,int actionPriority, MonoBehaviour mono)
+        public void AddAction_First(IEnumerator actionEnumerator, int queuePriority, int actionPriority, MonoBehaviour mono)
         {
             GetActionModelQueue(queuePriority).AddAction_First(actionEnumerator, actionPriority, mono);
             CheckAction(mono);

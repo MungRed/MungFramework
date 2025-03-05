@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace MungFramework.Logic.Sound
@@ -6,13 +7,51 @@ namespace MungFramework.Logic.Sound
     [Serializable]
     public class SoundSource : Model.Model
     {
-        public string Id;//id
-        public Transform Follow;//跟随的对象
-        public Vector3 LocalPosition;//与跟随对象的相对位置
+        public SoundSource(string id, Transform follow, Vector3 localPosition, AudioSource source, SoundDataManagerAbstract.VolumeTypeEnum volumeType, float volume)
+        {
+            Id = id;
+            Follow = follow;
+            LocalPosition = localPosition;
+            Source = source;
+            VolumeType = volumeType;
+            Volume = volume;
+        }
 
-        public AudioSource Source;//音频源
-        public SoundDataManagerAbstract.VolumeTypeEnum VolumeType;//音量类型
-        public float Volume;//音量
+        [ShowInInspector]
+        public string Id
+        {
+            get;
+        }
+        [ShowInInspector]
+        public Transform Follow
+        {
+            get;
+            set;
+        }
+        [ShowInInspector]
+        public Vector3 LocalPosition
+        {
+            get;
+            set;
+        }
+        [ShowInInspector]
+        public AudioSource Source
+        {
+            get;
+            set;
+        }
+        [ShowInInspector]
+        public SoundDataManagerAbstract.VolumeTypeEnum VolumeType
+        {
+            get;
+        }
+        [ShowInInspector]
+        public float Volume
+        {
+            get;
+            set;
+        }
+
     }
 }
 

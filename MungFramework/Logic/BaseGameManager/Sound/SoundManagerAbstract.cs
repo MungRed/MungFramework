@@ -19,18 +19,24 @@ namespace MungFramework.Logic.Sound
         [Required("需要拖拽挂载")]
         protected SoundDataManagerAbstract soundDataManager;
 
-        [ReadOnly]
-        [SerializeField]
-        protected List<SoundSource> SoundSourceList = new();
 
-        [ReadOnly]
-        [SerializeField]
+        [ShowInInspector]
+        protected List<SoundSource> SoundSourceList
+        {
+            get;
+        } = new();
+
+
         //默认的声音源
-        protected readonly List<(string, VolumeTypeEnum)> DefaultSoundSourceList = new List<(string, SoundDataManagerAbstract.VolumeTypeEnum)>() {
+        [ShowInInspector]
+        protected List<(string, VolumeTypeEnum)> DefaultSoundSourceList
+        {
+            get;
+        } =  new List<(string, SoundDataManagerAbstract.VolumeTypeEnum)>() {
             ("music",VolumeTypeEnum.Music),
             ("effect",VolumeTypeEnum.Effect),
-            ("voice",VolumeTypeEnum.Voice)
-        };
+            ("voice",VolumeTypeEnum.Voice)};
+
 
         public virtual int GetVolumeData(VolumeTypeEnum volumeType) => soundDataManager.GetVolumeData(volumeType);
 
@@ -103,18 +109,8 @@ namespace MungFramework.Logic.Sound
             GameObject soundSourceObj = AddSoundSourceObj(id, transform, Vector3.zero, volume);
 
             //注册声音源
-            SoundSource soundSource = new()
-            {
-                Id = id,
-                Follow = transform,
-                LocalPosition = Vector3.zero,
-
-                Source = soundSourceObj.GetComponent<AudioSource>(),
-                VolumeType = volumeType,
-                Volume = volume
-            };
+            SoundSource soundSource = new(id,transform,Vector3.zero,soundSourceObj.GetComponent<AudioSource>(),volumeType,volume);
             SoundSourceList.Add(soundSource);
-
             return this;
         }
 
@@ -128,7 +124,6 @@ namespace MungFramework.Logic.Sound
             {
                 return this;
             }
-
             soundSource.Follow = follow;
             return this;
         }
@@ -184,6 +179,26 @@ namespace MungFramework.Logic.Sound
             return this;
         }
 
+        /// <summary>
+        /// 利用声音源播放一次音频
+        /// 不会覆盖原音频
+        /// </summary>
+        public virtual SoundManagerAbstract PlayAudioOnShot(string id, AudioClip audioclip)
+        {
+            var soundSource = GetSoundSource(id);
+
+            if (soundSource == null)
+            {
+                return this;
+            }
+
+            soundSource.Source.PlayOneShot(audioclip, soundSource.Source.volume);
+            return this;
+        }
+
+        /// <summary>
+        /// 播放音频，如果播放的音频与当前音频相同，不会重复播放，如果replace为true，则会替换当前音频
+        /// </summary>
         public virtual SoundManagerAbstract PlayAudio(string id, AudioClip audioclip, bool loop = false, bool transition = false, bool replace = false)
         {
             var soundSource = GetSoundSource(id);
@@ -238,7 +253,6 @@ namespace MungFramework.Logic.Sound
                     {
                         newAudioSource.volume = volume;
                     };
-
                 soundSource.Source = newAudioSource;
             }
             return this;
