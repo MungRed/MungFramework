@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace MungFramework.Model.MungBuffer
@@ -12,8 +12,11 @@ namespace MungFramework.Model.MungBuffer
     [Serializable]
     public class BufferModel<T_Key, T_Value> : MungFramework.Model.Model
     {
-        [SerializeField]
-        private SerializedDictionary<T_Key, T_Value> buffer = new();
+        [ShowInInspector]
+        private SerializedDictionary<T_Key, T_Value> buffer
+        {
+            get;
+        } = new();
 
         public void UpdateBuffer(T_Key key, T_Value value)
         {

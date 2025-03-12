@@ -21,8 +21,11 @@ namespace MungFramework.Logic.Save
         [SerializeField]
         protected string GameSceneName; //游戏场景的名字，用于加载存档后进入游戏场景
 
-        [SerializeField]
-        protected BufferModel<string, Sprite> SaveImageBuffer = new(); //存档图片的缓存
+        [ShowInInspector]
+        protected BufferModel<string, Sprite> SaveImageBuffer
+        {
+            get;
+        } = new(); //存档图片的缓存
 
         protected const string NowSaveFileNameSaveKey = "NowSaveFileName";
 

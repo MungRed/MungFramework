@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace MungFramework.Model.MungBag.BagUi
 {
@@ -15,8 +14,11 @@ namespace MungFramework.Model.MungBag.BagUi
         where T_ItemTypeEnum : Enum
         where T_ItemModel : BagUiItemModel
     {
-        [SerializeField]
-        private SerializedDictionary<T_ItemTypeEnum, List<T_ItemModel>> itemDictionary = new();
+        [ShowInInspector]
+        private Dictionary<T_ItemTypeEnum, List<T_ItemModel>> itemDictionary
+        {
+            get;
+        } = new();
 
 
         public void LoadData(Dictionary<T_ItemTypeEnum, List<T_ItemModel>> data)

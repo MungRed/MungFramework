@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using MungFramework.Tool;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,9 +32,9 @@ namespace MungFramework.ScriptableObjects
         {
             return DataSOItemList;
         }
-        public DataSOItem GetItemById(string id)
+        public TDataSO GetItemById(string id)
         {
-            return DataSOItemList.Find(item => item.Id == id);
+            return DataSOItemList.Find(item => item.Id == id)?.Item??default;
         }
 
 #if UNITY_EDITOR
@@ -44,11 +45,11 @@ namespace MungFramework.ScriptableObjects
         {
             DataSOItemList.Clear();
             var guids = UnityEditor.AssetDatabase.FindAssets("t:" + typeof(TDataSO).Name);
-            foreach (var guid in guids)
+            foreach (var find in FindAssets.Find<TDataSO>())
             {
-                var path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
-                var so = UnityEditor.AssetDatabase.LoadAssetAtPath<TDataSO>(path);
-                DataSOItemList.Add(new(so.Id, so));
+                //var path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
+                //var so = UnityEditor.AssetDatabase.LoadAssetAtPath<TDataSO>(path);
+                DataSOItemList.Add(new(find.Id, find));
             }
             SortList();
         }
