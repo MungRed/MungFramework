@@ -26,7 +26,7 @@ namespace MungFramework.Logic.Sound
         }
 
 
-        public virtual int GetVolumeData(VolumeTypeEnum volumeType)
+        public virtual int GetVolume(VolumeTypeEnum volumeType)
         {
             return volumeType switch
             {

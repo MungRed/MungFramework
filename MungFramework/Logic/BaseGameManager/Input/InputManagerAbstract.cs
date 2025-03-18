@@ -524,8 +524,7 @@ namespace MungFramework.Logic.Input
         {
             IEnumerator defaultMoter(float time)
             {
-                var gamepad = Gamepad.current;
-                Moter(gamepad, 1f, 1f);
+                var gamepad = Moter(1f, 1f);
                 yield return new WaitForSeconds(time);
                 CancelMoter(gamepad);
             }
@@ -540,13 +539,15 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 震动
         /// </summary>
-        public virtual void Moter(Gamepad pad, float low, float max)
+        public Gamepad Moter(float low, float max)
         {
+            var pad = Gamepad.current;
             moterCount++;
             if (InputDevice == InputDeviceEnum.手柄 && pad != null)
             {
                 pad.SetMotorSpeeds(low, max);
             }
+            return pad;
         }
         /// <summary>
         /// 取消震动
@@ -555,6 +556,24 @@ namespace MungFramework.Logic.Input
         {
             moterCount--;
             if (pad != null && moterCount <= 0)
+            {
+                pad.SetMotorSpeeds(0, 0);
+            }
+        }
+        public virtual void CancelMoter()
+        {
+            moterCount--;
+            var pad = Gamepad.current;
+            if (pad != null && moterCount <= 0)
+            {
+                pad.SetMotorSpeeds(0, 0);
+            }
+        }
+        public virtual void CancelAllMoter()
+        {
+            moterCount = 0;
+            var pad = Gamepad.current;
+            if (pad != null)
             {
                 pad.SetMotorSpeeds(0, 0);
             }

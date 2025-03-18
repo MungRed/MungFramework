@@ -64,59 +64,83 @@ namespace MungFramework.Logic.Camera
         }
 
         private TweenerCore<float, float, FloatOptions> setFovTweenCore;
-
+        private TweenerCore<float, float, FloatOptions> setNoiseTwnnerCore;
 
         [Button]
         public void SetNoise(float value)
         {
+            if (setNoiseTwnnerCore != null)
+            {
+                setNoiseTwnnerCore.Complete();
+                setNoiseTwnnerCore = null;
+            }
             MultiChannelPerlin.m_AmplitudeGain = value;
         }
 
         [Button]
-        public void SetNoise(float value, float time, UnityAction endCallback = null)
+        public void SetNoise(float value, float duration, UnityAction endCallback = null)
         {
-            float nowValue = MultiChannelPerlin.m_AmplitudeGain;
-            MultiChannelPerlin.m_AmplitudeGain = value;
-            TimeCounterManager.StartTimeCounter(time, 0, null, () => { MultiChannelPerlin.m_AmplitudeGain = nowValue; endCallback?.Invoke(); });
+            if (setNoiseTwnnerCore != null)
+            {
+                setNoiseTwnnerCore.Complete();
+                setNoiseTwnnerCore = null;
+            }
+            setNoiseTwnnerCore = DOTween.To(() => MultiChannelPerlin.m_AmplitudeGain, x => MultiChannelPerlin.m_AmplitudeGain = x, value, duration).OnComplete(() => endCallback?.Invoke());
+            //float nowValue = MultiChannelPerlin.m_AmplitudeGain;
+            //MultiChannelPerlin.m_AmplitudeGain = value;
+            //TimeCounterManager.StartTimeCounter(duration, 0, null, () => { MultiChannelPerlin.m_AmplitudeGain = nowValue; endCallback?.Invoke(); });
         }
 
         [Button]
         public void SetNoise(float init, float target, float duration, UnityAction endCallback = null)
         {
+            if(setNoiseTwnnerCore != null)
+            {
+                setNoiseTwnnerCore.Complete();
+                setNoiseTwnnerCore = null;
+            }
             MultiChannelPerlin.m_AmplitudeGain = init;
-            DOTween.To(() => MultiChannelPerlin.m_AmplitudeGain, x => MultiChannelPerlin.m_AmplitudeGain = x, target, duration).onComplete += () => endCallback?.Invoke();
+            setNoiseTwnnerCore = DOTween.To(() => MultiChannelPerlin.m_AmplitudeGain, x => MultiChannelPerlin.m_AmplitudeGain = x, target, duration).OnComplete(() => endCallback?.Invoke());
         }
 
         [Button]
-        public void ResetNoise()
+        public void ResetNoise(float duration,UnityAction endCallback = null)
         {
-            MultiChannelPerlin.m_AmplitudeGain = 0;
+            if (setNoiseTwnnerCore != null)
+            {
+                setNoiseTwnnerCore.Complete();
+                setNoiseTwnnerCore = null;
+            }
+            setNoiseTwnnerCore = DOTween.To(() => MultiChannelPerlin.m_AmplitudeGain, x => MultiChannelPerlin.m_AmplitudeGain = x, 0, duration).OnComplete(() => endCallback?.Invoke());
+           // MultiChannelPerlin.m_AmplitudeGain = 0;
         }
 
         [Button]
-        public void SetFov(int val, float time)
+        public void SetFov(float val, float duration,UnityAction endCallback = null)
         {
             if (setFovTweenCore != null)
             {
-                setFovTweenCore.Kill();
+                setFovTweenCore.Complete();
+                setNoiseTwnnerCore = null;
             }
 
             setFovTweenCore = DOTween
-                .To(() => virtualCamera.m_Lens.FieldOfView, x => virtualCamera.m_Lens.FieldOfView = x, val, time)
-                .OnComplete(() => setFovTweenCore = null);
+                .To(() => virtualCamera.m_Lens.FieldOfView, x => virtualCamera.m_Lens.FieldOfView = x, val, duration)
+                .OnComplete(() => endCallback?.Invoke());
         }
 
         [Button]
-        public void ResetFov(float time)
+        public void ResetFov(float time, UnityAction endCallback = null)
         {
             if (setFovTweenCore != null)
             {
-                setFovTweenCore.Kill();
+                setFovTweenCore.Complete();
+                setNoiseTwnnerCore = null;
             }
 
             setFovTweenCore = DOTween
                 .To(() => virtualCamera.m_Lens.FieldOfView, x => virtualCamera.m_Lens.FieldOfView = x, 60, time)
-                .OnComplete(() => setFovTweenCore = null);
+                .OnComplete(() => endCallback?.Invoke());
         }
 
         public override void OnGamePause(GameManagerAbstract parentManager)

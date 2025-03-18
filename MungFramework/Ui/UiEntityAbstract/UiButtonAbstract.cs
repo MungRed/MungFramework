@@ -190,7 +190,7 @@ namespace MungFramework.Ui
             IsSelected = true;
             if (checkAudio != null && playAudio)
             {
-                SoundManagerAbstract.Instance.PlayAudio(VolumeTypeEnum.Effect, checkAudio, forceReplace: true);
+                SoundManagerAbstract.Instance.PlayAudioOneShot(VolumeTypeEnum.Effect, checkAudio);
             }
             SetSelectObjectActive(true);
             UpdateScrollView();
