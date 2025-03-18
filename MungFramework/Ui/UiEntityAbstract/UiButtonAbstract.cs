@@ -131,9 +131,12 @@ namespace MungFramework.Ui
             }
         }
         #endregion
+
         #region Select
         [SerializeField]
         private bool couldMouseSelect = true;
+        public bool CouldMouseSelect => couldMouseSelect;
+
         [SerializeField]
         private bool isSelected = false;
         public bool IsSelected
@@ -150,25 +153,22 @@ namespace MungFramework.Ui
         protected bool mouseIn;
         #endregion
 
-        protected virtual void Update()
+        public virtual void UpdateMouse()
         {
-            if (couldMouseSelect && InputManagerAbstract.Instance.UseMouse && UiLayer != null && UiLayer.IsTop)
+            if (MouseIn)
             {
-                if (MouseIn)
+                if (mouseIn == false)
                 {
-                    if (mouseIn == false)
-                    {
-                        mouseIn = true;
-                        MOnMouseEnter();
-                    }
+                    mouseIn = true;
+                    MOnMouseEnter();
                 }
-                else
+            }
+            else
+            {
+                if (mouseIn == true)
                 {
-                    if (mouseIn == true)
-                    {
-                        mouseIn = false;
-                        MOnMouseExit();
-                    }
+                    mouseIn = false;
+                    MOnMouseExit();
                 }
             }
         }
@@ -190,7 +190,7 @@ namespace MungFramework.Ui
             IsSelected = true;
             if (checkAudio != null && playAudio)
             {
-                SoundManagerAbstract.Instance.PlayAudio("effect", checkAudio, replace: true);
+                SoundManagerAbstract.Instance.PlayAudio(VolumeTypeEnum.Effect, checkAudio, forceReplace: true);
             }
             SetSelectObjectActive(true);
             UpdateScrollView();

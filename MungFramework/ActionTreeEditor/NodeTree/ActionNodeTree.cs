@@ -83,7 +83,16 @@ namespace MungFramework.ActionTreeEditor
         {
             ActionNode node = CreateInstance(type) as ActionNode;
 
-            node.name = type.Name;
+            if (node.NodeType == ActionNode.NodeTypeEnum.Root)
+            {
+                node.Id = "根节点";
+                node.name = "根节点";
+            }
+            else
+            {
+                node.Id = type.Name;
+                node.name = type.Name;
+            }
             node.guid = System.Guid.NewGuid().ToString();
 
             actionNodeList.Add(node);

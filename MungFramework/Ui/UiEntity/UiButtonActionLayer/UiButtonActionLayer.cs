@@ -29,7 +29,7 @@ namespace MungFramework.Ui
             base.FixedUpdate();
             if (rootButton != null)
             {
-                transform.position = Vector3.Lerp(transform.position, rootButton.transform.position, MungFramework.StaticData.FixedDeltaTimeLerpValue_Faster);
+                transform.position = Vector3.Lerp(transform.position, rootButton.transform.position, MungFramework.StaticData.FixedDeltaTimeLerpValue_20f);
             }
         }
 
@@ -49,9 +49,9 @@ namespace MungFramework.Ui
                 Debug.Log("当前没有可操作的");
             }
         }
-        protected override void OK()
+        protected override void OK(bool useMouse)
         {
-            base.OK();
+            base.OK(useMouse);
             Close();
         }
         public override void Close()

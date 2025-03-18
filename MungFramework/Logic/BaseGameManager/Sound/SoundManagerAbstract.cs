@@ -9,7 +9,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static MungFramework.Logic.Sound.SoundDataManagerAbstract;
 
 namespace MungFramework.Logic.Sound
 {
@@ -29,13 +28,10 @@ namespace MungFramework.Logic.Sound
 
         //默认的声音源
         [ShowInInspector]
-        protected List<(string, VolumeTypeEnum)> DefaultSoundSourceList
+        protected Dictionary<VolumeTypeEnum, string> DefaultSoundSourceList
         {
             get;
-        } =  new List<(string, SoundDataManagerAbstract.VolumeTypeEnum)>() {
-            ("music",VolumeTypeEnum.Music),
-            ("effect",VolumeTypeEnum.Effect),
-            ("voice",VolumeTypeEnum.Voice)};
+        } = new() { { VolumeTypeEnum.Music, "Music" }, { VolumeTypeEnum.Effect, "Effect" }, { VolumeTypeEnum.Voice, "Voice" } };
 
 
         public virtual int GetVolumeData(VolumeTypeEnum volumeType) => soundDataManager.GetVolumeData(volumeType);
@@ -65,7 +61,10 @@ namespace MungFramework.Logic.Sound
         {
             base.OnSceneLoad(parentManager);
             //加载默认声音源
-            InitSoundSource();
+            foreach (var defaultSoundSource in DefaultSoundSourceList)
+            {
+                AddSoundSource(defaultSoundSource.Value, defaultSoundSource.Key);
+            }
         }
 
         public override void OnGameUpdate(GameManagerAbstract parentManager)
@@ -81,21 +80,9 @@ namespace MungFramework.Logic.Sound
         }
 
         /// <summary>
-        /// 初始化声音源
-        /// </summary>
-        public virtual void InitSoundSource()
-        {
-            foreach (var defaultSoundSource in DefaultSoundSourceList)
-            {
-                AddSoundSource(defaultSoundSource.Item1, defaultSoundSource.Item2);
-            }
-        }
-
-
-        /// <summary>
         /// 添加声音源
         /// </summary>
-        public virtual SoundManagerAbstract AddSoundSource(string id, SoundDataManagerAbstract.VolumeTypeEnum volumeType)
+        public virtual SoundManagerAbstract AddSoundSource(string id, VolumeTypeEnum volumeType)
         {
             //检查id是否存在
             if (GetSoundSource(id) != null)
@@ -109,7 +96,7 @@ namespace MungFramework.Logic.Sound
             GameObject soundSourceObj = AddSoundSourceObj(id, transform, Vector3.zero, volume);
 
             //注册声音源
-            SoundSource soundSource = new(id,transform,Vector3.zero,soundSourceObj.GetComponent<AudioSource>(),volumeType,volume);
+            SoundSource soundSource = new(id, transform, Vector3.zero, soundSourceObj.GetComponent<AudioSource>(), volumeType, volume);
             SoundSourceList.Add(soundSource);
             return this;
         }
@@ -179,11 +166,39 @@ namespace MungFramework.Logic.Sound
             return this;
         }
 
+        public virtual SoundManagerAbstract PlayAudio(PlayAudioData playAudioData)
+        {
+            if (playAudioData.OneShot)
+            {
+                if (playAudioData.UseDefaultSoundSource)
+                {
+                    PlayAudioOneShot(playAudioData.VolumeType, playAudioData.AudioClip);
+                }
+                else
+                {
+                    PlayAudioOneShot(playAudioData.SoundSourceId, playAudioData.AudioClip);
+                }
+            }
+            else
+            {
+                if (playAudioData.UseDefaultSoundSource)
+                {
+                    PlayAudio(playAudioData.VolumeType, playAudioData.AudioClip, playAudioData.Loop, playAudioData.Transition, playAudioData.ForceReplace);
+                }
+                else
+                {
+                    PlayAudio(playAudioData.SoundSourceId, playAudioData.AudioClip, playAudioData.Loop,playAudioData.Transition, playAudioData.ForceReplace);
+                }
+            }
+            return this;
+        }
+
+
         /// <summary>
         /// 利用声音源播放一次音频
         /// 不会覆盖原音频
         /// </summary>
-        public virtual SoundManagerAbstract PlayAudioOnShot(string id, AudioClip audioclip)
+        public virtual SoundManagerAbstract PlayAudioOneShot(string id, AudioClip audioClip)
         {
             var soundSource = GetSoundSource(id);
 
@@ -192,14 +207,18 @@ namespace MungFramework.Logic.Sound
                 return this;
             }
 
-            soundSource.Source.PlayOneShot(audioclip, soundSource.Source.volume);
+            soundSource.Source.PlayOneShot(audioClip, soundSource.Source.volume);
             return this;
+        }
+        public virtual SoundManagerAbstract PlayAudioOneShot(VolumeTypeEnum defaultType, AudioClip audioClip)
+        {
+            return PlayAudioOneShot(DefaultSoundSourceList[defaultType], audioClip);
         }
 
         /// <summary>
         /// 播放音频，如果播放的音频与当前音频相同，不会重复播放，如果replace为true，则会替换当前音频
         /// </summary>
-        public virtual SoundManagerAbstract PlayAudio(string id, AudioClip audioclip, bool loop = false, bool transition = false, bool replace = false)
+        public virtual SoundManagerAbstract PlayAudio(string id, AudioClip audioclip, bool loop = false, bool transition = false, bool forceReplace = false)
         {
             var soundSource = GetSoundSource(id);
 
@@ -208,7 +227,7 @@ namespace MungFramework.Logic.Sound
                 return this;
             }
 
-            if (soundSource.Source.clip == audioclip && replace == false)
+            if (soundSource.Source.clip == audioclip && forceReplace == false)
             {
                 return this;
             }
@@ -258,6 +277,7 @@ namespace MungFramework.Logic.Sound
             return this;
         }
 
+        public virtual SoundManagerAbstract PlayAudio(VolumeTypeEnum defaultType, AudioClip audioclip, bool loop = false, bool transition = false, bool forceReplace = false) => PlayAudio(DefaultSoundSourceList[defaultType], audioclip, loop, transition, forceReplace);
 
         private TweenerCore<float, float, FloatOptions> tmpTweenCore;
 
@@ -301,6 +321,11 @@ namespace MungFramework.Logic.Sound
 
             yield return null;
         }
+        public virtual IEnumerator PauseAudio(VolumeTypeEnum defaultType, bool transition = false)
+        {
+            return PauseAudio(DefaultSoundSourceList[defaultType], transition);
+        }
+
         public virtual IEnumerator ResumeAudio(string id, bool transition = false)
         {
             var soundSource = GetSoundSource(id);
@@ -345,6 +370,10 @@ namespace MungFramework.Logic.Sound
 
             }
             yield return null;
+        }
+        public virtual IEnumerator ResumeAudio(VolumeTypeEnum defaultType, bool transition = false)
+        {
+            return ResumeAudio(DefaultSoundSourceList[defaultType], transition);
         }
 
         protected virtual SoundSource GetSoundSource(string id)

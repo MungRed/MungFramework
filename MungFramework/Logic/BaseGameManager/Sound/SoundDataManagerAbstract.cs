@@ -7,10 +7,6 @@ namespace MungFramework.Logic.Sound
     public abstract class SoundDataManagerAbstract : GameManagerAbstract
     {
         private static readonly string VolumeSaveDataKey = "VolumeSaveData";
-        public enum VolumeTypeEnum
-        {
-            Music, Effect, Voice
-        }
 
         [Serializable]
         public class VolumeData
@@ -30,7 +26,7 @@ namespace MungFramework.Logic.Sound
         }
 
 
-        internal virtual int GetVolumeData(VolumeTypeEnum volumeType)
+        public virtual int GetVolumeData(VolumeTypeEnum volumeType)
         {
             return volumeType switch
             {
@@ -41,7 +37,7 @@ namespace MungFramework.Logic.Sound
             };
         }
 
-        internal virtual void SetVolumeData(VolumeTypeEnum volumeType, int val)
+        public virtual void SetVolumeData(VolumeTypeEnum volumeType, int val)
         {
             switch (volumeType)
             {
@@ -57,7 +53,7 @@ namespace MungFramework.Logic.Sound
             }
             Save();
         }
-        internal virtual void DefaultVolumeData()
+        public virtual void DefaultVolumeData()
         {
             volumeData = new()
             {

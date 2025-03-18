@@ -43,6 +43,18 @@ namespace MungFramework.Logic.Camera
         public IEnumerator ChangeBindFollow(Transform aim, float time) => CameraController.ChangeBindFollow(aim, time);
         public IEnumerator ChangeBindLookAt(Transform aim, float time) => CameraController.ChangeBindLookAt(aim, time);
 
+#if UNITY_EDITOR
+        [Button]
+        public void ResetCamera()
+        {
+            CameraController.ResetCamera();
+        }
+        [Button]
+        public void MoveCamera(Vector3 followPos, Vector3 lookAtPos)
+        {
+            CameraController.MoveCamera(followPos, lookAtPos);
+        }
+#endif
 
     }
 }

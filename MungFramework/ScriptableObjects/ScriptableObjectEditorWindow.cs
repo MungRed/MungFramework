@@ -1,5 +1,7 @@
 #if UNITY_EDITOR
 using Sirenix.OdinInspector.Editor;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -27,11 +29,14 @@ namespace MungFramework.ScriptableObjects
         {
             get;
         }
+
         protected override OdinMenuTree BuildMenuTree()
         {
             var tree = new OdinMenuTree();
-            tree.AddAllAssetsAtPath(Title, Path, typeof(T), true, false);
+            tree.DefaultMenuStyle = OdinMenuStyle.TreeViewStyle;
 
+            tree.AddAllAssetsAtPath(Title, Path, typeof(T), true, false);
+            tree.EnumerateTree().AddThumbnailIcons();
             return tree;
         }
 

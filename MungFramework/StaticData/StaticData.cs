@@ -10,14 +10,14 @@ namespace MungFramework
         /// <summary>
         /// 用于在Update中插值
         /// </summary>
-        public static float DeltaTimeLerpValue_Bigger
+        public static float DeltaTimeLerpValue_10f
         {
             get
             {
                 return Mathf.Clamp01(10 * Time.deltaTime);
             }
         }
-        public static float DeltaTimeLerpValue_Smaller
+        public static float DeltaTimeLerpValue_8f
         {
             get
             {
@@ -25,21 +25,28 @@ namespace MungFramework
             }
         }
 
-        public static float FixedDeltaTimeLerpValue_Faster
+        public static float FixedDeltaTimeLerpValue_20f
         {
             get
             {
                 return Mathf.Clamp01(20 * Time.fixedDeltaTime);
             }
         }
-        public static float FixedDeltaTimeLerpValue_Bigger
+        public static float FixedDeltaTimeLerpValue_16f
+        {
+            get
+            {
+                return Mathf.Clamp01(16 * Time.fixedDeltaTime);
+            }
+        }
+        public static float FixedDeltaTimeLerpValue_10f
         {
             get
             {
                 return Mathf.Clamp01(10 * Time.fixedDeltaTime);
             }
         }
-        public static float FixedDeltaTimeLerpValue_Smaller
+        public static float FixedDeltaTimeLerpValue_8f
         {
             get
             {

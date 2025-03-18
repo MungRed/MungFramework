@@ -15,10 +15,19 @@ namespace MungFramework.Logic.Input
         [SerializeField]
         private List<InputMapLayerDataSO> inputMapLayerDataSOList = new();
 
-        [SerializeField]
-        private List<InputMapLayer> inputMapLayerList = new();
+        [ShowInInspector]
+        private List<InputMapLayer> inputMapLayerList
+        {
+            get;
+        } = new();
 
-        public InputSource InputSource;
+
+        [ShowInInspector]
+        public InputSource InputSource
+        {
+            get;
+            private set;
+        }
 
         private bool useMouse;
         public bool UseMouse
@@ -34,6 +43,33 @@ namespace MungFramework.Logic.Input
             }
         }
 
+        private int viewSpeed_GamePad;
+        public int ViewSpeed_GamePad
+        {
+            get
+            {
+                return viewSpeed_GamePad;
+            }
+            set
+            {
+                viewSpeed_GamePad = value;
+                SaveManagerAbstract.Instance.SetSystemSaveValue("VIEWSPEED_GAMEPAD", viewSpeed_GamePad.ToString());
+            }
+        }
+        private int viewSpeed_Mouse;
+        public int ViewSpeed_Mouse
+        {
+            get
+            {
+                return viewSpeed_Mouse;
+            }
+            set
+            {
+                viewSpeed_Mouse = value;
+                SaveManagerAbstract.Instance.SetSystemSaveValue("VIEWSPEED_MOUSE", viewSpeed_Mouse.ToString());
+            }
+        }
+
         public override void OnSceneLoad(GameManagerAbstract parentManager)
         {
             base.OnSceneLoad(parentManager);
@@ -43,11 +79,11 @@ namespace MungFramework.Logic.Input
             Load();
         }
 
-        public static bool isKeyboard(InputKeyEnum inputKey)
+        public static bool IsKeyboard(InputKeyEnum inputKey)
         {
             return !inputKey.ToString().StartsWith("GP") && !inputKey.ToString().StartsWith("MOUSE");
         }
-        public static bool isGamepad(InputKeyEnum inputKey)
+        public static bool IsGamepad(InputKeyEnum inputKey)
         {
             return inputKey.ToString().StartsWith("GP");
         }
@@ -58,14 +94,15 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 获得某个Key在不同层绑定的所有Value
         /// </summary>
-        public virtual IEnumerable<InputValueEnum> GetInputValues(InputKeyEnum inputKey)
+        public IEnumerable<InputValueEnum> GetInputValues(InputKeyEnum inputKey)
         {
             for (int i = 0; i < inputMapLayerList.Count; i++)
             {
                 yield return inputMapLayerList[i].GetInputValue(inputKey);
             }
         }
-        public virtual InputValueEnum GetInputValue(string inputMapLayerName, InputKeyEnum inputKey)
+
+        public InputValueEnum GetInputValue(string inputMapLayerName, InputKeyEnum inputKey)
         {
             var inputMap = inputMapLayerList.Find(x => x.InputMapLayerName == inputMapLayerName);
             if (inputMap == null)
@@ -78,7 +115,7 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 获得Value在不同层绑定的所有Key
         /// </summary>
-        public virtual IEnumerable<InputKeyEnum> GetInputKeys(InputValueEnum inputValue)
+        public IEnumerable<InputKeyEnum> GetInputKeys(InputValueEnum inputValue)
         {
             foreach (var inputMap in inputMapLayerList)
             {
@@ -88,7 +125,7 @@ namespace MungFramework.Logic.Input
                 }
             }
         }
-        public virtual IEnumerable<InputKeyEnum> GetInputKeys(string inputMapLayerName, InputValueEnum inputValue)
+        public IEnumerable<InputKeyEnum> GetInputKeys(string inputMapLayerName, InputValueEnum inputValue)
         {
             var inputMap = inputMapLayerList.Find(x => x.InputMapLayerName == inputMapLayerName);
             if (inputMap == null)
@@ -97,7 +134,7 @@ namespace MungFramework.Logic.Input
             }
             return inputMap.GetInputKey(inputValue);
         }
-        public virtual InputKeyEnum GetInputKey(string inputMapLayerName, InputValueEnum inputValue, InputDeviceEnum inputDevice)
+        public InputKeyEnum GetInputKey(string inputMapLayerName, InputValueEnum inputValue, InputDeviceEnum inputDevice)
         {
             var inputMap = inputMapLayerList.Find(x => x.InputMapLayerName == inputMapLayerName);
             if (inputMap == null)
@@ -105,8 +142,8 @@ namespace MungFramework.Logic.Input
                 return InputKeyEnum.NONE;
             }
             var inputKeys = inputMap.GetInputKey(inputValue);
-            var keybord = inputKeys.Where(x => isKeyboard(x));
-            var gamepad = inputKeys.Where(x => isGamepad(x));
+            var keybord = inputKeys.Where(x => IsKeyboard(x));
+            var gamepad = inputKeys.Where(x => IsGamepad(x));
             if (inputDevice == InputDeviceEnum.键鼠)
             {
                 if (keybord.Count() > 0)
@@ -127,7 +164,7 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 根据inputMap名称获取inputMap
         /// </summary>
-        public virtual InputMapLayer GetInputMap(string inputMapName)
+        public InputMapLayer GetInputMap(string inputMapName)
         {
             return inputMapLayerList.Find(x => x.InputMapLayerName == inputMapName);
         }
@@ -152,11 +189,32 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 返回视角轴
         /// </summary>
-        public Vector2 ViewAxis
+        public Vector2 ViewAxis_GamePad
         {
             get
             {
-                return InputSource == null ? Vector2.zero : InputSource.Controll.ViewAxis.ReadValue<Vector2>();
+                if (InputSource == null)
+                {
+                    return Vector2.zero;
+                }
+                else
+                {
+                    return InputSource.Controll.ViewAxis.ReadValue<Vector2>() * ViewSpeed_GamePad;
+                }
+            }
+        }
+        public Vector2 ViewAxis_Mouse
+        {
+            get
+            {
+                if (InputSource == null)
+                {
+                    return Vector2.zero;
+                }
+                else
+                {
+                    return InputSystem.GetDevice<Mouse>().delta.ReadValue() * ViewSpeed_Mouse;
+                }
             }
         }
         #endregion
@@ -204,6 +262,12 @@ namespace MungFramework.Logic.Input
             //加载是否使用鼠标
             var useMouse = SaveManagerAbstract.Instance.GetSystemSaveValue("USE_MOUSE");
             UseMouse = useMouse.hasValue && useMouse.value == "true";
+            //加载视角速度
+            var viewSpeed_GamePadData = SaveManagerAbstract.Instance.GetSystemSaveValue("VIEWSPEED_GAMEPAD");
+            ViewSpeed_GamePad = viewSpeed_GamePadData.hasValue ? int.Parse(viewSpeed_GamePadData.value) : 10;
+
+            var viewSpeed_MouseData = SaveManagerAbstract.Instance.GetSystemSaveValue("VIEWSPEED_MOUSE");
+            ViewSpeed_Mouse = viewSpeed_MouseData.hasValue ? int.Parse(viewSpeed_MouseData.value) : 1;
             Save();
         }
 

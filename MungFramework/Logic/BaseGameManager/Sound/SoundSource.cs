@@ -7,7 +7,7 @@ namespace MungFramework.Logic.Sound
     [Serializable]
     public class SoundSource : Model.Model
     {
-        public SoundSource(string id, Transform follow, Vector3 localPosition, AudioSource source, SoundDataManagerAbstract.VolumeTypeEnum volumeType, float volume)
+        public SoundSource(string id, Transform follow, Vector3 localPosition, AudioSource source, VolumeTypeEnum volumeType, float volume)
         {
             Id = id;
             Follow = follow;
@@ -22,29 +22,34 @@ namespace MungFramework.Logic.Sound
         {
             get;
         }
+
         [ShowInInspector]
         public Transform Follow
         {
             get;
             set;
         }
+
         [ShowInInspector]
         public Vector3 LocalPosition
         {
             get;
             set;
         }
+
         [ShowInInspector]
         public AudioSource Source
         {
             get;
             set;
         }
+
         [ShowInInspector]
-        public SoundDataManagerAbstract.VolumeTypeEnum VolumeType
+        public VolumeTypeEnum VolumeType
         {
             get;
         }
+
         [ShowInInspector]
         public float Volume
         {

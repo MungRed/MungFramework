@@ -242,11 +242,11 @@ namespace MungFramework.Logic.Input
                 UnityAction<InputKeyEnum> addBind = (InputKeyEnum newkey) =>
                 {
                     isKeyDown = true;
-                    if (inputDevice == InputDeviceEnum.手柄 && InputDataManagerAbstract.isGamepad(newkey))
+                    if (inputDevice == InputDeviceEnum.手柄 && InputDataManagerAbstract.IsGamepad(newkey))
                     {
                         changeSuccess = inputMap.AddBind(newkey, value);
                     }
-                    else if (inputDevice == InputDeviceEnum.键鼠 && InputDataManagerAbstract.isKeyboard(newkey))
+                    else if (inputDevice == InputDeviceEnum.键鼠 && InputDataManagerAbstract.IsKeyboard(newkey))
                     {
                         changeSuccess = inputMap.AddBind(newkey, value);
                     }
@@ -267,11 +267,11 @@ namespace MungFramework.Logic.Input
                 UnityAction<InputKeyEnum> changeBind = (InputKeyEnum newkey) =>
                 {
                     isKeyDown = true;
-                    if (inputDevice == InputDeviceEnum.手柄 && InputDataManagerAbstract.isGamepad(newkey))
+                    if (inputDevice == InputDeviceEnum.手柄 && InputDataManagerAbstract.IsGamepad(newkey))
                     {
                         changeSuccess = inputMap.ChangeBind(oldkey, newkey, value);
                     }
-                    else if (inputDevice == InputDeviceEnum.键鼠 && InputDataManagerAbstract.isKeyboard(newkey))
+                    else if (inputDevice == InputDeviceEnum.键鼠 && InputDataManagerAbstract.IsKeyboard(newkey))
                     {
                         changeSuccess = inputMap.ChangeBind(oldkey, newkey, value);
                     }
@@ -351,7 +351,7 @@ namespace MungFramework.Logic.Input
         /// <summary>
         /// 返回视角轴
         /// </summary>
-        public Vector2 ViewAxis => inputDataManager.ViewAxis;
+        public Vector2 ViewAxis => InputDevice == InputDeviceEnum.手柄 ? inputDataManager.ViewAxis_GamePad : inputDataManager.ViewAxis_Mouse;
 
         /// <summary>
         /// 鼠标位置
@@ -446,10 +446,10 @@ namespace MungFramework.Logic.Input
             {
                 return;
             }
+
             //Debug.Log(inputkey);
             //触发一次任意键按下的事件
             InputAction_AnyKeyDown(inputkey);
-
 
             IInputAcceptor inputAcceptor = null;
 
@@ -480,7 +480,7 @@ namespace MungFramework.Logic.Input
                     {
                         inputActionListener_Performed[inputValue].Invoke();
                     }
-                    inputAcceptor?.OnInput(inputValue);
+                    inputAcceptor?.OnInput(inputValue, inputkey);
                 }
             }
         }
@@ -543,7 +543,7 @@ namespace MungFramework.Logic.Input
         public virtual void Moter(Gamepad pad, float low, float max)
         {
             moterCount++;
-            if (InputDevice == InputDeviceEnum.手柄&&pad !=null)
+            if (InputDevice == InputDeviceEnum.手柄 && pad != null)
             {
                 pad.SetMotorSpeeds(low, max);
             }
@@ -554,7 +554,7 @@ namespace MungFramework.Logic.Input
         public virtual void CancelMoter(Gamepad pad)
         {
             moterCount--;
-            if (pad != null&&moterCount<=0)
+            if (pad != null && moterCount <= 0)
             {
                 pad.SetMotorSpeeds(0, 0);
             }

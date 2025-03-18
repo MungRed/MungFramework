@@ -44,9 +44,9 @@ namespace MungFramework.Ui
                 {
                     slider.gameObject.SetActive(true);
                     slider.position = Vector3.Lerp(slider.position, nowSelectOptionItem.Button.position,
-                        StaticData.FixedDeltaTimeLerpValue_Faster);
+                        StaticData.FixedDeltaTimeLerpValue_20f);
                     slider.sizeDelta = Vector2.Lerp(slider.sizeDelta, nowSelectOptionItem.Button.sizeDelta,
-                        StaticData.FixedDeltaTimeLerpValue_Faster);
+                        StaticData.FixedDeltaTimeLerpValue_20f);
                 }
                 else
                 {

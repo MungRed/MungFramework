@@ -9,7 +9,7 @@
         {
             get;
         }
-        public void OnInput(InputValueEnum inputType);
+        public void OnInput(InputValueEnum inputType, InputKeyEnum inputKey);
     }
 
 }

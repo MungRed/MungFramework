@@ -16,7 +16,7 @@ namespace MungFramework.Logic.Camera
         [SerializeField]
         private CinemachineVirtualCamera virtualCamera;
 
-        private CinemachineBasicMultiChannelPerlin  multiChannelPerlin;
+        private CinemachineBasicMultiChannelPerlin multiChannelPerlin;
 
         private CinemachineBasicMultiChannelPerlin MultiChannelPerlin
         {
@@ -31,7 +31,7 @@ namespace MungFramework.Logic.Camera
         }
 
         [SerializeField]
-        [Required("需要挂载跟随和注释Transform")]
+        [Required("需要挂载跟随和注视Transform")]
         private Transform follow_Pos, lookAt_Pos;
 
         [SerializeField]
@@ -73,7 +73,7 @@ namespace MungFramework.Logic.Camera
         }
 
         [Button]
-        public void SetNoise(float value, float time,UnityAction endCallback = null)
+        public void SetNoise(float value, float time, UnityAction endCallback = null)
         {
             float nowValue = MultiChannelPerlin.m_AmplitudeGain;
             MultiChannelPerlin.m_AmplitudeGain = value;
@@ -81,10 +81,10 @@ namespace MungFramework.Logic.Camera
         }
 
         [Button]
-        public void SetNoise(float init, float target, float duration,UnityAction endCallback = null)
+        public void SetNoise(float init, float target, float duration, UnityAction endCallback = null)
         {
             MultiChannelPerlin.m_AmplitudeGain = init;
-            DOTween.To(() => MultiChannelPerlin.m_AmplitudeGain, x => MultiChannelPerlin.m_AmplitudeGain = x, target, duration).onComplete+= () => endCallback?.Invoke();
+            DOTween.To(() => MultiChannelPerlin.m_AmplitudeGain, x => MultiChannelPerlin.m_AmplitudeGain = x, target, duration).onComplete += () => endCallback?.Invoke();
         }
 
         [Button]
@@ -236,5 +236,20 @@ namespace MungFramework.Logic.Camera
             }
             lookAt_isBinding = true;
         }
+
+#if UNITY_EDITOR
+        [Button]
+        public void ResetCamera()
+        {
+            MoveCamera(new Vector3(0, 3, -7),Vector3.zero);
+        }
+        [Button]
+        public void MoveCamera(Vector3 followPos, Vector3 lookAtPos)
+        {
+            follow_Pos.position = followPos;
+            lookAt_Pos.position = lookAtPos;
+        }
+#endif
+
     }
 }

@@ -9,6 +9,9 @@ namespace MungFramework.Logic.Sound
     public class AutoSoundSourceEntity : Entity.Entity
     {
         [SerializeField]
+        private VolumeTypeEnum volumeType;
+
+        [SerializeField]
         private string soundSourceId;
         [SerializeField]
         private Transform soundSourceFollow;
@@ -17,7 +20,7 @@ namespace MungFramework.Logic.Sound
 
         private void OnEnable()
         {
-            SoundManagerAbstract.Instance.AddSoundSource(soundSourceId, SoundDataManagerAbstract.VolumeTypeEnum.Music)
+            SoundManagerAbstract.Instance.AddSoundSource(soundSourceId, volumeType)
                 .SetSoundSourceLocalPosition(soundSourceId, soundSourceLocalPosition);
             if (soundSourceFollow != null)
             {

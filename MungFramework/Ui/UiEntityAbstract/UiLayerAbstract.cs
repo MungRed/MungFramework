@@ -74,6 +74,20 @@ namespace MungFramework.Ui
         public bool IsOpen;
         public bool IsTop => InputManager.IsTop(this);
 
+        protected virtual void Update()
+        {
+            if (IsOpen && IsTop && InputManagerAbstract.Instance.UseMouse)
+            {
+                foreach (var button in buttonList)
+                {
+                    if (button.CouldMouseSelect)
+                    {
+                        button.UpdateMouse();
+                    }
+                }
+            }
+        }
+
         protected virtual void FixedUpdate()
         {
             if (IsOpen && selectPoint != null)
@@ -82,7 +96,7 @@ namespace MungFramework.Ui
                 {
                     selectPoint.gameObject.SetActive(true);
                     // Debug.LogError("1    "+selectPoint.position);
-                    selectPoint.LerpRectTransform(nowSelectButton.RectTransform, StaticData.FixedDeltaTimeLerpValue_Faster);
+                    selectPoint.LerpRectTransform(nowSelectButton.RectTransform, StaticData.FixedDeltaTimeLerpValue_20f);
                     //  Debug.LogError("2    "+selectPoint.position);
                 }
                 else
@@ -93,14 +107,21 @@ namespace MungFramework.Ui
         }
 
         #region Input
-        public virtual void OnInput(InputValueEnum inputType)
+        public virtual void OnInput(InputValueEnum inputType, InputKeyEnum inputkey)
         {
             if (IsOpen)
             {
-                LayerControll(inputType);
+                if (inputkey == InputKeyEnum.MOUSE_LEFT || inputkey == InputKeyEnum.MOUSE_RIGHT)
+                {
+                    LayerControll(inputType, true);
+                }
+                else
+                {
+                    LayerControll(inputType, false);
+                }
             }
         }
-        protected virtual void LayerControll(InputValueEnum inputType)
+        protected virtual void LayerControll(InputValueEnum inputType, bool useMouse)
         {
             switch (inputType)
             {
@@ -137,7 +158,7 @@ namespace MungFramework.Ui
                     }
                     break;
                 case InputValueEnum.OK:
-                    OK();
+                    OK(useMouse);
                     break;
                 case InputValueEnum.CANCEL:
                     Cancel();
@@ -358,12 +379,22 @@ namespace MungFramework.Ui
         }
         #endregion
         #region Controll
-        protected virtual void OK()
+        protected virtual void OK(bool useMouse)
         {
             CallActionHelp(ON_LAYER_OK);
             if (nowSelectButton != null && !nowSelectButton.gameObject.activeSelf == false)
             {
-                nowSelectButton.OnOK();
+                if (useMouse)
+                {
+                    if (nowSelectButton.MouseIn)
+                    {
+                        nowSelectButton.OnOK();
+                    }
+                }
+                else
+                {
+                    nowSelectButton.OnOK();
+                }
             }
         }
 

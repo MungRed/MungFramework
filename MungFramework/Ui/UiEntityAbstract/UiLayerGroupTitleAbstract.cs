@@ -39,9 +39,9 @@ namespace MungFramework.Ui
                 {
                     selectPoint.gameObject.SetActive(true);
                     selectPoint.position = Vector3.Lerp(selectPoint.position, nowSelectTitleButton.Button.position,
-                        StaticData.FixedDeltaTimeLerpValue_Faster);
+                        StaticData.FixedDeltaTimeLerpValue_20f);
                     selectPoint.sizeDelta = Vector2.Lerp(selectPoint.sizeDelta, nowSelectTitleButton.Button.sizeDelta,
-                        StaticData.FixedDeltaTimeLerpValue_Faster);
+                        StaticData.FixedDeltaTimeLerpValue_20f);
                 }
                 else
                 {
