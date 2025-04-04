@@ -1,5 +1,6 @@
 using MungFramework.Algorithm;
 using MungFramework.Extension.ListExtension;
+using MungFramework.Logic.Sound;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,7 +29,8 @@ namespace MungFramework.Ui
         protected UiLayerAbstract nowLayer;
         [SerializeField]
         protected int nowLayerIndex;
-
+        [SerializeField]
+        protected AudioClip pageAudio;
 
         #region Countrol
         public virtual void LeftPage()
@@ -36,6 +38,10 @@ namespace MungFramework.Ui
             if (uiLayerList.Empty())
             {
                 return;
+            }
+            if (pageAudio != null)
+            {
+                SoundManagerAbstract.Instance.PlayAudioOneShot(VolumeTypeEnum.Effect,pageAudio);
             }
             int nextIndex = nowLayerIndex;
             nextIndex.RollNum(0, uiLayerList.Count - 1, -1);
@@ -47,6 +53,10 @@ namespace MungFramework.Ui
             if (uiLayerList.Empty())
             {
                 return;
+            }
+            if (pageAudio != null)
+            {
+                SoundManagerAbstract.Instance.PlayAudioOneShot(VolumeTypeEnum.Effect, pageAudio);
             }
             int nextIndex = nowLayerIndex;
             nextIndex.RollNum(0, uiLayerList.Count - 1, 1);

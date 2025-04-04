@@ -57,7 +57,7 @@ namespace MungFramework.Logic.Sound
         {
             volumeData = new()
             {
-                MusicVolume = 70,
+                MusicVolume = 50,
                 EffectVolume = 70,
                 VoiceVolume = 70
             };

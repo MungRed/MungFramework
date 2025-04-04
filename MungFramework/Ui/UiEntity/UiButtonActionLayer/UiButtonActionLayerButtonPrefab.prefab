@@ -432,7 +432,7 @@ MonoBehaviour:
   couldMouseSelect: 1
   isSelected: 0
   selectObject: {fileID: 6864925394833441092}
-  checkAudio: {fileID: 0}
+  checkAudio: {fileID: 8300000, guid: fec09f129838bad4b88c09add2049b70, type: 3}
   unSelectText: {fileID: 6864925394907194746}
   selectText: {fileID: 6864925394659812020}
 --- !u!1 &6864925394907194744

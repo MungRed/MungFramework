@@ -2,7 +2,7 @@
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
-using MungFramework.Logic.TimeCounter;
+using MungFramework.Extension.VectorExtension;
 using Sirenix.OdinInspector;
 using System.Collections;
 using UnityEngine;
@@ -49,6 +49,18 @@ namespace MungFramework.Logic.Camera
         {
             return new CameraSource(follow_Bind, lookAt_Bind);
         }
+        public bool IsZeroDistanceWithNowCameraSource(CameraSource cameraSource)
+        {
+            if (!(cameraSource.Follow.position - follow_Pos.position).IsZeroDistance())
+            {
+                return false;
+            }
+            if (!(cameraSource.LookAt.position - lookAt_Pos.position).IsZeroDistance())
+            {
+                return false;
+            }
+            return true;
+        }
 
         public void Update()
         {
@@ -94,7 +106,7 @@ namespace MungFramework.Logic.Camera
         [Button]
         public void SetNoise(float init, float target, float duration, UnityAction endCallback = null)
         {
-            if(setNoiseTwnnerCore != null)
+            if (setNoiseTwnnerCore != null)
             {
                 setNoiseTwnnerCore.Complete();
                 setNoiseTwnnerCore = null;
@@ -104,7 +116,7 @@ namespace MungFramework.Logic.Camera
         }
 
         [Button]
-        public void ResetNoise(float duration,UnityAction endCallback = null)
+        public void ResetNoise(float duration, UnityAction endCallback = null)
         {
             if (setNoiseTwnnerCore != null)
             {
@@ -112,11 +124,11 @@ namespace MungFramework.Logic.Camera
                 setNoiseTwnnerCore = null;
             }
             setNoiseTwnnerCore = DOTween.To(() => MultiChannelPerlin.m_AmplitudeGain, x => MultiChannelPerlin.m_AmplitudeGain = x, 0, duration).OnComplete(() => endCallback?.Invoke());
-           // MultiChannelPerlin.m_AmplitudeGain = 0;
+            // MultiChannelPerlin.m_AmplitudeGain = 0;
         }
 
         [Button]
-        public void SetFov(float val, float duration,UnityAction endCallback = null)
+        public void SetFov(float val, float duration, UnityAction endCallback = null)
         {
             if (setFovTweenCore != null)
             {
@@ -169,6 +181,7 @@ namespace MungFramework.Logic.Camera
 
         public IEnumerator ChangeCameraSource(CameraSource cameraSource, float time)
         {
+
             var changeFollow = StartCoroutine(ChangeBindFollow(cameraSource.Follow, time));
             var changeLookAt = StartCoroutine(ChangeBindLookAt(cameraSource.LookAt, time));
 
@@ -183,6 +196,7 @@ namespace MungFramework.Logic.Camera
             if (bindfollow != null)
             {
                 StopCoroutine(bindfollow);
+                bindfollow = null;
             }
 
             follow_isBinding = false;
@@ -194,7 +208,11 @@ namespace MungFramework.Logic.Camera
                 follow_isBinding = true;
                 yield break;
             }
-
+            if ((follow_Bind.transform.position - follow_Pos.position).IsZeroDistance())
+            {
+                follow_isBinding = true;
+                yield break;
+            }
 
             Coroutine thisCor;
             thisCor = bindfollow = StartCoroutine(MoveFollow(aim, time));
@@ -208,6 +226,7 @@ namespace MungFramework.Logic.Camera
             if (bindlookat != null)
             {
                 StopCoroutine(bindlookat);
+                bindlookat = null;
             }
 
             lookAt_isBinding = false;
@@ -215,6 +234,11 @@ namespace MungFramework.Logic.Camera
             lookAt_Pos.DOKill();
 
             if (time <= Mathf.Epsilon)
+            {
+                lookAt_isBinding = true;
+                yield break;
+            }
+            if ((lookAt_Bind.transform.position - lookAt_Pos.position).IsZeroDistance())
             {
                 lookAt_isBinding = true;
                 yield break;
@@ -229,7 +253,7 @@ namespace MungFramework.Logic.Camera
         {
             float nowTime = 0;
             var wait = new WaitForFixedUpdate();
-            while (nowTime < time)
+            while (nowTime < time && aim != null)
             {
                 if (!isPause)
                 {
@@ -247,7 +271,7 @@ namespace MungFramework.Logic.Camera
         {
             float nowTime = 0;
             var wait = new WaitForFixedUpdate();
-            while (nowTime < time)
+            while (nowTime < time && aim != null)
             {
                 if (!isPause)
                 {
@@ -265,7 +289,7 @@ namespace MungFramework.Logic.Camera
         [Button]
         public void ResetCamera()
         {
-            MoveCamera(new Vector3(0, 3, -7),Vector3.zero);
+            MoveCamera(new Vector3(0, 3, -7), Vector3.zero);
         }
         [Button]
         public void MoveCamera(Vector3 followPos, Vector3 lookAtPos)

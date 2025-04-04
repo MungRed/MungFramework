@@ -4,7 +4,7 @@ using System;
 namespace MungFramework.Model.MungBag.FlagBag
 {
     [Serializable]
-    public class FlagBagModel : ListBagModel<FlagBagItem>,IFlagBag
+    public class FlagBagModel : ListBagModel<FlagBagItem>, IFlagBag
     {
         [Button]
         public void AddFlag(string flagName, int flagValue)
@@ -73,7 +73,7 @@ namespace MungFramework.Model.MungBag.FlagBag
         public void ChangeFlagValue(string flagName, int flagValue)
         {
             AddFlag(flagName, flagValue);
-        }     
+        }
         public void DeltaFlagValue(string flagName, int deltaValue)
         {
             if (flagName == null)
@@ -92,8 +92,8 @@ namespace MungFramework.Model.MungBag.FlagBag
                 AddFlag(flagName, deltaValue);
             }
         }
-        
-        
+
+
         private void InsertFlag(FlagBagItem flag)
         {
             ItemList.Add(flag);
@@ -105,7 +105,7 @@ namespace MungFramework.Model.MungBag.FlagBag
                 }
             }
         }
-        
+
         private FlagBagItem FindFlag(string flagName)
         {
             //二分查找

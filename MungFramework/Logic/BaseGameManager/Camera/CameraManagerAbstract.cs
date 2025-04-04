@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 namespace MungFramework.Logic.Camera
 {
-    public class CameraManagerAbstract : SingletonGameManagerAbstract<CameraManagerAbstract>
+    public abstract class CameraManagerAbstract : SingletonGameManagerAbstract<CameraManagerAbstract>
     {
         [Required("需要挂载AimCameraController")]
         public AimCameraControllerAbstarct AimCameraController;
@@ -111,7 +111,7 @@ namespace MungFramework.Logic.Camera
 
         public CameraSource GetCameraSource() => CameraController.GetCameraSource();
 
-        public IEnumerator ChangeCameraSource(CameraSource cameraSource, float time) => CameraController.ChangeCameraSource(cameraSource, time);
+        public virtual IEnumerator ChangeCameraSource(CameraSource cameraSource, float time) => CameraController.ChangeCameraSource(cameraSource, time);
         public IEnumerator ChangeBindFollow(Transform aim, float time) => CameraController.ChangeBindFollow(aim, time);
         public IEnumerator ChangeBindLookAt(Transform aim, float time) => CameraController.ChangeBindLookAt(aim, time);
 

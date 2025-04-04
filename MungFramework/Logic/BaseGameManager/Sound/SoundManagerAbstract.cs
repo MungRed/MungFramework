@@ -424,7 +424,7 @@ namespace MungFramework.Logic.Sound
 
 
 
-        protected virtual IEnumerator StopAudio(string id, bool transition = false)
+        protected virtual IEnumerator StopAudio(string id, bool transition = false,float duration = 0.8f)
         {
             var soundSource = GetSoundSource(id);
             if (soundSource == null)
@@ -435,21 +435,22 @@ namespace MungFramework.Logic.Sound
 
             var audioSource = soundSource.Source;
             //var volumeType = soundSource.VolumeType;
-
+            
             //如果不需要过渡
             if (transition == false)
             {
+                audioSource.clip = null;
                 //直接暂停
                 audioSource.Stop();
             }
             else
             {
-                //var oldvolume = soundSource.Volume;
                 //淡出
-                var dt = DOTween.To(() => audioSource.volume, x => audioSource.volume = x, 0, 0.8f)
+                var dt = DOTween.To(() => audioSource.volume, x => audioSource.volume = x, 0, duration)
                     .SetEase(Ease.InOutSine);
                 dt.onComplete += () =>
                 {
+                    audioSource.clip = null;
                     audioSource.Stop();
                     audioSource.volume = soundSource.Volume;
                 };
@@ -475,15 +476,8 @@ namespace MungFramework.Logic.Sound
         protected void AddTweener(string id, TweenerCore<float, float, FloatOptions> tweener)
         {
             StopTweener(id);
-            //if (transitionTweenDic.ContainsKey(id))
-            //{
-            //    transitionTweenDic[id].Kill();
-            //    transitionTweenDic.Remove(id);
-            //}
             transitionTweenDic.Add(id, tweener);
         }
-
-        //private TweenerCore<float, float, FloatOptions> tmpTweenCore;
 
         protected virtual SoundSource GetSoundSource(string id)
         {

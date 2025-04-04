@@ -64,10 +64,10 @@ namespace MungFramework.ActionTreeEditor
         }
 
         /// <summary>
-        /// 用孩子兄弟二叉树的逻辑获取下一个节点，逻辑为：
-        /// 1.如果Next节点满足，返回Next
-        /// 2.递归AtTime节点，返回第一个满足的AtTime节点
-        /// 3.如果Next节点为null，返回null
+        /// 用孩子兄弟二叉树的逻辑获取下一个节点，逻辑为：    
+        /// 1.如果Next节点为null，返回null
+        /// 2.如果Next节点满足，返回Next
+        /// 3.递归Next节点的AtTime节点，返回第一个满足的AtTime节点
         /// 4.如果没有满足的AtTime节点，返回null
         /// </summary>
         public T GetNextNodeWithMatch<T>(Func<T, bool> match) where T : ActionNode
@@ -100,7 +100,7 @@ namespace MungFramework.ActionTreeEditor
             }
             else
             {
-                return GetNextNodeInAtTime((T)this);
+                return GetNextNodeInAtTime(nextNode);
             }
         }
 
